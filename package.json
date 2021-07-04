@@ -1,5 +1,5 @@
 {
-  "name": "JunkNote",
+  "name": "junk-note",
   "version": "1.0.0",
   "description": "Frontend for JunkNoteAPI",
   "main": "index.js",

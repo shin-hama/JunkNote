@@ -16,7 +16,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: [/\.js$/, /\.jsx$/],
+        test: /\.js(x?)$/,
         use: [
           {
             // babel
