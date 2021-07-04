@@ -1,0 +1,2 @@
+# JunkNote
+Frontend for JunkNoteAPI
