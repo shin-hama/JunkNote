@@ -5,8 +5,12 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        - http_proxy=$http_proxy
+    environment:
+      - http_proxy=$http_proxy
     restart: on-failure
-    container_name: 'react'
+    container_name: 'junk_note_client'
     ports:
       - '3000:3000'
     tty: true
