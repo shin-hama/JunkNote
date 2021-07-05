@@ -43,6 +43,7 @@ module.exports = {
     contentBase: path.resolve(__dirname, 'dist'),
     open: true,
     host: '0.0.0.0',
+    hot: true,
     port: 3000,
   },
 }
