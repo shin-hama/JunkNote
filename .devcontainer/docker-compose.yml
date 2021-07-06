@@ -19,13 +19,9 @@ services:
     build:
       context: .
       dockerfile: .devcontainer/Dockerfile
-      args:
-        - http_proxy=$http_proxy
-        - https_proxy=$http_proxy
-        - HTTP_PROXY=$http_proxy
 
     environment:
-      - http_proxy=$http_proxy
+      - CHOKIDAR_USEPOLLING=true
 
     volumes:
       # Update this to wherever you want VS Code to mount the folder of your project

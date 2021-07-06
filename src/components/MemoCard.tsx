@@ -10,7 +10,7 @@ const MemoCard = ({ text }: MemoCardProps) => {
     <Card>
       <CardContent>
         <Typography>
-          {text}test
+          {text}
         </Typography>
       </CardContent>
     </Card>

@@ -1,13 +1,13 @@
 import React from 'react'
-import Container from "@material-ui/core/Container"
+import Container from '@material-ui/core/Container'
 import Grid from '@material-ui/core/Grid'
 
 import MemoCard from './MemoCard'
 
 export default function App() {
   const testMemos = [
-    "test1",
-    "test2",
+    "test hot reload",
+    "test memo 1",
     "Frontend for JunkNoteAPI",
   ]
   return (

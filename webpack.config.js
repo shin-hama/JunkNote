@@ -3,20 +3,25 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 const htmlWebpackPlugin = new HtmlWebpackPlugin({
   template: './src/index.html',
+  filename: 'index.html',
 })
+const outputPath = path.resolve(__dirname, 'dist')
 
 module.exports = {
   //  development or production
   mode: 'development',
+  target: 'web',
   entry: './src/index.tsx',
   output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename: '[name].js',
+    path: outputPath,
+    publicPath: '/js/',
+    filename: 'bundle.js',
   },
   module: {
     rules: [
       {
         test: /\.js(x?)$/,
+        exclude: /node_modules/,
         use: [
           {
             // babel
@@ -26,7 +31,6 @@ module.exports = {
             },
           },
         ],
-        exclude: /node_modules/,
       },
       {
         test: /\.ts(x?)$/,
@@ -39,11 +43,16 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.ts', '.tsx'],
   },
+  devtool: 'source-map',
   devServer: {
-    contentBase: path.resolve(__dirname, 'dist'),
+    contentBase: outputPath,
     open: true,
-    host: '0.0.0.0',
     hot: true,
+    host: '0.0.0.0',
     port: 3000,
+    // need for hot reloading in docker container
+    watchOptions: {
+      poll: 1000,
+    },
   },
 }
