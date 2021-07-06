@@ -12,12 +12,14 @@ export default function App() {
   ]
   return (
     <div className="reactApp">
-      <Container>
-        {testMemos.map((item, i) => (
-          <Grid key={i} xs={6} md={4}>
-            <MemoCard text={item}/>
-          </Grid>
-        ))}
+      <Container maxWidth="md">
+        <Grid container justify="flex-start" spacing={2}>
+          {testMemos.map((item, i) => (
+            <Grid key={i} item xs={6} md={4}>
+              <MemoCard text={item}/>
+            </Grid>
+          ))}
+        </Grid>
       </Container>
     </div>
   )
