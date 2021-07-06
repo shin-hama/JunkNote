@@ -1,48 +1,58 @@
-const path = require("path");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
+const path = require('path')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 const htmlWebpackPlugin = new HtmlWebpackPlugin({
-  template: "./src/index.html",
-});
+  template: './src/index.html',
+  filename: 'index.html',
+})
+const outputPath = path.resolve(__dirname, 'dist')
 
 module.exports = {
   //  development or production
-  mode: "development",
-  entry: "./src/index.tsx",
+  mode: 'development',
+  target: 'web',
+  entry: './src/index.tsx',
   output: {
-    path: path.resolve(__dirname, "dist"),
-    filename: "[name].js",
+    path: outputPath,
+    publicPath: '/js/',
+    filename: 'bundle.js',
   },
   module: {
     rules: [
       {
         test: /\.js(x?)$/,
+        exclude: /node_modules/,
         use: [
           {
             // babel
-            loader: "babel-loader",
+            loader: 'babel-loader',
             options: {
-              presets: ["@babel/preset-env", "@babel/preset-react"],
+              presets: ['@babel/preset-env', '@babel/preset-react'],
             },
           },
         ],
-        exclude: /node_modules/,
       },
       {
         test: /\.ts(x?)$/,
-        loader: "ts-loader",
+        loader: 'ts-loader',
         exclude: /node_modules/,
       },
     ],
   },
   plugins: [htmlWebpackPlugin],
   resolve: {
-    extensions: [".js", ".ts", ".tsx"],
+    extensions: ['.js', '.ts', '.tsx'],
   },
+  devtool: 'source-map',
   devServer: {
-    contentBase: path.resolve(__dirname, "dist"),
+    contentBase: outputPath,
     open: true,
-    host: "0.0.0.0",
+    hot: true,
+    host: '0.0.0.0',
     port: 3000,
+    // need for hot reloading in docker container
+    watchOptions: {
+      poll: 1000,
+    },
   },
-};
+}
