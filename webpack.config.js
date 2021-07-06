@@ -17,6 +17,13 @@ module.exports = {
     publicPath: '/js/',
     filename: 'bundle.js',
   },
+  // to make faster for building
+  cache: {
+    type: 'filesystem',
+    buildDependencies: {
+      config: [__filename],
+    },
+  },
   module: {
     rules: [
       {

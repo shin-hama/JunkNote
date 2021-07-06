@@ -70,6 +70,7 @@ export default function Header() {
           <Typography className="classes.title" variant="h6" noWrap>
             Junk Note
           </Typography>
+          <div className={classes.grow} />
           <div className={classes.search}>
             <InputBase
               placeholder="Search..."
@@ -80,7 +81,6 @@ export default function Header() {
               inputProps={{ 'area-label': 'search' }}
             />
           </div>
-          <div className={classes.grow} />
           <Button>
             <Typography variant="button">Login</Typography>
           </Button>
