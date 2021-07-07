@@ -1,11 +1,23 @@
 import React from 'react'
+import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
 import Grid from '@material-ui/core/Grid'
 
 import Header from './Header'
+import LeftDrawer from './LeftDrawer'
 import MemoCard from './MemoCard'
 
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    mainContainer: {
+      padding: theme.spacing(3),
+    },
+  })
+)
+
 export default function App() {
+  const classes = useStyles()
+
   const testMemos = [
     'test hot reload',
     'test memo 1',
@@ -14,7 +26,8 @@ export default function App() {
   return (
     <div className="reactApp">
       <Header />
-      <Container maxWidth="md">
+      <LeftDrawer />
+      <Container maxWidth="md" className={classes.mainContainer}>
         <Grid container justify="flex-start" spacing={2}>
           {testMemos.map((item, i) => (
             <Grid key={i} item xs={6} md={4}>

@@ -67,7 +67,7 @@ export default function Header() {
     <div className={classes.grow}>
       <AppBar position="static">
         <Toolbar>
-          <Typography className="classes.title" variant="h6" noWrap>
+          <Typography className={classes.title} variant="h6" noWrap>
             Junk Note
           </Typography>
           <div className={classes.grow} />
