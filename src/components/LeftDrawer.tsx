@@ -15,14 +15,14 @@ const useStyles = makeStyles((theme: Theme) =>
       background: theme.palette.primary.main,
     },
     list: {
-      width: 250,
+      width: 200,
     },
   })
 )
 
-const DrawerItems = (): JSX.Element => {
+const DrawerItems = (): React.ReactElement => {
   const classes = useStyles()
-  const items: { [s: string]: JSX.Element } = {
+  const items: { [s: string]: React.ReactElement } = {
     Home: <HomeIcon />,
     Trash: <DeleteIcon />,
   }
