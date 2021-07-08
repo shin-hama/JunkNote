@@ -4,8 +4,8 @@ import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
 import Typography from '@material-ui/core/Typography'
 
-type MemoCardProps = { text: string }
-const MemoCard = ({ text }: MemoCardProps) => {
+type Props = { text: string }
+const MemoCard: React.FC<Props> = ({ text }) => {
   return (
     <Card>
       <CardContent>
@@ -13,9 +13,6 @@ const MemoCard = ({ text }: MemoCardProps) => {
       </CardContent>
     </Card>
   )
-}
-MemoCard.propTypes = {
-  text: PropTypes.string,
 }
 
 export default MemoCard

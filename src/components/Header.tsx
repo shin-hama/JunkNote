@@ -1,15 +1,27 @@
 import React from 'react'
+import clsx from 'clsx'
 import { fade, makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import InputBase from '@material-ui/core/InputBase'
+import IconButton from '@material-ui/core/IconButton'
+import MenuIcon from '@material-ui/icons/Menu'
+import SearchIcon from '@material-ui/icons/Search'
+
+import LeftDrawer from './LeftDrawer'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
+    overlap: {
+      zIndex: theme.zIndex.drawer + 1,
+    },
     grow: {
       flexGrow: 1,
+    },
+    menuButton: {
+      marginRight: theme.spacing(2),
     },
     title: {
       display: 'none',
@@ -31,6 +43,15 @@ const useStyles = makeStyles((theme: Theme) =>
         marginLeft: theme.spacing(3),
         width: 'auto',
       },
+    },
+    searchIcon: {
+      padding: theme.spacing(0, 2),
+      height: '100%',
+      position: 'absolute',
+      pointerEvents: 'none',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
     },
     inputRoot: {
       color: 'inherit',
@@ -62,30 +83,51 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function Header() {
   const classes = useStyles()
+  const [isDrawerOpen, setIsDrawerOpen] = React.useState<boolean>(true)
+
+  const handleOpen = () => {
+    setIsDrawerOpen(!isDrawerOpen)
+  }
 
   return (
-    <div className={classes.grow}>
-      <AppBar position="static">
-        <Toolbar>
-          <Typography className={classes.title} variant="h6" noWrap>
-            Junk Note
-          </Typography>
-          <div className={classes.grow} />
-          <div className={classes.search}>
-            <InputBase
-              placeholder="Search..."
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
-              }}
-              inputProps={{ 'area-label': 'search' }}
-            />
-          </div>
-          <Button>
-            <Typography variant="button">Login</Typography>
-          </Button>
-        </Toolbar>
-      </AppBar>
+    <div>
+      <div className={classes.grow}>
+        <AppBar position="static">
+          <Toolbar>
+            <IconButton
+              edge="start"
+              onClick={handleOpen}
+              className={clsx(classes.menuButton, classes.overlap)}
+              aria-label="menu">
+              <MenuIcon />
+            </IconButton>
+            <Typography
+              className={clsx(classes.title, classes.overlap)}
+              variant="h6"
+              noWrap>
+              Junk Note
+            </Typography>
+            <div className={classes.grow} />
+            <div className={classes.search}>
+              <div className={classes.searchIcon}>
+                <SearchIcon />
+              </div>
+              <InputBase
+                placeholder="Search..."
+                classes={{
+                  root: classes.inputRoot,
+                  input: classes.inputInput,
+                }}
+                inputProps={{ 'area-label': 'search' }}
+              />
+            </div>
+            <Button variant="contained">
+              <Typography variant="button">Login</Typography>
+            </Button>
+          </Toolbar>
+        </AppBar>
+        <LeftDrawer open={isDrawerOpen} />
+      </div>
     </div>
   )
 }

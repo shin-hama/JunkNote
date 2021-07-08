@@ -1,22 +1,61 @@
 import React from 'react'
-import { makeStyles, createStyles } from '@material-ui/core/styles'
-import Button from '@material-ui/core/Button'
+import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
 import Drawer from '@material-ui/core/Drawer'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
 import Toolbar from '@material-ui/core/Toolbar'
+import DeleteIcon from '@material-ui/icons/Delete'
+import HomeIcon from '@material-ui/icons/Home'
 
-export default function LeftDrawer() {
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    paper: {
+      background: theme.palette.primary.main,
+    },
+    list: {
+      width: 250,
+    },
+  })
+)
+
+const DrawerItems = (): JSX.Element => {
+  const classes = useStyles()
+  const items: { [s: string]: JSX.Element } = {
+    Home: <HomeIcon />,
+    Trash: <DeleteIcon />,
+  }
+
   return (
-    <Drawer variant="persistent" anchor="left" open={true}>
-      <Toolbar />
+    <div className={classes.list} role="presentation">
       <List>
-        <ListItem>
-          <Button>test</Button>
-        </ListItem>
+        {Object.entries(items).map(([name, icon]) => (
+          <ListItem button key={name}>
+            <ListItemIcon>{icon}</ListItemIcon>
+            <ListItemText primary={name} color="inherit" />
+          </ListItem>
+        ))}
       </List>
+    </div>
+  )
+}
+
+type Props = {
+  open: boolean
+}
+const LeftDrawer: React.FC<Props> = ({ open }) => {
+  const classes = useStyles()
+  return (
+    <Drawer
+      variant="persistent"
+      anchor="left"
+      open={open}
+      classes={{ paper: classes.paper }}>
+      <Toolbar />
+      {DrawerItems()}
     </Drawer>
   )
 }
+
+export default LeftDrawer

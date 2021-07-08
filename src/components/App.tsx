@@ -4,7 +4,6 @@ import Container from '@material-ui/core/Container'
 import Grid from '@material-ui/core/Grid'
 
 import Header from './Header'
-import LeftDrawer from './LeftDrawer'
 import MemoCard from './MemoCard'
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -26,7 +25,6 @@ export default function App() {
   return (
     <div className="reactApp">
       <Header />
-      <LeftDrawer />
       <Container maxWidth="md" className={classes.mainContainer}>
         <Grid container justify="flex-start" spacing={2}>
           {testMemos.map((item, i) => (

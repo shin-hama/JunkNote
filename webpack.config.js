@@ -32,7 +32,7 @@ module.exports = {
         use: [
           {
             // babel
-            loader: 'babel-loader',
+            loader: 'babel-loader?cacheDirectory',
             options: {
               presets: ['@babel/preset-env', '@babel/preset-react'],
             },
