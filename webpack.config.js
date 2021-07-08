@@ -1,3 +1,4 @@
+/* eslint @typescript-eslint/no-var-requires: 0 */
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
@@ -17,6 +18,13 @@ module.exports = {
     publicPath: '/js/',
     filename: 'bundle.js',
   },
+  // to make faster for building
+  cache: {
+    type: 'filesystem',
+    buildDependencies: {
+      config: [__filename],
+    },
+  },
   module: {
     rules: [
       {
@@ -25,7 +33,7 @@ module.exports = {
         use: [
           {
             // babel
-            loader: 'babel-loader',
+            loader: 'babel-loader?cacheDirectory',
             options: {
               presets: ['@babel/preset-env', '@babel/preset-react'],
             },

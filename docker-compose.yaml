@@ -7,8 +7,6 @@ services:
       dockerfile: Dockerfile
       args:
         - http_proxy=$http_proxy
-    environment:
-      - http_proxy=$http_proxy
     restart: on-failure
     container_name: 'junk_note_client'
     ports:
