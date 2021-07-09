@@ -13,6 +13,7 @@
     "standard",
     "prettier"
   ],
+  "ignorePatterns": ["node_modules/*", "dist/*"],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaFeatures": {
@@ -28,5 +29,10 @@
     "no-use-before-define": "off",
     "@typescript-eslint/no-use-before-define": "off",
     "react/prop-types": "off"
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
   }
 }

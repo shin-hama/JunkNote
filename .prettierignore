@@ -1,6 +1,10 @@
+# vscode
+.vscode/*
+.devcontainer/*
+
+# node
 package.json
 package-lock.json
-.vscode/*
 dist/*
 
 # jest
