@@ -39,6 +39,12 @@
   },
   "scripts": {
     "build": "webpack",
-    "dev": "webpack serve"
+    "dev": "webpack serve",
+    "lint": "yarn lint:prettier & yarn lint:eslint",
+    "lint:prettier": "prettier --check .",
+    "lint:eslint": "yarn run eslint .",
+    "fix": "yarn run fix:prettier & yarn run fix:eslint",
+    "fix:prettier": "prettier --write .",
+    "fix:eslint": "prettier --write ."
   }
 }
