@@ -8,6 +8,10 @@ import MemoCard from './MemoCard'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
+    root: {
+      background: theme.palette.primary.main,
+      height: '100vh',
+    },
     mainContainer: {
       padding: theme.spacing(3),
     },
@@ -23,7 +27,7 @@ export default function App() {
     'Frontend for JunkNoteAPI',
   ]
   return (
-    <div className="reactApp">
+    <div className={classes.root}>
       <Header />
       <Container maxWidth="md" className={classes.mainContainer}>
         <Grid container justify="flex-start" spacing={2}>

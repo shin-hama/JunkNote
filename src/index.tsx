@@ -1,13 +1,13 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import CssBaseline from '@material-ui/core/CssBaseline'
-import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
+import { createTheme, MuiThemeProvider } from '@material-ui/core/styles'
 
 import './index.css'
 import App from './components/App'
 import reportWebVitals from './reportWebVitals'
 
-const customTheme = createMuiTheme({
+const customTheme = createTheme({
   mixins: {
     toolbar: {
       minHeight: 48,
