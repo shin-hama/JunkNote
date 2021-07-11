@@ -5,8 +5,11 @@
 # node
 package.json
 package-lock.json
-dist/*
+build/*
+public/*
 
 # jest
-
 coverage/*
+
+# github
+.github/*
