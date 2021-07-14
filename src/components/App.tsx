@@ -9,7 +9,6 @@ import MemoCard from './MemoCard'
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      background: theme.palette.primary.main,
       height: '100vh',
     },
     mainContainer: {
@@ -18,7 +17,8 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-export default function App() {
+type Props = { handleTheme: CallableFunction }
+export default function App({ handleTheme }: Props) {
   const classes = useStyles()
 
   const testMemos = [
@@ -28,7 +28,7 @@ export default function App() {
   ]
   return (
     <div className={classes.root}>
-      <Header />
+      <Header handleTheme={handleTheme} />
       <Container maxWidth="md" className={classes.mainContainer}>
         <Grid container justify="flex-start" spacing={2}>
           {testMemos.map((item, i) => (

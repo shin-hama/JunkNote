@@ -1,5 +1,4 @@
 import React from 'react'
-import clsx from 'clsx'
 import { fade, makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
@@ -9,12 +8,13 @@ import InputBase from '@material-ui/core/InputBase'
 import IconButton from '@material-ui/core/IconButton'
 import MenuIcon from '@material-ui/icons/Menu'
 import SearchIcon from '@material-ui/icons/Search'
+import Brightness4 from '@material-ui/icons/Brightness4'
 
 import LeftDrawer from './LeftDrawer'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    overlap: {
+    appBar: {
       zIndex: theme.zIndex.drawer + 1,
     },
     grow: {
@@ -81,7 +81,8 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-export default function Header() {
+type Props = { handleTheme: CallableFunction }
+export default function Header({ handleTheme }: Props) {
   const classes = useStyles()
   const [isDrawerOpen, setIsDrawerOpen] = React.useState<boolean>(true)
 
@@ -89,25 +90,31 @@ export default function Header() {
     setIsDrawerOpen(!isDrawerOpen)
   }
 
+  const handleButton = () => handleTheme()
+
   return (
     <div>
       <div className={classes.grow}>
-        <AppBar position="static">
+        <AppBar
+          elevation={1}
+          position="relative"
+          color="inherit"
+          className={classes.appBar}>
           <Toolbar>
             <IconButton
               edge="start"
               onClick={handleOpen}
-              className={clsx(classes.menuButton, classes.overlap)}
+              className={classes.menuButton}
               aria-label="menu">
               <MenuIcon />
             </IconButton>
-            <Typography
-              className={clsx(classes.title, classes.overlap)}
-              variant="h6"
-              noWrap>
+            <Typography className={classes.title} variant="h6" noWrap>
               Junk Note
             </Typography>
             <div className={classes.grow} />
+            <IconButton onClick={handleButton}>
+              <Brightness4 />
+            </IconButton>
             <div className={classes.search}>
               <div className={classes.searchIcon}>
                 <SearchIcon />

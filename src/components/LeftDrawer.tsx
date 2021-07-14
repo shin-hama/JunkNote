@@ -12,7 +12,8 @@ import HomeIcon from '@material-ui/icons/Home'
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     paper: {
-      background: theme.palette.primary.main,
+      background: 'transparent',
+      borderRight: '0',
     },
     list: {
       width: 200,
@@ -51,6 +52,7 @@ const LeftDrawer: React.FC<Props> = ({ open }) => {
       variant="persistent"
       anchor="left"
       open={open}
+      elevation={0}
       classes={{ paper: classes.paper }}>
       <Toolbar />
       {DrawerItems()}

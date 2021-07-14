@@ -6,13 +6,7 @@ import Typography from '@material-ui/core/Typography'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    card: {
-      background: theme.palette.primary.main,
-      color: theme.palette.primary.contrastText,
-      borderColor: theme.palette.primary.light,
-      borderStyle: 'solid',
-      borderWidth: 'thin',
-    },
+    card: {},
   })
 )
 
