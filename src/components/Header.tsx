@@ -6,9 +6,11 @@ import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import InputBase from '@material-ui/core/InputBase'
 import IconButton from '@material-ui/core/IconButton'
+import useTheme from '@material-ui/core/styles/useTheme'
 import MenuIcon from '@material-ui/icons/Menu'
 import SearchIcon from '@material-ui/icons/Search'
 import Brightness4 from '@material-ui/icons/Brightness4'
+import Brightness7 from '@material-ui/icons/Brightness7'
 
 import LeftDrawer from './LeftDrawer'
 
@@ -86,6 +88,8 @@ export default function Header({ handleTheme }: Props) {
   const classes = useStyles()
   const [isDrawerOpen, setIsDrawerOpen] = React.useState<boolean>(true)
 
+  const themeType = useTheme().palette.type
+
   const handleOpen = () => {
     setIsDrawerOpen(!isDrawerOpen)
   }
@@ -113,7 +117,7 @@ export default function Header({ handleTheme }: Props) {
             </Typography>
             <div className={classes.grow} />
             <IconButton onClick={handleButton}>
-              <Brightness4 />
+              {themeType === "light" ? <Brightness4 /> : <Brightness7 />}
             </IconButton>
             <div className={classes.search}>
               <div className={classes.searchIcon}>
