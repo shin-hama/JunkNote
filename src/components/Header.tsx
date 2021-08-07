@@ -12,8 +12,6 @@ import SearchIcon from '@material-ui/icons/Search'
 import Brightness4 from '@material-ui/icons/Brightness4'
 import Brightness7 from '@material-ui/icons/Brightness7'
 
-import LeftDrawer from './LeftDrawer'
-
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     appBar: {
@@ -83,18 +81,14 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-type Props = { handleTheme: CallableFunction }
-export default function Header({ handleTheme }: Props) {
+type Props = {
+  handleOpen: React.MouseEventHandler
+  handleTheme: React.MouseEventHandler
+}
+export default function Header({ handleOpen, handleTheme }: Props) {
   const classes = useStyles()
-  const [isDrawerOpen, setIsDrawerOpen] = React.useState<boolean>(true)
 
   const themeType = useTheme().palette.type
-
-  const handleOpen = () => {
-    setIsDrawerOpen(!isDrawerOpen)
-  }
-
-  const handleButton = () => handleTheme()
 
   return (
     <div>
@@ -116,8 +110,8 @@ export default function Header({ handleTheme }: Props) {
               Junk Note
             </Typography>
             <div className={classes.grow} />
-            <IconButton onClick={handleButton}>
-              {themeType === "light" ? <Brightness4 /> : <Brightness7 />}
+            <IconButton onClick={handleTheme}>
+              {themeType === 'light' ? <Brightness4 /> : <Brightness7 />}
             </IconButton>
             <div className={classes.search}>
               <div className={classes.searchIcon}>
@@ -137,7 +131,6 @@ export default function Header({ handleTheme }: Props) {
             </Button>
           </Toolbar>
         </AppBar>
-        <LeftDrawer open={isDrawerOpen} />
       </div>
     </div>
   )

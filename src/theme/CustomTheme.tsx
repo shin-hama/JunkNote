@@ -36,7 +36,7 @@ const CustomTheme: React.FC<Props> = ({ children, isLightMode }) => {
       button: {
         textTransform: 'none',
       },
-    },
+    }
   })
 
   return (

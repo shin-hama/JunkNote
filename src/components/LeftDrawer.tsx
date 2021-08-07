@@ -9,27 +9,29 @@ import Toolbar from '@material-ui/core/Toolbar'
 import DeleteIcon from '@material-ui/icons/Delete'
 import HomeIcon from '@material-ui/icons/Home'
 
+import { DRAWER_WIDTH } from '../constants'
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     paper: {
       background: 'transparent',
       borderRight: '0',
+      width: DRAWER_WIDTH,
     },
-    list: {
-      width: 200,
+    drawer: {
+      width: DRAWER_WIDTH,
     },
   })
 )
 
 const DrawerItems = (): React.ReactElement => {
-  const classes = useStyles()
   const items: { [s: string]: React.ReactElement } = {
     Home: <HomeIcon />,
     Trash: <DeleteIcon />,
   }
 
   return (
-    <div className={classes.list} role="presentation">
+    <div role="presentation">
       <List>
         {Object.entries(items).map(([name, icon]) => (
           <ListItem button key={name}>
@@ -53,7 +55,8 @@ const LeftDrawer: React.FC<Props> = ({ open }) => {
       anchor="left"
       open={open}
       elevation={0}
-      classes={{ paper: classes.paper }}>
+      classes={{ paper: classes.paper }}
+      className={classes.drawer}>
       <Toolbar />
       {DrawerItems()}
     </Drawer>
