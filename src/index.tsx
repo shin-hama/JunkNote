@@ -4,15 +4,24 @@ import CssBaseline from '@material-ui/core/CssBaseline'
 
 import './index.css'
 import App from './components/App'
+import CustomTheme from './theme/CustomTheme'
 import reportWebVitals from './reportWebVitals'
 
-ReactDOM.render(
-  <React.StrictMode>
-    <CssBaseline />
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-)
+const Index: React.FC = () => {
+  const [isLightMode, setIsLightMode] = React.useState<boolean>(true)
+  const handleThemeMode = () => setIsLightMode(!isLightMode)
+
+  return (
+    <React.StrictMode>
+      <CustomTheme isLightMode={isLightMode}>
+        <CssBaseline />
+        <App handleTheme={handleThemeMode} />
+      </CustomTheme>
+    </React.StrictMode>
+  )
+}
+
+ReactDOM.render(<Index />, document.getElementById('root'))
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

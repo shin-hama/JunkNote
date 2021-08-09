@@ -1,5 +1,4 @@
 import React from 'react'
-import clsx from 'clsx'
 import { fade, makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
@@ -7,14 +6,15 @@ import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import InputBase from '@material-ui/core/InputBase'
 import IconButton from '@material-ui/core/IconButton'
+import useTheme from '@material-ui/core/styles/useTheme'
 import MenuIcon from '@material-ui/icons/Menu'
 import SearchIcon from '@material-ui/icons/Search'
-
-import LeftDrawer from './LeftDrawer'
+import Brightness4 from '@material-ui/icons/Brightness4'
+import Brightness7 from '@material-ui/icons/Brightness7'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    overlap: {
+    appBar: {
       zIndex: theme.zIndex.drawer + 1,
     },
     grow: {
@@ -81,33 +81,38 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-export default function Header() {
+type Props = {
+  handleOpen: React.MouseEventHandler
+  handleTheme: React.MouseEventHandler
+}
+export default function Header({ handleOpen, handleTheme }: Props) {
   const classes = useStyles()
-  const [isDrawerOpen, setIsDrawerOpen] = React.useState<boolean>(true)
 
-  const handleOpen = () => {
-    setIsDrawerOpen(!isDrawerOpen)
-  }
+  const themeType = useTheme().palette.type
 
   return (
     <div>
       <div className={classes.grow}>
-        <AppBar position="static">
+        <AppBar
+          elevation={1}
+          position="relative"
+          color="inherit"
+          className={classes.appBar}>
           <Toolbar>
             <IconButton
               edge="start"
               onClick={handleOpen}
-              className={clsx(classes.menuButton, classes.overlap)}
+              className={classes.menuButton}
               aria-label="menu">
               <MenuIcon />
             </IconButton>
-            <Typography
-              className={clsx(classes.title, classes.overlap)}
-              variant="h6"
-              noWrap>
+            <Typography className={classes.title} variant="h6" noWrap>
               Junk Note
             </Typography>
             <div className={classes.grow} />
+            <IconButton onClick={handleTheme}>
+              {themeType === 'light' ? <Brightness4 /> : <Brightness7 />}
+            </IconButton>
             <div className={classes.search}>
               <div className={classes.searchIcon}>
                 <SearchIcon />
@@ -126,7 +131,6 @@ export default function Header() {
             </Button>
           </Toolbar>
         </AppBar>
-        <LeftDrawer open={isDrawerOpen} />
       </div>
     </div>
   )
