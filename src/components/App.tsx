@@ -5,6 +5,7 @@ import Container from '@material-ui/core/Container'
 import Grid from '@material-ui/core/Grid'
 
 import { DRAWER_WIDTH } from '../constants'
+import AddButton from './AddButton'
 import Header from './Header'
 import LeftDrawer from './LeftDrawer'
 import MemoCard from './MemoCard'
@@ -68,6 +69,7 @@ export default function App({ handleTheme }: Props) {
           ))}
         </Grid>
       </Container>
+      <AddButton />
     </div>
   )
 }
