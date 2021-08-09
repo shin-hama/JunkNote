@@ -15,6 +15,7 @@ const useStyles = makeStyles((theme: Theme) =>
       height: '100vh',
     },
     content: {
+      width: 'auto',
       flexGrow: 1,
       padding: theme.spacing(3),
       transition: theme.transitions.create('margin', {
@@ -55,7 +56,7 @@ export default function App({ handleTheme }: Props) {
       <Header handleOpen={handleOpen} handleTheme={handleTheme} />
       <LeftDrawer open={isDrawerOpen} />
       <Container
-        maxWidth="md"
+        maxWidth="lg"
         className={clsx(classes.content, {
           [classes.contentShift]: isDrawerOpen,
         })}>
