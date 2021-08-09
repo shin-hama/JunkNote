@@ -13,12 +13,15 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-function AddButton() {
+type Props = {
+  onClick: React.MouseEventHandler
+}
+function AddButton({onClick}: Props) {
   const classes = useStyles()
 
   return (
     <div className={classes.root}>
-      <Fab color="primary" aria-label="add">
+      <Fab color="primary" aria-label="add" onClick={onClick}>
         <AddIcon />
       </Fab>
     </div>

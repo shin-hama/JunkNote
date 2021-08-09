@@ -6,6 +6,7 @@ import Grid from '@material-ui/core/Grid'
 
 import { DRAWER_WIDTH } from '../constants'
 import AddButton from './AddButton'
+import AddMemoDialog from './AddMemoDialog'
 import Header from './Header'
 import LeftDrawer from './LeftDrawer'
 import MemoCard from './MemoCard'
@@ -39,6 +40,7 @@ type Props = { handleTheme: React.MouseEventHandler }
 export default function App({ handleTheme }: Props) {
   const classes = useStyles()
   const [isDrawerOpen, setIsDrawerOpen] = React.useState<boolean>(true)
+  const [isDialogOpen, setIsDialogOpen] = React.useState<boolean>(false)
 
   const testMemos = [
     'test hot reload',
@@ -50,6 +52,10 @@ export default function App({ handleTheme }: Props) {
 
   const handleOpen = () => {
     setIsDrawerOpen(!isDrawerOpen)
+  }
+
+  const handleDialogOpen = () => {
+    setIsDialogOpen(!isDialogOpen)
   }
 
   return (
@@ -69,7 +75,8 @@ export default function App({ handleTheme }: Props) {
           ))}
         </Grid>
       </Container>
-      <AddButton />
+      <AddButton onClick={handleDialogOpen} />
+      <AddMemoDialog isOpen={isDialogOpen} handleOpen={handleDialogOpen} />
     </div>
   )
 }
