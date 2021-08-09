@@ -6,6 +6,7 @@ import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
 import Toolbar from '@material-ui/core/Toolbar'
+import Create from '@material-ui/icons/Create'
 import DeleteIcon from '@material-ui/icons/Delete'
 import HomeIcon from '@material-ui/icons/Home'
 
@@ -21,22 +22,37 @@ const useStyles = makeStyles((theme: Theme) =>
     drawer: {
       width: DRAWER_WIDTH,
     },
+    drawerItem: {},
   })
 )
 
 const DrawerItems = (): React.ReactElement => {
-  const items: { [s: string]: React.ReactElement } = {
-    Home: <HomeIcon />,
-    Trash: <DeleteIcon />,
+  interface IItem {
+    name: string
+    icon: React.ReactElement
   }
+  const items: Array<IItem> = [
+    {
+      name: 'Add Memo',
+      icon: <Create />,
+    },
+    {
+      name: 'Home',
+      icon: <HomeIcon />,
+    },
+    {
+      name: 'Trash',
+      icon: <DeleteIcon />,
+    },
+  ]
 
   return (
     <div role="presentation">
       <List>
-        {Object.entries(items).map(([name, icon]) => (
-          <ListItem button key={name}>
-            <ListItemIcon>{icon}</ListItemIcon>
-            <ListItemText primary={name} color="inherit" />
+        {items.map((item) => (
+          <ListItem button key={item.name}>
+            <ListItemIcon>{item.icon}</ListItemIcon>
+            <ListItemText primary={item.name} color="inherit" />
           </ListItem>
         ))}
       </List>
