@@ -56,39 +56,42 @@ export default function App({ handleTheme }: Props) {
     setIsDialogOpen,
   }
 
-  const testMemos = [
+  const handleOpen = () => {
+    setIsDrawerOpen(!isDrawerOpen)
+  }
+
+  const [memos, setMemos] = React.useState([
     'test hot reload',
     'test memo 1',
     'Frontend for JunkNoteAPI',
     'test multi line',
     'coffee',
-  ]
-
-  const handleOpen = () => {
-    setIsDrawerOpen(!isDrawerOpen)
+  ])
+  const updateMemos = (newText: string) => {
+    setMemos([...memos, newText])
   }
 
   return (
     <div className={classes.root}>
+      <Header handleOpen={handleOpen} handleTheme={handleTheme} />
       <IsDialogOpen.Provider value={value}>
-        <Header handleOpen={handleOpen} handleTheme={handleTheme} />
         <LeftDrawer open={isDrawerOpen} />
-        <Container
-          maxWidth="lg"
-          className={clsx(classes.content, {
-            [classes.contentShift]: isDrawerOpen,
-          })}>
-          <Grid container justifyContent="flex-start" spacing={2}>
-            {testMemos.map((item, i) => (
-              <Grid key={i} item xs={6} md={4} lg={3}>
-                <MemoCard text={item} />
-              </Grid>
-            ))}
-          </Grid>
-        </Container>
         <AddButton />
-        <AddMemoDialog />
+        <AddMemoDialog onUpdate={updateMemos} />
       </IsDialogOpen.Provider>
+      <Container
+        maxWidth="lg"
+        className={clsx(classes.content, {
+          [classes.contentShift]: isDrawerOpen,
+        })}>
+        <Grid container justifyContent="flex-start" spacing={2}>
+          {memos.map((item, i) => (
+            <Grid key={i} item xs={6} md={4} lg={3}>
+              <MemoCard text={item} />
+            </Grid>
+          ))}
+        </Grid>
+      </Container>
     </div>
   )
 }

@@ -21,11 +21,25 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-function AddMemoDialog() {
+type Props = {
+  onUpdate: CallableFunction
+}
+function AddMemoDialog({ onUpdate }: Props) {
   const classes = useStyles()
   const { isDialogOpen, setIsDialogOpen } = React.useContext(IsDialogOpen)
+  const [text, setText] = React.useState('')
   const handleOpen = () => {
     setIsDialogOpen(!isDialogOpen)
+  }
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setText(event.target.value)
+  }
+
+  const handleSave = () => {
+    setIsDialogOpen(!isDialogOpen)
+    onUpdate(text)
+    setText('')
   }
 
   return (
@@ -42,6 +56,8 @@ function AddMemoDialog() {
             maxRows={16}
             fullWidth
             variant="outlined"
+            value={text}
+            onChange={handleChange}
           />
         </DialogContent>
         <DialogActions>
@@ -49,7 +65,7 @@ function AddMemoDialog() {
             <AttachFileIcon />
           </IconButton>
           <div className={classes.grow} />
-          <Button variant="contained" color="primary" onClick={handleOpen}>
+          <Button variant="contained" color="primary" onClick={handleSave}>
             Save Memo
           </Button>
         </DialogActions>
