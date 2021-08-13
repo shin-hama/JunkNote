@@ -44,7 +44,7 @@ services:
     restart: on-failure
     container_name: 'junk_note_client'
     ports:
-      - '3000:3000'
+      - '3091:3091'
     tty: true
 
     # Overrides default command so things don't shut down after the process ends.
