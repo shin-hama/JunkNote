@@ -3,6 +3,8 @@ import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import Fab from '@material-ui/core/Fab'
 import AddIcon from '@material-ui/icons/Add'
 
+import { IsDialogOpen } from './App'
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -13,15 +15,16 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-type Props = {
-  onClick: React.MouseEventHandler
-}
-function AddButton({onClick}: Props) {
+function AddButton() {
   const classes = useStyles()
+  const { isDialogOpen, setIsDialogOpen } = React.useContext(IsDialogOpen)
+  const handleOpen = () => {
+    setIsDialogOpen(!isDialogOpen)
+  }
 
   return (
     <div className={classes.root}>
-      <Fab color="primary" aria-label="add" onClick={onClick}>
+      <Fab color="primary" aria-label="add" onClick={handleOpen}>
         <AddIcon />
       </Fab>
     </div>

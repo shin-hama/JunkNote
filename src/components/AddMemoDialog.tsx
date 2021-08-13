@@ -8,6 +8,8 @@ import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import AttachFileIcon from '@material-ui/icons/AttachFile'
 
+import { IsDialogOpen } from './App'
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -19,39 +21,40 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-type Props = {
-  isOpen: boolean
-  handleOpen: React.MouseEventHandler
-}
-
-function AddMemoDialog({ isOpen, handleOpen }: Props) {
+function AddMemoDialog() {
   const classes = useStyles()
+  const { isDialogOpen, setIsDialogOpen } = React.useContext(IsDialogOpen)
+  const handleOpen = () => {
+    setIsDialogOpen(!isDialogOpen)
+  }
 
   return (
-    <Dialog open={isOpen} onClose={handleOpen} maxWidth="sm" fullWidth>
-      <DialogContent>
-        <TextField
-          autoFocus
-          margin="dense"
-          id="name"
-          label="Enter Memo"
-          multiline
-          minRows={4}
-          maxRows={16}
-          fullWidth
-          variant="outlined"
-        />
-      </DialogContent>
-      <DialogActions>
-        <IconButton>
-          <AttachFileIcon />
-        </IconButton>
-        <div className={classes.grow} />
-        <Button variant="contained" color="primary" onClick={handleOpen}>
-          Save Memo
-        </Button>
-      </DialogActions>
-    </Dialog>
+    <div>
+      <Dialog open={isDialogOpen} onClose={handleOpen} maxWidth="sm" fullWidth>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            label="Enter Memo"
+            multiline
+            minRows={4}
+            maxRows={16}
+            fullWidth
+            variant="outlined"
+          />
+        </DialogContent>
+        <DialogActions>
+          <IconButton>
+            <AttachFileIcon />
+          </IconButton>
+          <div className={classes.grow} />
+          <Button variant="contained" color="primary" onClick={handleOpen}>
+            Save Memo
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </div>
   )
 }
 

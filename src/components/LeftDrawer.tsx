@@ -11,6 +11,7 @@ import DeleteIcon from '@material-ui/icons/Delete'
 import HomeIcon from '@material-ui/icons/Home'
 
 import { DRAWER_WIDTH } from '../constants'
+import { IsDialogOpen } from './App'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -27,22 +28,35 @@ const useStyles = makeStyles((theme: Theme) =>
 )
 
 const DrawerItems = (): React.ReactElement => {
+  const { isDialogOpen, setIsDialogOpen } = React.useContext(IsDialogOpen)
+  const handleOpen = () => {
+    setIsDialogOpen(!isDialogOpen)
+  }
+
   interface IItem {
     name: string
     icon: React.ReactElement
+    func: React.MouseEventHandler
   }
   const items: Array<IItem> = [
     {
       name: 'Add Memo',
       icon: <Create />,
+      func: handleOpen,
     },
     {
       name: 'Home',
       icon: <HomeIcon />,
+      func: () => {
+        /* not implemented */
+      },
     },
     {
       name: 'Trash',
       icon: <DeleteIcon />,
+      func: () => {
+        /* not implemented */
+      },
     },
   ]
 
@@ -50,7 +64,7 @@ const DrawerItems = (): React.ReactElement => {
     <div role="presentation">
       <List>
         {items.map((item) => (
-          <ListItem button key={item.name}>
+          <ListItem button key={item.name} onClick={item.func}>
             <ListItemIcon>{item.icon}</ListItemIcon>
             <ListItemText primary={item.name} color="inherit" />
           </ListItem>

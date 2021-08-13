@@ -35,12 +35,26 @@ const useStyles = makeStyles((theme: Theme) =>
     },
   })
 )
+export interface ContextProps {
+  isDialogOpen: boolean
+  setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>
+}
+export const IsDialogOpen = React.createContext<ContextProps>({
+  isDialogOpen: false,
+  setIsDialogOpen: () => {
+    // no run
+  },
+})
 
 type Props = { handleTheme: React.MouseEventHandler }
 export default function App({ handleTheme }: Props) {
   const classes = useStyles()
   const [isDrawerOpen, setIsDrawerOpen] = React.useState<boolean>(true)
   const [isDialogOpen, setIsDialogOpen] = React.useState<boolean>(false)
+  const value = {
+    isDialogOpen,
+    setIsDialogOpen,
+  }
 
   const testMemos = [
     'test hot reload',
@@ -54,29 +68,27 @@ export default function App({ handleTheme }: Props) {
     setIsDrawerOpen(!isDrawerOpen)
   }
 
-  const handleDialogOpen = () => {
-    setIsDialogOpen(!isDialogOpen)
-  }
-
   return (
     <div className={classes.root}>
-      <Header handleOpen={handleOpen} handleTheme={handleTheme} />
-      <LeftDrawer open={isDrawerOpen} />
-      <Container
-        maxWidth="lg"
-        className={clsx(classes.content, {
-          [classes.contentShift]: isDrawerOpen,
-        })}>
-        <Grid container justify="flex-start" spacing={2}>
-          {testMemos.map((item, i) => (
-            <Grid key={i} item xs={6} md={4} lg={3}>
-              <MemoCard text={item} />
-            </Grid>
-          ))}
-        </Grid>
-      </Container>
-      <AddButton onClick={handleDialogOpen} />
-      <AddMemoDialog isOpen={isDialogOpen} handleOpen={handleDialogOpen} />
+      <IsDialogOpen.Provider value={value}>
+        <Header handleOpen={handleOpen} handleTheme={handleTheme} />
+        <LeftDrawer open={isDrawerOpen} />
+        <Container
+          maxWidth="lg"
+          className={clsx(classes.content, {
+            [classes.contentShift]: isDrawerOpen,
+          })}>
+          <Grid container justifyContent="flex-start" spacing={2}>
+            {testMemos.map((item, i) => (
+              <Grid key={i} item xs={6} md={4} lg={3}>
+                <MemoCard text={item} />
+              </Grid>
+            ))}
+          </Grid>
+        </Container>
+        <AddButton />
+        <AddMemoDialog />
+      </IsDialogOpen.Provider>
     </div>
   )
 }
