@@ -78,20 +78,20 @@ export default function App({ handleTheme }: Props) {
         <LeftDrawer open={isDrawerOpen} />
         <AddButton />
         <AddMemoDialog onUpdate={updateMemos} />
+        <Container
+          maxWidth="lg"
+          className={clsx(classes.content, {
+            [classes.contentShift]: isDrawerOpen,
+          })}>
+          <Grid container justifyContent="flex-start" spacing={2}>
+            {memos.map((item, i) => (
+              <Grid key={i} item xs={6} md={4} lg={3}>
+                <MemoCard text={item} />
+              </Grid>
+            ))}
+          </Grid>
+        </Container>
       </IsDialogOpen.Provider>
-      <Container
-        maxWidth="lg"
-        className={clsx(classes.content, {
-          [classes.contentShift]: isDrawerOpen,
-        })}>
-        <Grid container justifyContent="flex-start" spacing={2}>
-          {memos.map((item, i) => (
-            <Grid key={i} item xs={6} md={4} lg={3}>
-              <MemoCard text={item} />
-            </Grid>
-          ))}
-        </Grid>
-      </Container>
     </div>
   )
 }
