@@ -6,6 +6,7 @@ import CardContent from '@material-ui/core/CardContent'
 import Typography from '@material-ui/core/Typography'
 
 import { IsDialogOpen } from './App'
+import { MemoFactory } from '../model/Memo'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -13,12 +14,12 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-type Props = { text: string }
-const MemoCard: React.FC<Props> = ({ text }) => {
+type Props = { text: string; id: number; }
+const MemoCard: React.FC<Props> = ({ text, id }) => {
   const classes = useStyles()
-  const { isDialogOpen, setIsDialogOpen } = React.useContext(IsDialogOpen)
+  const { setMemo } = React.useContext(IsDialogOpen)
   const handleOpen = () => {
-    setIsDialogOpen(!isDialogOpen)
+    setMemo(MemoFactory({id: id, text: text}))
   }
 
   return (

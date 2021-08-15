@@ -11,6 +11,7 @@ import DeleteIcon from '@material-ui/icons/Delete'
 import HomeIcon from '@material-ui/icons/Home'
 
 import { DRAWER_WIDTH } from '../constants'
+import { MemoFactory } from '../model/Memo'
 import { IsDialogOpen } from './App'
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -28,9 +29,9 @@ const useStyles = makeStyles((theme: Theme) =>
 )
 
 const DrawerItems = (): React.ReactElement => {
-  const { isDialogOpen, setIsDialogOpen } = React.useContext(IsDialogOpen)
+  const { setMemo } = React.useContext(IsDialogOpen)
   const handleOpen = () => {
-    setIsDialogOpen(!isDialogOpen)
+    setMemo(MemoFactory({}))
   }
 
   interface IItem {

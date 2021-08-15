@@ -26,10 +26,11 @@ type Props = {
 }
 function AddMemoDialog({ onUpdate }: Props) {
   const classes = useStyles()
-  const { isDialogOpen, setIsDialogOpen } = React.useContext(IsDialogOpen)
+  const { memo, setMemo } = React.useContext(IsDialogOpen)
+  const [isOpen, setIsOpen] = React.useState(false)
   const [text, setText] = React.useState('')
-  const handleOpen = () => {
-    setIsDialogOpen(!isDialogOpen)
+  const handleClose = () => {
+    setMemo(null)
   }
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -37,14 +38,26 @@ function AddMemoDialog({ onUpdate }: Props) {
   }
 
   const handleSave = () => {
-    setIsDialogOpen(!isDialogOpen)
-    onUpdate(text)
+    if (memo !== null) {
+      onUpdate(text, memo.id)
+    }
+    setMemo(null)
     setText('')
   }
 
+  React.useEffect(() => {
+    if (memo === null) {
+      setIsOpen(false)
+      setText('')
+    } else {
+      setText(memo.text)
+      setIsOpen(true)
+    }
+  }, [memo])
+
   return (
     <div>
-      <Dialog open={isDialogOpen} onClose={handleOpen} maxWidth="sm" fullWidth>
+      <Dialog open={isOpen} onClose={handleClose} maxWidth="sm" fullWidth>
         <DialogContent>
           <TextField
             autoFocus

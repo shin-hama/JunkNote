@@ -4,6 +4,7 @@ import Fab from '@material-ui/core/Fab'
 import AddIcon from '@material-ui/icons/Add'
 
 import { IsDialogOpen } from './App'
+import { MemoFactory } from '../model/Memo'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -17,9 +18,9 @@ const useStyles = makeStyles((theme: Theme) =>
 
 function AddButton() {
   const classes = useStyles()
-  const { isDialogOpen, setIsDialogOpen } = React.useContext(IsDialogOpen)
+  const { setMemo } = React.useContext(IsDialogOpen)
   const handleOpen = () => {
-    setIsDialogOpen(!isDialogOpen)
+    setMemo(MemoFactory({}))
   }
 
   return (

@@ -10,6 +10,7 @@ import AddMemoDialog from './AddMemoDialog'
 import Header from './Header'
 import LeftDrawer from './LeftDrawer'
 import MemoCard from './MemoCard'
+import { IMemo } from '../model/Memo'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -35,13 +36,14 @@ const useStyles = makeStyles((theme: Theme) =>
     },
   })
 )
+
 export interface ContextProps {
-  isDialogOpen: boolean
-  setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>
+  memo: IMemo | null
+  setMemo: React.Dispatch<React.SetStateAction<IMemo | null>>
 }
 export const IsDialogOpen = React.createContext<ContextProps>({
-  isDialogOpen: false,
-  setIsDialogOpen: () => {
+  memo: null,
+  setMemo: () => {
     // no run
   },
 })
@@ -50,10 +52,10 @@ type Props = { handleTheme: React.MouseEventHandler }
 export default function App({ handleTheme }: Props) {
   const classes = useStyles()
   const [isDrawerOpen, setIsDrawerOpen] = React.useState<boolean>(true)
-  const [isDialogOpen, setIsDialogOpen] = React.useState<boolean>(false)
+  const [memo, setMemo] = React.useState<IMemo | null>(null)
   const value = {
-    isDialogOpen,
-    setIsDialogOpen,
+    memo: memo,
+    setMemo: setMemo,
   }
 
   const handleOpen = () => {
@@ -67,8 +69,13 @@ export default function App({ handleTheme }: Props) {
     'test multi line',
     'coffee',
   ])
-  const updateMemos = (newText: string) => {
-    setMemos([...memos, newText])
+  const updateMemos = (newText: string, id: number) => {
+    if (id === -1) {
+      setMemos([...memos, newText])
+    } else {
+      memos[id] = newText
+      setMemos([...memos])
+    }
   }
 
   return (
@@ -86,7 +93,7 @@ export default function App({ handleTheme }: Props) {
           <Grid container justifyContent="flex-start" spacing={2}>
             {memos.map((item, i) => (
               <Grid key={i} item xs={6} md={4} lg={3}>
-                <MemoCard text={item} />
+                <MemoCard text={item} id={i} />
               </Grid>
             ))}
           </Grid>
