@@ -15,6 +15,18 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     card: {
       position: 'relative',
+      '&:hover': {
+        border: 'solid 1px dimgray',
+        margin: '-1px',
+      },
+    },
+    actionArea: {
+      '&:hover $focusHighlight': {
+        opacity: 0,
+      },
+    },
+    focusHighlight: {
+      transition: 'opacity 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
     },
     fab: {
       position: 'absolute',
@@ -58,7 +70,12 @@ const MemoCard: React.FC<Props> = ({ text, id }) => {
       className={classes.card}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}>
-      <CardActionArea onClick={handleOpen}>
+      <CardActionArea
+        onClick={handleOpen}
+        classes={{
+          root: classes.actionArea,
+          focusHighlight: classes.focusHighlight,
+        }}>
         <CardContent>
           <Typography>{text}</Typography>
         </CardContent>
