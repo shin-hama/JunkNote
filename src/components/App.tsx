@@ -83,7 +83,6 @@ export default function App({ handleTheme }: Props) {
       <Header handleOpen={handleOpen} handleTheme={handleTheme} />
       <IsDialogOpen.Provider value={value}>
         <LeftDrawer open={isDrawerOpen} />
-        <AddButton />
         <AddMemoDialog onUpdate={updateMemos} />
         <Container
           maxWidth="lg"
@@ -98,6 +97,7 @@ export default function App({ handleTheme }: Props) {
             ))}
           </Grid>
         </Container>
+        <AddButton />
       </IsDialogOpen.Provider>
     </div>
   )
