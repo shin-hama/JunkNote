@@ -11,6 +11,7 @@ import Header from './Header'
 import LeftDrawer from './LeftDrawer'
 import MemoCard from './MemoCard'
 import { IMemo } from '../model/Memo'
+import { GetRandomIndexes } from '../utility/utility'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -78,6 +79,11 @@ export default function App({ handleTheme }: Props) {
     }
   }
 
+  const [indexes, setIndexes] = React.useState<number[]>([])
+  React.useEffect(() => {
+    setIndexes(GetRandomIndexes(memos.length))
+  }, [memos])
+
   return (
     <div className={classes.root}>
       <Header handleOpen={handleOpen} handleTheme={handleTheme} />
@@ -90,9 +96,9 @@ export default function App({ handleTheme }: Props) {
             [classes.contentShift]: isDrawerOpen,
           })}>
           <Grid container justifyContent="flex-start" spacing={2}>
-            {memos.map((item, i) => (
-              <Grid key={i} item xs={6} md={4} lg={3}>
-                <MemoCard text={item} id={i} />
+            {indexes.map((index) => (
+              <Grid key={index} item xs={6} md={4} lg={3}>
+                <MemoCard text={memos[index]} id={index} />
               </Grid>
             ))}
           </Grid>
