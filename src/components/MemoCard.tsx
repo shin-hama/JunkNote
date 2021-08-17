@@ -77,7 +77,9 @@ const MemoCard: React.FC<Props> = ({ text, id }) => {
           focusHighlight: classes.focusHighlight,
         }}>
         <CardContent>
-          <Typography>{text}</Typography>
+          <Typography display="inline" style={{ whiteSpace: 'pre-line' }}>
+            {text}
+          </Typography>
         </CardContent>
       </CardActionArea>
       <Fab
