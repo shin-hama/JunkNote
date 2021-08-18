@@ -17,6 +17,8 @@ import SearchIcon from '@material-ui/icons/Search'
 import Brightness4 from '@material-ui/icons/Brightness4'
 import Brightness7 from '@material-ui/icons/Brightness7'
 
+import SignInDialog from './SignInDialog'
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     appBar: {
@@ -92,8 +94,12 @@ type Props = {
 }
 export default function Header({ handleOpen, handleTheme }: Props) {
   const classes = useStyles()
-
   const themeType = useTheme().palette.type
+
+  const [isOpenSignIn, setIsOpenSignIn] = React.useState(false)
+  const handleSignInOpen = () => {
+    setIsOpenSignIn(true)
+  }
 
   return (
     <div>
@@ -131,12 +137,13 @@ export default function Header({ handleOpen, handleTheme }: Props) {
                 inputProps={{ 'area-label': 'search' }}
               />
             </div>
-            <Button variant="contained">
-              <Typography variant="button">Login</Typography>
+            <Button onClick={handleSignInOpen} variant="contained">
+              <Typography variant="button">Sign in</Typography>
             </Button>
           </Toolbar>
         </AppBar>
       </div>
+      <SignInDialog isOpen={isOpenSignIn} setIsOpen={setIsOpenSignIn} />
     </div>
   )
 }
