@@ -12,6 +12,7 @@ import LeftDrawer from './LeftDrawer'
 import MemoCard from './MemoCard'
 import { IMemo } from '../model/Memo'
 import { GetRandomIndexes } from '../utility/utility'
+import { GetMethod } from '../utility/ApiConnection'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -61,6 +62,7 @@ export default function App({ handleTheme }: Props) {
 
   const handleOpen = () => {
     setIsDrawerOpen(!isDrawerOpen)
+    GetMethod('memos/1', null, console.log)
   }
 
   const [memos, setMemos] = React.useState([
