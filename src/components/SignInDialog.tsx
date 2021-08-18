@@ -4,8 +4,8 @@ import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import Box from '@material-ui/core/Box'
 import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
-import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
+import DialogTitle from '@material-ui/core/DialogTitle'
 import FormControl from '@material-ui/core/FormControl'
 import IconButton from '@material-ui/core/IconButton'
 import InputAdornment from '@material-ui/core/InputAdornment/InputAdornment'
@@ -13,7 +13,6 @@ import InputLabel from '@material-ui/core/InputLabel'
 import OutlinedInput, {
   OutlinedInputProps,
 } from '@material-ui/core/OutlinedInput'
-import Typography from '@material-ui/core/Typography'
 import Visibility from '@material-ui/icons/Visibility'
 import VisibilityOff from '@material-ui/icons/VisibilityOff'
 
@@ -25,7 +24,10 @@ const useStyles = makeStyles((theme: Theme) =>
       margin: theme.spacing(1),
     },
     textField: {
-      width: '50ch',
+      width: '40ch',
+    },
+    title: {
+      textAlign: 'center',
     },
   })
 )
@@ -90,45 +92,47 @@ function SignInDialog({ isOpen, setIsOpen }: Props) {
 
   return (
     <div>
-      <Dialog open={isOpen} onClose={handleClose} maxWidth="sm" fullWidth>
+      <Dialog open={isOpen} onClose={handleClose} maxWidth="xs" fullWidth>
         <DialogContent>
-          <Typography variant="h4" align="center" className={classes.margin}>
-            Sign in
-          </Typography>
-          <Box textAlign="center" m={2}>
-            <SignInForm
-              autoFocus
-              id="email"
-              label="Email"
-              type="email"
-              onChange={handleChange('email')}
-              value={forms.email}
-            />
-            <SignInForm
-              id="password"
-              label="Password"
-              onChange={handleChange('password')}
-              type={showPassword ? 'text' : 'password'}
-              value={forms.password}
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label="toggle password visibility"
-                    onClick={handleShowPassword}
-                    onMouseDown={handleMouseDownPassword}
-                    edge="end">
-                    {showPassword ? <Visibility /> : <VisibilityOff />}
-                  </IconButton>
-                </InputAdornment>
-              }
-            />
-          </Box>
+          <form onSubmit={executeSignIn}>
+            <DialogTitle className={classes.title}>Sign in</DialogTitle>
+            <Box textAlign="center">
+              <SignInForm
+                autoFocus
+                id="email"
+                label="Email"
+                type="email"
+                onChange={handleChange('email')}
+                value={forms.email}
+              />
+              <SignInForm
+                id="password"
+                label="Password"
+                onChange={handleChange('password')}
+                type={showPassword ? 'text' : 'password'}
+                value={forms.password}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                      edge="end">
+                      {showPassword ? <Visibility /> : <VisibilityOff />}
+                    </IconButton>
+                  </InputAdornment>
+                }
+              />
+              <Button
+                variant="contained"
+                color="primary"
+                type="submit"
+                className={classes.margin}>
+                Sign in
+              </Button>
+            </Box>
+          </form>
         </DialogContent>
-        <DialogActions>
-          <Button variant="contained" color="primary" onClick={executeSignIn}>
-            Sign in
-          </Button>
-        </DialogActions>
       </Dialog>
     </div>
   )
