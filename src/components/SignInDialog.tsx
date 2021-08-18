@@ -16,7 +16,7 @@ import OutlinedInput, {
 import Visibility from '@material-ui/icons/Visibility'
 import VisibilityOff from '@material-ui/icons/VisibilityOff'
 
-import { GetMethod } from '../utility/ApiConnection'
+import { PostMethod } from '../utility/ApiConnection'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -47,8 +47,8 @@ const SignInForm = (props: OutlinedInputProps) => {
   )
 }
 
-interface FormsState {
-  email: string
+interface FormsState extends Record<string, string> {
+  username: string
   password: string
 }
 
@@ -60,17 +60,24 @@ type Props = {
 function SignInDialog({ isOpen, setIsOpen }: Props) {
   const classes = useStyles()
   const [forms, setForms] = React.useState<FormsState>({
-    email: '',
+    username: '',
     password: '',
   })
   const [showPassword, setShowPassword] = React.useState(false)
   const handleClose = () => {
+    console.log(window.localStorage.getItem('myBearerToken'))
+    window.localStorage.removeItem('myBearerToken')
     setIsOpen(false)
   }
 
-  const executeSignIn = () => {
+  const executeSignIn = (event: React.FormEvent) => {
+    event.preventDefault()
     console.log(forms)
-    GetMethod('users/token', null, console.log)
+    const params = new URLSearchParams(forms)
+    PostMethod('users/token', null, params, (data: Record<string, string>) => {
+      console.log(data)
+      window.localStorage.setItem('myBearerToken', data.access_token)
+    })
     setIsOpen(false)
   }
 
@@ -102,8 +109,8 @@ function SignInDialog({ isOpen, setIsOpen }: Props) {
                 id="email"
                 label="Email"
                 type="email"
-                onChange={handleChange('email')}
-                value={forms.email}
+                onChange={handleChange('username')}
+                value={forms.username}
               />
               <SignInForm
                 id="password"
