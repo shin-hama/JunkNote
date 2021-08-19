@@ -4,7 +4,6 @@ import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import Box from '@material-ui/core/Box'
 import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
-import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import FormControl from '@material-ui/core/FormControl'
 import IconButton from '@material-ui/core/IconButton'
@@ -21,7 +20,8 @@ import { PostMethod } from '../utility/ApiConnection'
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     margin: {
-      margin: theme.spacing(1),
+      marginTop: theme.spacing(1),
+      marginBottom: theme.spacing(1),
     },
     textField: {
       width: '40ch',
@@ -47,7 +47,7 @@ const SignInForm = (props: OutlinedInputProps) => {
   )
 }
 
-interface FormsState extends Record<string, string> {
+type FormStates = {
   username: string
   password: string
 }
@@ -59,30 +59,27 @@ type Props = {
 
 function SignInDialog({ isOpen, setIsOpen }: Props) {
   const classes = useStyles()
-  const [forms, setForms] = React.useState<FormsState>({
+  const [forms, setForms] = React.useState<FormStates>({
     username: '',
     password: '',
   })
   const [showPassword, setShowPassword] = React.useState(false)
   const handleClose = () => {
-    console.log(window.localStorage.getItem('myBearerToken'))
-    window.localStorage.removeItem('myBearerToken')
     setIsOpen(false)
   }
 
   const executeSignIn = (event: React.FormEvent) => {
     event.preventDefault()
-    console.log(forms)
     const params = new URLSearchParams(forms)
     PostMethod('users/token', null, params, (data: Record<string, string>) => {
-      console.log(data)
       window.localStorage.setItem('myBearerToken', data.access_token)
+      window.location.reload()
     })
     setIsOpen(false)
   }
 
   const handleChange =
-    (prop: keyof FormsState) =>
+    (prop: keyof FormStates) =>
     (event: React.ChangeEvent<HTMLInputElement>) => {
       setForms({ ...forms, [prop]: event.target.value })
     }
@@ -99,47 +96,52 @@ function SignInDialog({ isOpen, setIsOpen }: Props) {
 
   return (
     <div>
-      <Dialog open={isOpen} onClose={handleClose} maxWidth="xs" fullWidth>
-        <DialogContent>
-          <form onSubmit={executeSignIn}>
-            <DialogTitle className={classes.title}>Sign in</DialogTitle>
-            <Box textAlign="center">
-              <SignInForm
-                autoFocus
-                id="email"
-                label="Email"
-                type="email"
-                onChange={handleChange('username')}
-                value={forms.username}
-              />
-              <SignInForm
-                id="password"
-                label="Password"
-                onChange={handleChange('password')}
-                type={showPassword ? 'text' : 'password'}
-                value={forms.password}
-                endAdornment={
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={handleShowPassword}
-                      onMouseDown={handleMouseDownPassword}
-                      edge="end">
-                      {showPassword ? <Visibility /> : <VisibilityOff />}
-                    </IconButton>
-                  </InputAdornment>
-                }
-              />
-              <Button
-                variant="contained"
-                color="primary"
-                type="submit"
-                className={classes.margin}>
-                Sign in
-              </Button>
-            </Box>
-          </form>
-        </DialogContent>
+      <Dialog
+        id="sign-in-title"
+        open={isOpen}
+        onClose={handleClose}
+        maxWidth="xs"
+        fullWidth>
+        <DialogTitle className={classes.title}>Sign in</DialogTitle>
+        <form onSubmit={executeSignIn}>
+          <Box textAlign="center">
+            <SignInForm
+              autoFocus
+              id="email"
+              label="Email"
+              type="email"
+              onChange={handleChange('username')}
+              value={forms.username}
+            />
+            <SignInForm
+              id="password"
+              label="Password"
+              onChange={handleChange('password')}
+              type={showPassword ? 'text' : 'password'}
+              value={forms.password}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleShowPassword}
+                    onMouseDown={handleMouseDownPassword}
+                    edge="end">
+                    {showPassword ? <Visibility /> : <VisibilityOff />}
+                  </IconButton>
+                </InputAdornment>
+              }
+            />
+          </Box>
+          <Box textAlign="center" className={classes.margin}>
+            <Button
+              variant="contained"
+              color="primary"
+              type="submit"
+              className={classes.margin}>
+              Sign in
+            </Button>
+          </Box>
+        </form>
       </Dialog>
     </div>
   )

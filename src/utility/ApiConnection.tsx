@@ -13,7 +13,7 @@ export const GetMethod = async (
   const uri = query
     ? `${baseApiHost}/${endpoint}?${query}`
     : `${baseApiHost}/${endpoint}`
-  axios
+  await axios
     .get(uri, Config())
     .then((response) => {
       callback?.(response.data)
