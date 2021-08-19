@@ -8,7 +8,6 @@ import {
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
-import Button from '@material-ui/core/Button'
 import InputBase from '@material-ui/core/InputBase'
 import IconButton from '@material-ui/core/IconButton'
 import useTheme from '@material-ui/core/styles/useTheme'
@@ -17,7 +16,7 @@ import SearchIcon from '@material-ui/icons/Search'
 import Brightness4 from '@material-ui/icons/Brightness4'
 import Brightness7 from '@material-ui/icons/Brightness7'
 
-import SignInDialog from './SignInDialog'
+import AccountButton from './AccountButton'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -96,11 +95,6 @@ export default function Header({ handleOpen, handleTheme }: Props) {
   const classes = useStyles()
   const themeType = useTheme().palette.type
 
-  const [isOpenSignIn, setIsOpenSignIn] = React.useState(false)
-  const handleSignInOpen = () => {
-    setIsOpenSignIn(true)
-  }
-
   return (
     <div>
       <div className={classes.grow}>
@@ -137,13 +131,10 @@ export default function Header({ handleOpen, handleTheme }: Props) {
                 inputProps={{ 'area-label': 'search' }}
               />
             </div>
-            <Button onClick={handleSignInOpen} variant="contained">
-              <Typography variant="button">Sign in</Typography>
-            </Button>
+            <AccountButton />
           </Toolbar>
         </AppBar>
       </div>
-      <SignInDialog isOpen={isOpenSignIn} setIsOpen={setIsOpenSignIn} />
     </div>
   )
 }
