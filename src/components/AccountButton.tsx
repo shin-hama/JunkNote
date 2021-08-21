@@ -21,7 +21,8 @@ const AccountButton = () => {
   const getCurrentUser = () => {
     GetMethod('users/me', null, (data: UserStates) => {
       setUser(data)
-      // TODO: Save new token
+      // Update stored token to extend the expiration.
+      window.localStorage.setItem('myBearerToken', data.access_token)
     })
   }
 

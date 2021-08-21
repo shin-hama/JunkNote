@@ -45,7 +45,7 @@ const AccountMenu = ({ user, menuProps }: Props) => {
       className={classes.menu}
       {...menuProps}>
       <MenuItem button={false}>
-        <Typography>Signed in as {user?.username}</Typography>
+        <Typography>Signed in as {user.username}</Typography>
       </MenuItem>
       <Divider />
       <MenuItem button onClick={signOut}>

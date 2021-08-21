@@ -15,6 +15,7 @@ import OutlinedInput, {
 import Visibility from '@material-ui/icons/Visibility'
 import VisibilityOff from '@material-ui/icons/VisibilityOff'
 
+import { UserStates } from '../model/User'
 import { PostMethod } from '../utility/ApiConnection'
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -63,7 +64,7 @@ function SignInDialog(props: DialogProps) {
   const executeSignIn = (event: React.FormEvent) => {
     event.preventDefault()
     const params = new URLSearchParams(forms)
-    PostMethod('users/token', null, params, (data: Record<string, string>) => {
+    PostMethod('users/token', null, params, (data: UserStates) => {
       window.localStorage.setItem('myBearerToken', data.access_token)
       window.location.reload()
     })
