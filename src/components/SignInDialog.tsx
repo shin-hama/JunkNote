@@ -3,6 +3,7 @@ import clsx from 'clsx'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import Box from '@material-ui/core/Box'
 import Button from '@material-ui/core/Button'
+import CircularProgress from '@material-ui/core/CircularProgress'
 import Dialog, { DialogProps } from '@material-ui/core/Dialog'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import FormControl from '@material-ui/core/FormControl'
@@ -60,9 +61,11 @@ function SignInDialog(props: DialogProps) {
     password: '',
   })
   const [showPassword, setShowPassword] = React.useState(false)
+  const [isProcessing, setIsProcessing] = React.useState(false)
 
   const executeSignIn = (event: React.FormEvent) => {
     event.preventDefault()
+    setIsProcessing(true)
     const params = new URLSearchParams(forms)
     PostMethod('users/token', null, params, (data: UserStates) => {
       window.localStorage.setItem('myBearerToken', data.access_token)
@@ -120,13 +123,17 @@ function SignInDialog(props: DialogProps) {
             />
           </Box>
           <Box textAlign="center" className={classes.margin}>
-            <Button
-              variant="contained"
-              color="primary"
-              type="submit"
-              className={classes.margin}>
-              Sign in
-            </Button>
+            {isProcessing ? (
+              <CircularProgress />
+            ) : (
+              <Button
+                variant="contained"
+                color="primary"
+                type="submit"
+                className={classes.margin}>
+                Sign in
+              </Button>
+            )}
           </Box>
         </form>
       </Dialog>
