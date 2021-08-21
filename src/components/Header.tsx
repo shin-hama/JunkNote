@@ -8,7 +8,6 @@ import {
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
-import Button from '@material-ui/core/Button'
 import InputBase from '@material-ui/core/InputBase'
 import IconButton from '@material-ui/core/IconButton'
 import useTheme from '@material-ui/core/styles/useTheme'
@@ -16,6 +15,8 @@ import MenuIcon from '@material-ui/icons/Menu'
 import SearchIcon from '@material-ui/icons/Search'
 import Brightness4 from '@material-ui/icons/Brightness4'
 import Brightness7 from '@material-ui/icons/Brightness7'
+
+import AccountButton from './AccountButton'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -92,7 +93,6 @@ type Props = {
 }
 export default function Header({ handleOpen, handleTheme }: Props) {
   const classes = useStyles()
-
   const themeType = useTheme().palette.type
 
   return (
@@ -131,9 +131,7 @@ export default function Header({ handleOpen, handleTheme }: Props) {
                 inputProps={{ 'area-label': 'search' }}
               />
             </div>
-            <Button variant="contained">
-              <Typography variant="button">Login</Typography>
-            </Button>
+            <AccountButton />
           </Toolbar>
         </AppBar>
       </div>
