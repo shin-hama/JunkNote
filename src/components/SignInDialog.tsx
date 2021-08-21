@@ -3,7 +3,7 @@ import clsx from 'clsx'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import Box from '@material-ui/core/Box'
 import Button from '@material-ui/core/Button'
-import Dialog from '@material-ui/core/Dialog'
+import Dialog, { DialogProps } from '@material-ui/core/Dialog'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import FormControl from '@material-ui/core/FormControl'
 import IconButton from '@material-ui/core/IconButton'
@@ -52,21 +52,13 @@ type FormStates = {
   password: string
 }
 
-type Props = {
-  isOpen: boolean
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
-}
-
-function SignInDialog({ isOpen, setIsOpen }: Props) {
+function SignInDialog(props: DialogProps) {
   const classes = useStyles()
   const [forms, setForms] = React.useState<FormStates>({
     username: '',
     password: '',
   })
   const [showPassword, setShowPassword] = React.useState(false)
-  const handleClose = () => {
-    setIsOpen(false)
-  }
 
   const executeSignIn = (event: React.FormEvent) => {
     event.preventDefault()
@@ -75,7 +67,6 @@ function SignInDialog({ isOpen, setIsOpen }: Props) {
       window.localStorage.setItem('myBearerToken', data.access_token)
       window.location.reload()
     })
-    setIsOpen(false)
   }
 
   const handleChange =
@@ -96,12 +87,7 @@ function SignInDialog({ isOpen, setIsOpen }: Props) {
 
   return (
     <div>
-      <Dialog
-        id="sign-in-title"
-        open={isOpen}
-        onClose={handleClose}
-        maxWidth="xs"
-        fullWidth>
+      <Dialog id="sign-in-title" maxWidth="xs" fullWidth {...props}>
         <DialogTitle className={classes.title}>Sign in</DialogTitle>
         <form onSubmit={executeSignIn}>
           <Box textAlign="center">
