@@ -52,6 +52,7 @@ const SignInForm = (props: OutlinedInputProps) => {
 
 type FormStates = {
   username: string
+  email: string
   password: string
 }
 
@@ -59,11 +60,12 @@ function SignInDialog(props: DialogProps) {
   const classes = useStyles()
   const [forms, setForms] = React.useState<FormStates>({
     username: '',
+    email: '',
     password: '',
   })
   const [showPassword, setShowPassword] = React.useState(false)
 
-  const executeSignIn = (event: React.FormEvent) => {
+  const executeSignUp = (event: React.FormEvent) => {
     event.preventDefault()
     const params = new URLSearchParams(forms)
     PostMethod('users/token', null, params, (data: UserStates) => {
@@ -88,29 +90,34 @@ function SignInDialog(props: DialogProps) {
     event.stopPropagation()
   }
 
-  const handleSignUp = () => {
-    console.log('test')
-  }
-
   return (
     <div>
-      <Dialog id="sign-in-title" maxWidth="xs" fullWidth {...props}>
-        <DialogTitle className={classes.title}>Sign in</DialogTitle>
-        <form onSubmit={executeSignIn}>
+      <Dialog id="sign-up" maxWidth="xs" fullWidth {...props}>
+        <DialogTitle id="sign-up-title" className={classes.title}>
+          Sign Up Your Account
+        </DialogTitle>
+        <form onSubmit={executeSignUp}>
           <Box textAlign="center">
             <SignInForm
               autoFocus
-              id="email"
-              label="Email"
-              type="email"
+              id="username"
+              label="Username"
+              type="text"
               onChange={handleChange('username')}
               value={forms.username}
             />
             <SignInForm
+              id="email"
+              label="Email"
+              type="email"
+              onChange={handleChange('email')}
+              value={forms.email}
+            />
+            <SignInForm
               id="password"
               label="Password"
-              onChange={handleChange('password')}
               type={showPassword ? 'text' : 'password'}
+              onChange={handleChange('password')}
               value={forms.password}
               endAdornment={
                 <InputAdornment position="end">
@@ -131,21 +138,10 @@ function SignInDialog(props: DialogProps) {
               color="primary"
               type="submit"
               className={classes.margin}>
-              Sign in
+              Sign Up
             </Button>
           </Box>
         </form>
-        <Box textAlign="center" className={classes.margin}>
-          <Typography>Forgot password?</Typography>
-        </Box>
-        <Box textAlign="center" className={classes.margin}>
-          <Typography>
-            {" Don't have an account? "}
-            <Link component="button" variant="body1" onClick={handleSignUp}>
-              Sign up
-            </Link>
-          </Typography>
-        </Box>
       </Dialog>
     </div>
   )
