@@ -17,6 +17,7 @@ import Typography from '@material-ui/core/Typography'
 import Visibility from '@material-ui/icons/Visibility'
 import VisibilityOff from '@material-ui/icons/VisibilityOff'
 
+import { SetSignUpDialogOpen } from './Account'
 import { UserStates } from '../model/User'
 import { PostMethod } from '../utility/ApiConnection'
 
@@ -57,6 +58,7 @@ type FormStates = {
 
 function SignInDialog(props: DialogProps) {
   const classes = useStyles()
+  const setSignUpDialogOpen = React.useContext(SetSignUpDialogOpen)
   const [forms, setForms] = React.useState<FormStates>({
     username: '',
     password: '',
@@ -88,8 +90,8 @@ function SignInDialog(props: DialogProps) {
     event.stopPropagation()
   }
 
-  const handleSignUp = () => {
-    console.log('test')
+  const handleSignUpOpen = () => {
+    setSignUpDialogOpen(true)
   }
 
   return (
@@ -141,7 +143,7 @@ function SignInDialog(props: DialogProps) {
         <Box textAlign="center" className={classes.margin}>
           <Typography>
             {" Don't have an account? "}
-            <Link component="button" variant="body1" onClick={handleSignUp}>
+            <Link component="button" variant="body1" onClick={handleSignUpOpen}>
               Sign up
             </Link>
           </Typography>

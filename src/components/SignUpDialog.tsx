@@ -9,11 +9,9 @@ import FormControl from '@material-ui/core/FormControl'
 import IconButton from '@material-ui/core/IconButton'
 import InputAdornment from '@material-ui/core/InputAdornment/InputAdornment'
 import InputLabel from '@material-ui/core/InputLabel'
-import Link from '@material-ui/core/Link'
 import OutlinedInput, {
   OutlinedInputProps,
 } from '@material-ui/core/OutlinedInput'
-import Typography from '@material-ui/core/Typography'
 import Visibility from '@material-ui/icons/Visibility'
 import VisibilityOff from '@material-ui/icons/VisibilityOff'
 
@@ -56,7 +54,7 @@ type FormStates = {
   password: string
 }
 
-function SignInDialog(props: DialogProps) {
+const SignUpDialog = (props: DialogProps) => {
   const classes = useStyles()
   const [forms, setForms] = React.useState<FormStates>({
     username: '',
@@ -94,7 +92,7 @@ function SignInDialog(props: DialogProps) {
     <div>
       <Dialog id="sign-up" maxWidth="xs" fullWidth {...props}>
         <DialogTitle id="sign-up-title" className={classes.title}>
-          Sign Up Your Account
+          Join Junk Notes
         </DialogTitle>
         <form onSubmit={executeSignUp}>
           <Box textAlign="center">
@@ -147,4 +145,4 @@ function SignInDialog(props: DialogProps) {
   )
 }
 
-export default SignInDialog
+export default SignUpDialog

@@ -6,6 +6,7 @@ import MenuItem from '@material-ui/core/MenuItem'
 import Typography from '@material-ui/core/Typography'
 
 import SignInDialog from './SignInDialog'
+import SignUpDialog from './SignUpDialog'
 import { UserStates } from '../model/User'
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -17,6 +18,11 @@ const useStyles = makeStyles((theme: Theme) =>
     },
   })
 )
+
+type ContextProps = React.Dispatch<React.SetStateAction<boolean>>
+export const SetSignUpDialogOpen = React.createContext<ContextProps>(() => {
+  // no run
+})
 
 type Props = {
   user: UserStates
@@ -67,21 +73,38 @@ const AccountComponent = ({
   anchorEl,
   user,
 }: AccountProps) => {
+  const [signUpDialogOpen, setSignUpDialogOpen] = React.useState<boolean>(false)
+
   const handleClose = () => {
     setIsOpen(false)
   }
 
-  return user ? (
-    <AccountMenu
-      user={user}
-      menuProps={{
-        open: isOpen,
-        onClose: handleClose,
-        anchorEl: anchorEl,
-      }}
-    />
-  ) : (
-    <SignInDialog open={isOpen} onClose={handleClose} />
+  const handleSignUpDialogClose = () => {
+    setSignUpDialogOpen(false)
+  }
+
+  React.useEffect(() => {
+    if (signUpDialogOpen) {
+      setIsOpen(false)
+    }
+  }, [signUpDialogOpen, setIsOpen])
+
+  return (
+    <SetSignUpDialogOpen.Provider value={setSignUpDialogOpen}>
+      {user ? (
+        <AccountMenu
+          user={user}
+          menuProps={{
+            open: isOpen,
+            onClose: handleClose,
+            anchorEl: anchorEl,
+          }}
+        />
+      ) : (
+        <SignInDialog open={isOpen} onClose={handleClose} />
+      )}
+      <SignUpDialog open={signUpDialogOpen} onClose={handleSignUpDialogClose} />
+    </SetSignUpDialogOpen.Provider>
   )
 }
 
