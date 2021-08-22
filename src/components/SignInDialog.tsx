@@ -51,7 +51,7 @@ const SignInForm = (props: OutlinedInputProps) => {
   )
 }
 
-type FormStates = {
+type FormStates = Record<string, string> & {
   username: string
   password: string
 }
