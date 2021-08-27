@@ -1,4 +1,5 @@
 import React from 'react'
+import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 
@@ -6,7 +7,17 @@ import AccountComponent from './Account'
 import { UserStates } from '../model/User'
 import { GetMethod } from '../utility/ApiConnection'
 
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    button: {
+      minWidth: '80px',
+    },
+  })
+)
+
 const AccountButton = () => {
+  const classes = useStyles()
+
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null)
   const [buttonText, setButtonText] = React.useState('')
   const [user, setUser] = React.useState<UserStates | null>(null)
@@ -39,7 +50,11 @@ const AccountButton = () => {
 
   return (
     <div>
-      <Button onClick={handleButtonClick} variant="contained">
+      <Button
+        color="primary"
+        onClick={handleButtonClick}
+        variant="contained"
+        className={classes.button}>
         <Typography variant="button">{buttonText}</Typography>
       </Button>
       <AccountComponent
