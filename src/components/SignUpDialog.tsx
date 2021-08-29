@@ -3,22 +3,18 @@ import clsx from 'clsx'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import Box from '@material-ui/core/Box'
 import Button from '@material-ui/core/Button'
-import CircularProgress from '@material-ui/core/CircularProgress'
 import Dialog, { DialogProps } from '@material-ui/core/Dialog'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import FormControl from '@material-ui/core/FormControl'
 import IconButton from '@material-ui/core/IconButton'
 import InputAdornment from '@material-ui/core/InputAdornment/InputAdornment'
 import InputLabel from '@material-ui/core/InputLabel'
-import Link from '@material-ui/core/Link'
 import OutlinedInput, {
   OutlinedInputProps,
 } from '@material-ui/core/OutlinedInput'
-import Typography from '@material-ui/core/Typography'
 import Visibility from '@material-ui/icons/Visibility'
 import VisibilityOff from '@material-ui/icons/VisibilityOff'
 
-import { SetSignUpDialogOpen } from './Account'
 import { UserStates } from '../model/User'
 import { PostMethod } from '../utility/ApiConnection'
 
@@ -52,26 +48,26 @@ const SignInForm = (props: OutlinedInputProps) => {
   )
 }
 
-type FormStates = Record<string, string> & {
+type FormStates = {
   username: string
+  email: string
   password: string
 }
 
-function SignInDialog(props: DialogProps) {
+const SignUpDialog = (props: DialogProps) => {
   const classes = useStyles()
-  const setSignUpDialogOpen = React.useContext(SetSignUpDialogOpen)
   const [forms, setForms] = React.useState<FormStates>({
     username: '',
+    email: '',
     password: '',
   })
   const [showPassword, setShowPassword] = React.useState(false)
-  const [isProcessing, setIsProcessing] = React.useState(false)
 
-  const executeSignIn = (event: React.FormEvent) => {
+  const executeSignUp = (event: React.FormEvent) => {
     event.preventDefault()
-    setIsProcessing(true)
-    const params = new URLSearchParams(forms)
-    PostMethod('users/token', null, params, (data: UserStates) => {
+    const params = { user: forms }
+    console.log(params)
+    PostMethod('users', null, params, (data: UserStates) => {
       window.localStorage.setItem('myBearerToken', data.access_token)
       window.location.reload()
     })
@@ -93,29 +89,34 @@ function SignInDialog(props: DialogProps) {
     event.stopPropagation()
   }
 
-  const handleSignUpOpen = () => {
-    setSignUpDialogOpen(true)
-  }
-
   return (
     <div>
-      <Dialog id="sign-in-title" maxWidth="xs" fullWidth {...props}>
-        <DialogTitle className={classes.title}>Sign in</DialogTitle>
-        <form onSubmit={executeSignIn}>
+      <Dialog id="sign-up" maxWidth="xs" fullWidth {...props}>
+        <DialogTitle id="sign-up-title" className={classes.title}>
+          Join Junk Notes
+        </DialogTitle>
+        <form onSubmit={executeSignUp}>
           <Box textAlign="center">
             <SignInForm
               autoFocus
-              id="email"
-              label="Email"
-              type="email"
+              id="username"
+              label="Username"
+              type="text"
               onChange={handleChange('username')}
               value={forms.username}
             />
             <SignInForm
+              id="email"
+              label="Email"
+              type="email"
+              onChange={handleChange('email')}
+              value={forms.email}
+            />
+            <SignInForm
               id="password"
               label="Password"
-              onChange={handleChange('password')}
               type={showPassword ? 'text' : 'password'}
+              onChange={handleChange('password')}
               value={forms.password}
               endAdornment={
                 <InputAdornment position="end">
@@ -131,33 +132,18 @@ function SignInDialog(props: DialogProps) {
             />
           </Box>
           <Box textAlign="center" className={classes.margin}>
-            {isProcessing ? (
-              <CircularProgress />
-            ) : (
-              <Button
-                variant="contained"
-                color="primary"
-                type="submit"
-                className={classes.margin}>
-                Sign in
-              </Button>
-            )}
+            <Button
+              variant="contained"
+              color="primary"
+              type="submit"
+              className={classes.margin}>
+              Sign Up
+            </Button>
           </Box>
         </form>
-        <Box textAlign="center" className={classes.margin}>
-          <Typography>Forgot password?</Typography>
-        </Box>
-        <Box textAlign="center" className={classes.margin}>
-          <Typography>
-            {" Don't have an account? "}
-            <Link component="button" variant="body1" onClick={handleSignUpOpen}>
-              Sign up
-            </Link>
-          </Typography>
-        </Box>
       </Dialog>
     </div>
   )
 }
 
-export default SignInDialog
+export default SignUpDialog

@@ -21,19 +21,27 @@ const useStyles = makeStyles((theme: Theme) =>
     content: {
       width: 'auto',
       flexGrow: 1,
-      padding: theme.spacing(3),
+      paddingTop: theme.spacing(3),
+      paddingBottom: theme.spacing(3),
       transition: theme.transitions.create('margin', {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen,
       }),
-      marginLeft: 0,
+      '& .MuiContainer-maxWidthMd': {
+        maxWidth: '960px',
+      },
     },
     contentShift: {
       transition: theme.transitions.create('margin', {
         easing: theme.transitions.easing.easeOut,
         duration: theme.transitions.duration.enteringScreen,
       }),
-      marginLeft: DRAWER_WIDTH,
+      paddingLeft: DRAWER_WIDTH,
+    },
+    item: {
+      '& .MuiGrid-root': {
+        minWidth: '280px',
+      },
     },
   })
 )
@@ -91,13 +99,17 @@ export default function App({ handleTheme }: Props) {
         <LeftDrawer open={isDrawerOpen} />
         <AddMemoDialog onUpdate={updateMemos} />
         <Container
-          maxWidth="lg"
+          maxWidth="md"
           className={clsx(classes.content, {
             [classes.contentShift]: isDrawerOpen,
           })}>
-          <Grid container justifyContent="flex-start" spacing={2}>
+          <Grid
+            container
+            justifyContent="flex-start"
+            spacing={2}
+            className={classes.item}>
             {indexes.map((index) => (
-              <Grid key={index} item xs={6} md={4} lg={3}>
+              <Grid key={index} item xs={6} sm={4} md={4}>
                 <MemoCard text={memos[index]} id={index} />
               </Grid>
             ))}
