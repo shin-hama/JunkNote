@@ -2,16 +2,14 @@ import React from 'react'
 import clsx from 'clsx'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
-import Grid from '@material-ui/core/Grid'
 
 import { DRAWER_WIDTH } from '../constants'
 import AddButton from './AddButton'
 import AddMemoDialog from './AddMemoDialog'
 import Header from './Header'
 import LeftDrawer from './LeftDrawer'
-import MemoCard from './MemoCard'
+import MemoList from './MemoList'
 import { IMemo } from '../model/Memo'
-import { GetRandomIndexes } from '../utility/utility'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -87,11 +85,6 @@ export default function App({ handleTheme }: Props) {
     }
   }
 
-  const [indexes, setIndexes] = React.useState<number[]>([])
-  React.useEffect(() => {
-    setIndexes(GetRandomIndexes(memos.length))
-  }, [memos])
-
   return (
     <div className={classes.root}>
       <Header handleOpen={handleOpen} handleTheme={handleTheme} />
@@ -103,17 +96,7 @@ export default function App({ handleTheme }: Props) {
           className={clsx(classes.content, {
             [classes.contentShift]: isDrawerOpen,
           })}>
-          <Grid
-            container
-            justifyContent="flex-start"
-            spacing={2}
-            className={classes.item}>
-            {indexes.map((index) => (
-              <Grid key={index} item xs={6} sm={4} md={4}>
-                <MemoCard text={memos[index]} id={index} />
-              </Grid>
-            ))}
-          </Grid>
+          <MemoList />
         </Container>
         <AddButton />
       </IsDialogOpen.Provider>

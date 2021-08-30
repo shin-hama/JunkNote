@@ -18,3 +18,10 @@ export function MemoFactory({
     reference: reference,
   }
 }
+
+export interface IMemos {
+  containts: string
+  reference: string
+  created: Date
+  id: number
+}
