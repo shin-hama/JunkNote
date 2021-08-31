@@ -2,10 +2,8 @@ import React from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid'
 
-import { TOKEN_KEY } from '../constants'
 import MemoCard from './MemoCard'
 import { IMemos } from '../model/Memo'
-import { GetMethod } from '../utility/ApiConnection'
 import { GetRandomIndexes } from '../utility/utility'
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -18,22 +16,16 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-const MemoList: React.FC = () => {
+type Props = {
+  memos: IMemos[]
+}
+const MemoList: React.FC<Props> = ({ memos }) => {
   const classes = useStyles()
-  const [memos, setMemos] = React.useState<IMemos[]>([])
   const [indexes, setIndexes] = React.useState<number[]>([])
+
   React.useEffect(() => {
     setIndexes(GetRandomIndexes(memos.length))
   }, [memos])
-
-  React.useEffect(() => {
-    const token = window.localStorage.getItem(TOKEN_KEY)
-    if (token) {
-      GetMethod('memos', null, (data: IMemos[]) => {
-        setMemos(data)
-      })
-    }
-  }, [])
 
   return (
     <Grid

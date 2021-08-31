@@ -1,45 +1,16 @@
 import React from 'react'
-import clsx from 'clsx'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
-import Container from '@material-ui/core/Container'
 
-import { DRAWER_WIDTH } from '../constants'
-import AddButton from './AddButton'
 import AddMemoDialog from './AddMemoDialog'
+import ContentRegion from './ContentRegion'
 import Header from './Header'
 import LeftDrawer from './LeftDrawer'
-import MemoList from './MemoList'
 import { IMemo } from '../model/Memo'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       height: '100vh',
-    },
-    content: {
-      width: 'auto',
-      flexGrow: 1,
-      paddingTop: theme.spacing(3),
-      paddingBottom: theme.spacing(3),
-      transition: theme.transitions.create('margin', {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
-      }),
-      '& .MuiContainer-maxWidthMd': {
-        maxWidth: '960px',
-      },
-    },
-    contentShift: {
-      transition: theme.transitions.create('margin', {
-        easing: theme.transitions.easing.easeOut,
-        duration: theme.transitions.duration.enteringScreen,
-      }),
-      paddingLeft: DRAWER_WIDTH,
-    },
-    item: {
-      '& .MuiGrid-root': {
-        minWidth: '280px',
-      },
     },
   })
 )
@@ -91,14 +62,7 @@ export default function App({ handleTheme }: Props) {
       <IsDialogOpen.Provider value={value}>
         <LeftDrawer open={isDrawerOpen} />
         <AddMemoDialog onUpdate={updateMemos} />
-        <Container
-          maxWidth="md"
-          className={clsx(classes.content, {
-            [classes.contentShift]: isDrawerOpen,
-          })}>
-          <MemoList />
-        </Container>
-        <AddButton />
+        <ContentRegion isDrawerOpen={isDrawerOpen} />
       </IsDialogOpen.Provider>
     </div>
   )
