@@ -9,6 +9,8 @@ import DialogContent from '@material-ui/core/DialogContent'
 import AttachFileIcon from '@material-ui/icons/AttachFile'
 
 import { IsDialogOpen } from './App'
+import { IMemo, IMemoCreate } from '../model/Memo'
+import { PostMethod } from '../utility/ApiConnection'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -40,6 +42,15 @@ function AddMemoDialog({ onUpdate }: Props) {
   const handleSave = () => {
     if (memo !== null) {
       onUpdate(text, memo.id)
+      const memoParam: IMemoCreate = {
+        containts: text,
+        reference: '',
+      }
+      const params = { memo: memoParam }
+
+      PostMethod('memos', null, params, (data: IMemo) => {
+        console.log(data)
+      })
     }
     setMemo(null)
     setText('')

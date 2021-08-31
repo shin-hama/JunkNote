@@ -25,3 +25,8 @@ export interface IMemos {
   created: Date
   id: number
 }
+
+export interface IMemoCreate {
+  containts: string
+  reference: string
+}

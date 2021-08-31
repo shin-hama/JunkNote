@@ -2,7 +2,7 @@ import React from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid'
 
-import { DRAWER_WIDTH, TOKEN_KEY } from '../constants'
+import { TOKEN_KEY } from '../constants'
 import MemoCard from './MemoCard'
 import { IMemos } from '../model/Memo'
 import { GetMethod } from '../utility/ApiConnection'
@@ -10,32 +10,9 @@ import { GetRandomIndexes } from '../utility/utility'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    root: {
-      height: '100vh',
-    },
-    content: {
-      width: 'auto',
-      flexGrow: 1,
-      paddingTop: theme.spacing(3),
-      paddingBottom: theme.spacing(3),
-      transition: theme.transitions.create('margin', {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
-      }),
-      '& .MuiContainer-maxWidthMd': {
-        maxWidth: '960px',
-      },
-    },
-    contentShift: {
-      transition: theme.transitions.create('margin', {
-        easing: theme.transitions.easing.easeOut,
-        duration: theme.transitions.duration.enteringScreen,
-      }),
-      paddingLeft: DRAWER_WIDTH,
-    },
     item: {
       '& .MuiGrid-root': {
-        minWidth: '280px',
+        minWidth: '240px',
       },
     },
   })
