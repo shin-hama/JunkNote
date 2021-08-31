@@ -4,6 +4,7 @@ import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
 
 import AddButton from './AddButton'
+import AddMemoDialog from './AddMemoDialog'
 import MemoList from './MemoList'
 import { DRAWER_WIDTH, TOKEN_KEY } from '../constants'
 import { IMemos } from '../model/Memo'
@@ -41,6 +42,9 @@ const ContentRegion: React.FC<Props> = ({ isDrawerOpen }) => {
   const classes = useStyles()
 
   const [memos, setMemos] = React.useState<IMemos[]>([])
+  const updateMemos = (data: IMemos) => {
+    setMemos([data, ...memos])
+  }
 
   React.useEffect(() => {
     const token = window.localStorage.getItem(TOKEN_KEY)
@@ -61,6 +65,7 @@ const ContentRegion: React.FC<Props> = ({ isDrawerOpen }) => {
         <MemoList memos={memos} />
       </Container>
       <AddButton />
+      <AddMemoDialog onUpdate={updateMemos} />
     </div>
   )
 }

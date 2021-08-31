@@ -1,7 +1,6 @@
 import React from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 
-import AddMemoDialog from './AddMemoDialog'
 import ContentRegion from './ContentRegion'
 import Header from './Header'
 import LeftDrawer from './LeftDrawer'
@@ -40,28 +39,11 @@ export default function App({ handleTheme }: Props) {
     setIsDrawerOpen(!isDrawerOpen)
   }
 
-  const [memos, setMemos] = React.useState([
-    'test hot reload',
-    'test memo 1',
-    'Frontend for JunkNoteAPI',
-    'test multi line',
-    'coffee',
-  ])
-  const updateMemos = (newText: string, id: number) => {
-    if (id === -1) {
-      setMemos([...memos, newText])
-    } else {
-      memos[id] = newText
-      setMemos([...memos])
-    }
-  }
-
   return (
     <div className={classes.root}>
       <Header handleOpen={handleOpen} handleTheme={handleTheme} />
       <IsDialogOpen.Provider value={value}>
         <LeftDrawer open={isDrawerOpen} />
-        <AddMemoDialog onUpdate={updateMemos} />
         <ContentRegion isDrawerOpen={isDrawerOpen} />
       </IsDialogOpen.Provider>
     </div>
