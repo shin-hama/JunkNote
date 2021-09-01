@@ -14,11 +14,11 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-export interface ContextProps {
+interface ContextProps {
   memo: IMemo | null
   setMemo: React.Dispatch<React.SetStateAction<IMemo | null>>
 }
-export const IsDialogOpen = React.createContext<ContextProps>({
+export const MemoContext = React.createContext<ContextProps>({
   memo: null,
   setMemo: () => {
     // no run
@@ -42,10 +42,10 @@ export default function App({ handleTheme }: Props) {
   return (
     <div className={classes.root}>
       <Header handleOpen={handleOpen} handleTheme={handleTheme} />
-      <IsDialogOpen.Provider value={value}>
+      <MemoContext.Provider value={value}>
         <LeftDrawer open={isDrawerOpen} />
         <ContentRegion isDrawerOpen={isDrawerOpen} />
-      </IsDialogOpen.Provider>
+      </MemoContext.Provider>
     </div>
   )
 }

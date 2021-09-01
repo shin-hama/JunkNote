@@ -8,9 +8,9 @@ import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import AttachFileIcon from '@material-ui/icons/AttachFile'
 
-import { IsDialogOpen } from './App'
+import { MemoContext } from './App'
 import { MemosContext } from './ContentRegion'
-import { IMemos, IMemoCreate, IMemoUpdate } from '../model/Memo'
+import { IMemo, IMemoCreate, IMemoUpdate } from '../model/Memo'
 import { PostMethod, PutMethod } from '../utility/ApiConnection'
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const AddMemoDialog: React.FC = () => {
   const classes = useStyles()
-  const { memo, setMemo } = React.useContext(IsDialogOpen)
+  const { memo, setMemo } = React.useContext(MemoContext)
   const { memos, setMemos } = React.useContext(MemosContext)
   const [isOpen, setIsOpen] = React.useState(false)
   const [text, setText] = React.useState('')
@@ -48,7 +48,7 @@ const AddMemoDialog: React.FC = () => {
           reference: '',
         }
         const params = { memo: memoParam }
-        PostMethod('memos', null, params, (data: IMemos) => {
+        PostMethod('memos', null, params, (data: IMemo) => {
           console.log(data)
           setMemos([data, ...memos])
         })
@@ -59,7 +59,7 @@ const AddMemoDialog: React.FC = () => {
           isRemoved: false,
         }
         const params = { memo: memoParam }
-        PutMethod(`memos/${memo.id}`, null, params, (data: IMemos) => {
+        PutMethod(`memos/${memo.id}`, null, params, (data: IMemo) => {
           console.log(data)
           const updatedIndex = memos.findIndex((item) => item.id === data.id)
           memos[updatedIndex].containts = data.containts
@@ -76,7 +76,7 @@ const AddMemoDialog: React.FC = () => {
       setIsOpen(false)
       setText('')
     } else {
-      setText(memo.text)
+      setText(memo.containts)
       setIsOpen(true)
     }
   }, [memo])

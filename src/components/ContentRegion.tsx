@@ -7,7 +7,7 @@ import AddButton from './AddButton'
 import AddMemoDialog from './AddMemoDialog'
 import MemoList from './MemoList'
 import { DRAWER_WIDTH, TOKEN_KEY } from '../constants'
-import { IMemos } from '../model/Memo'
+import { IMemo } from '../model/Memo'
 import { GetMethod } from '../utility/ApiConnection'
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -36,8 +36,8 @@ const useStyles = makeStyles((theme: Theme) =>
 )
 
 interface MemosProps {
-  memos: IMemos[]
-  setMemos: React.Dispatch<React.SetStateAction<IMemos[]>>
+  memos: IMemo[]
+  setMemos: React.Dispatch<React.SetStateAction<IMemo[]>>
 }
 export const MemosContext = React.createContext<MemosProps>({
   memos: [],
@@ -52,7 +52,7 @@ type Props = {
 const ContentRegion: React.FC<Props> = ({ isDrawerOpen }) => {
   const classes = useStyles()
 
-  const [memos, setMemos] = React.useState<IMemos[]>([])
+  const [memos, setMemos] = React.useState<IMemo[]>([])
   const contextValue = {
     memos: memos,
     setMemos: setMemos,
@@ -61,7 +61,7 @@ const ContentRegion: React.FC<Props> = ({ isDrawerOpen }) => {
   React.useEffect(() => {
     const token = window.localStorage.getItem(TOKEN_KEY)
     if (token) {
-      GetMethod('memos', null, (data: IMemos[]) => {
+      GetMethod('memos', null, (data: IMemo[]) => {
         setMemos(data)
       })
     }

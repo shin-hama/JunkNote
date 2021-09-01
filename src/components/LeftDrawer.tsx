@@ -12,7 +12,7 @@ import HomeIcon from '@material-ui/icons/Home'
 
 import { DRAWER_WIDTH } from '../constants'
 import { MemoFactory } from '../model/Memo'
-import { IsDialogOpen } from './App'
+import { MemoContext } from './App'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme: Theme) =>
 )
 
 const DrawerItems = (): React.ReactElement => {
-  const { setMemo } = React.useContext(IsDialogOpen)
+  const { setMemo } = React.useContext(MemoContext)
   const handleOpen = () => {
     setMemo(MemoFactory({}))
   }

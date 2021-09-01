@@ -1,28 +1,21 @@
-export interface IMemo {
-  id: number
-  text: string
-  attached: string
-  reference: string
-}
-
 export function MemoFactory({
   id = -1,
   text = '',
-  attached = '',
+  created = Date(),
   reference = '',
-}) {
+}): IMemo {
   return {
-    id: id,
-    text: text,
-    attached: attached,
+    containts: text,
     reference: reference,
+    created: created,
+    id: id,
   }
 }
 
-export interface IMemos {
+export interface IMemo {
   containts: string
   reference: string
-  created: Date
+  created: string
   id: number
 }
 
