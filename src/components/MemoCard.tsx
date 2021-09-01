@@ -8,8 +8,8 @@ import Fab from '@material-ui/core/Fab'
 import Typography from '@material-ui/core/Typography'
 import PushPinOutlinedIcon from '@material-ui/icons/PushPinOutlined'
 
-import { IsDialogOpen } from './App'
-import { MemoFactory } from '../model/Memo'
+import { MemoContext } from './App'
+import { IMemo, MemoFactory } from '../model/Memo'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -44,13 +44,13 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-type Props = { text: string; id: number }
-const MemoCard: React.FC<Props> = ({ text, id }) => {
+type Props = { memo: IMemo }
+const MemoCard: React.FC<Props> = ({ memo }) => {
   const classes = useStyles()
   const [isOver, setIsOver] = React.useState(false)
-  const { setMemo } = React.useContext(IsDialogOpen)
+  const { setMemo } = React.useContext(MemoContext)
   const handleOpen = () => {
-    setMemo(MemoFactory({ id: id, text: text }))
+    setMemo(MemoFactory({ id: memo.id, text: memo.containts }))
   }
 
   const handleMouseEnter = () => {
@@ -78,7 +78,7 @@ const MemoCard: React.FC<Props> = ({ text, id }) => {
         }}>
         <CardContent>
           <Typography display="inline" style={{ whiteSpace: 'pre-line' }}>
-            {text}
+            {memo.containts}
           </Typography>
         </CardContent>
       </CardActionArea>

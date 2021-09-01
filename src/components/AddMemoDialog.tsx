@@ -8,7 +8,10 @@ import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import AttachFileIcon from '@material-ui/icons/AttachFile'
 
-import { IsDialogOpen } from './App'
+import { MemoContext } from './App'
+import { MemosContext } from './ContentRegion'
+import { IMemo, IMemoCreate, IMemoUpdate } from '../model/Memo'
+import { PostMethod, PutMethod } from '../utility/ApiConnection'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -21,12 +24,10 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-type Props = {
-  onUpdate: CallableFunction
-}
-function AddMemoDialog({ onUpdate }: Props) {
+const AddMemoDialog: React.FC = () => {
   const classes = useStyles()
-  const { memo, setMemo } = React.useContext(IsDialogOpen)
+  const { memo, setMemo } = React.useContext(MemoContext)
+  const { memos, setMemos } = React.useContext(MemosContext)
   const [isOpen, setIsOpen] = React.useState(false)
   const [text, setText] = React.useState('')
   const handleClose = () => {
@@ -39,7 +40,30 @@ function AddMemoDialog({ onUpdate }: Props) {
 
   const handleSave = () => {
     if (memo !== null) {
-      onUpdate(text, memo.id)
+      // TODO: Update memo when memo card is clicked that means memo.id !== -1
+      if (memo.id === -1) {
+        // Create new memo
+        const memoParam: IMemoCreate = {
+          containts: text,
+          reference: '',
+        }
+        const params = { memo: memoParam }
+        PostMethod('memos', null, params, (data: IMemo) => {
+          setMemos([data, ...memos])
+        })
+      } else {
+        const memoParam: IMemoUpdate = {
+          containts: text,
+          reference: '',
+          isRemoved: false,
+        }
+        const params = { memo: memoParam }
+        PutMethod(`memos/${memo.id}`, null, params, (data: IMemo) => {
+          const updatedIndex = memos.findIndex((item) => item.id === data.id)
+          memos[updatedIndex].containts = data.containts
+          setMemos([...memos])
+        })
+      }
     }
     setMemo(null)
     setText('')
@@ -50,7 +74,7 @@ function AddMemoDialog({ onUpdate }: Props) {
       setIsOpen(false)
       setText('')
     } else {
-      setText(memo.text)
+      setText(memo.containts)
       setIsOpen(true)
     }
   }, [memo])
