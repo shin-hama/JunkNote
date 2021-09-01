@@ -42,6 +42,25 @@ export const PostMethod = async (
     })
 }
 
+export const PutMethod = async (
+  endpoint: string,
+  query: string | null,
+  data: unknown,
+  callback: CallableFunction
+) => {
+  const uri = query
+    ? `${baseApiHost}/${endpoint}?${query}`
+    : `${baseApiHost}/${endpoint}`
+  await axios
+    .put(uri, data, Config())
+    .then((response) => {
+      callback?.(response.data)
+    })
+    .catch(() => {
+      console.log('fail to communicate with api')
+    })
+}
+
 const Config = () => {
   const token = window.localStorage.getItem('myBearerToken')
   if (token) {

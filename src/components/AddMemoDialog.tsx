@@ -9,8 +9,9 @@ import DialogContent from '@material-ui/core/DialogContent'
 import AttachFileIcon from '@material-ui/icons/AttachFile'
 
 import { IsDialogOpen } from './App'
-import { IMemos, IMemoCreate } from '../model/Memo'
-import { PostMethod } from '../utility/ApiConnection'
+import { MemosContext } from './ContentRegion'
+import { IMemos, IMemoCreate, IMemoUpdate } from '../model/Memo'
+import { PostMethod, PutMethod } from '../utility/ApiConnection'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -23,12 +24,10 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-type Props = {
-  onUpdate: CallableFunction
-}
-function AddMemoDialog({ onUpdate }: Props) {
+const AddMemoDialog: React.FC = () => {
   const classes = useStyles()
   const { memo, setMemo } = React.useContext(IsDialogOpen)
+  const { memos, setMemos } = React.useContext(MemosContext)
   const [isOpen, setIsOpen] = React.useState(false)
   const [text, setText] = React.useState('')
   const handleClose = () => {
@@ -41,16 +40,32 @@ function AddMemoDialog({ onUpdate }: Props) {
 
   const handleSave = () => {
     if (memo !== null) {
-      const memoParam: IMemoCreate = {
-        containts: text,
-        reference: '',
+      // TODO: Update memo when memo card is clicked that means memo.id !== -1
+      if (memo.id === -1) {
+        // Create new memo
+        const memoParam: IMemoCreate = {
+          containts: text,
+          reference: '',
+        }
+        const params = { memo: memoParam }
+        PostMethod('memos', null, params, (data: IMemos) => {
+          console.log(data)
+          setMemos([data, ...memos])
+        })
+      } else {
+        const memoParam: IMemoUpdate = {
+          containts: text,
+          reference: '',
+          isRemoved: false,
+        }
+        const params = { memo: memoParam }
+        PutMethod(`memos/${memo.id}`, null, params, (data: IMemos) => {
+          console.log(data)
+          const updatedIndex = memos.findIndex((item) => item.id === data.id)
+          memos[updatedIndex].containts = data.containts
+          setMemos([...memos])
+        })
       }
-      const params = { memo: memoParam }
-
-      PostMethod('memos', null, params, (data: IMemos) => {
-        console.log(data)
-        onUpdate(data)
-      })
     }
     setMemo(null)
     setText('')

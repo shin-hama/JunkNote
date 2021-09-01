@@ -35,6 +35,17 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
+interface MemosProps {
+  memos: IMemos[]
+  setMemos: React.Dispatch<React.SetStateAction<IMemos[]>>
+}
+export const MemosContext = React.createContext<MemosProps>({
+  memos: [],
+  setMemos: () => {
+    // no run
+  },
+})
+
 type Props = {
   isDrawerOpen: boolean
 }
@@ -42,8 +53,9 @@ const ContentRegion: React.FC<Props> = ({ isDrawerOpen }) => {
   const classes = useStyles()
 
   const [memos, setMemos] = React.useState<IMemos[]>([])
-  const updateMemos = (data: IMemos) => {
-    setMemos([data, ...memos])
+  const contextValue = {
+    memos: memos,
+    setMemos: setMemos,
   }
 
   React.useEffect(() => {
@@ -57,15 +69,17 @@ const ContentRegion: React.FC<Props> = ({ isDrawerOpen }) => {
 
   return (
     <div>
-      <Container
-        maxWidth="md"
-        className={clsx(classes.content, {
-          [classes.contentShift]: isDrawerOpen,
-        })}>
-        <MemoList memos={memos} />
-      </Container>
-      <AddButton />
-      <AddMemoDialog onUpdate={updateMemos} />
+      <MemosContext.Provider value={contextValue}>
+        <Container
+          maxWidth="md"
+          className={clsx(classes.content, {
+            [classes.contentShift]: isDrawerOpen,
+          })}>
+          <MemoList />
+        </Container>
+        <AddButton />
+        <AddMemoDialog />
+      </MemosContext.Provider>
     </div>
   )
 }

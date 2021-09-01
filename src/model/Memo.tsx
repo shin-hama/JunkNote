@@ -30,3 +30,9 @@ export interface IMemoCreate {
   containts: string
   reference: string
 }
+
+export interface IMemoUpdate {
+  containts: string
+  reference: string
+  isRemoved: boolean
+}
