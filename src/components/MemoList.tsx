@@ -33,7 +33,7 @@ const MemoList: React.FC = () => {
       className={classes.item}>
       {indexes.map((index) => (
         <Grid key={index} item xs={6} sm={4} md={4}>
-          <MemoCard text={memos[index].containts} id={index} />
+          <MemoCard text={memos[index].containts} id={memos[index].id} />
         </Grid>
       ))}
     </Grid>
