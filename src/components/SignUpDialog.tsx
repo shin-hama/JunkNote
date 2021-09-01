@@ -66,7 +66,6 @@ const SignUpDialog = (props: DialogProps) => {
   const executeSignUp = (event: React.FormEvent) => {
     event.preventDefault()
     const params = { user: forms }
-    console.log(params)
     PostMethod('users', null, params, (data: UserStates) => {
       window.localStorage.setItem('myBearerToken', data.access_token)
       window.location.reload()

@@ -49,7 +49,6 @@ const AddMemoDialog: React.FC = () => {
         }
         const params = { memo: memoParam }
         PostMethod('memos', null, params, (data: IMemo) => {
-          console.log(data)
           setMemos([data, ...memos])
         })
       } else {
@@ -60,7 +59,6 @@ const AddMemoDialog: React.FC = () => {
         }
         const params = { memo: memoParam }
         PutMethod(`memos/${memo.id}`, null, params, (data: IMemo) => {
-          console.log(data)
           const updatedIndex = memos.findIndex((item) => item.id === data.id)
           memos[updatedIndex].containts = data.containts
           setMemos([...memos])
