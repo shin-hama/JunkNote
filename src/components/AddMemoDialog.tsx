@@ -95,6 +95,13 @@ const AddMemoDialog: React.FC = () => {
             variant="outlined"
             value={text}
             onChange={handleChange}
+            onKeyDown={(e) => {
+              console.log(e)
+              if ((e.ctrlKey || e.metaKey) && e.code === 'Enter') {
+                console.log('enter with ctrl')
+                handleSave()
+              }
+            }}
           />
         </DialogContent>
         <DialogActions>
