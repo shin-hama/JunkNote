@@ -6,6 +6,7 @@ import TextField from '@material-ui/core/TextField'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
+import Tooltip from '@material-ui/core/Tooltip'
 import AttachFileIcon from '@material-ui/icons/AttachFile'
 
 import { MemoContext } from './App'
@@ -95,6 +96,11 @@ const AddMemoDialog: React.FC = () => {
             variant="outlined"
             value={text}
             onChange={handleChange}
+            onKeyDown={(e) => {
+              if ((e.ctrlKey || e.metaKey) && e.code === 'Enter') {
+                handleSave()
+              }
+            }}
           />
         </DialogContent>
         <DialogActions>
@@ -102,9 +108,11 @@ const AddMemoDialog: React.FC = () => {
             <AttachFileIcon />
           </IconButton>
           <div className={classes.grow} />
-          <Button variant="contained" color="primary" onClick={handleSave}>
-            Save Memo
-          </Button>
+          <Tooltip title="Save memo (Ctrl + Enter)" placement="top">
+            <Button variant="contained" color="primary" onClick={handleSave}>
+              Save Memo
+            </Button>
+          </Tooltip>
         </DialogActions>
       </Dialog>
     </div>
