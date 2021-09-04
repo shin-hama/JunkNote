@@ -20,7 +20,7 @@ import VisibilityOff from '@material-ui/icons/VisibilityOff'
 
 import { SetSignUpDialogOpen } from './Account'
 import { UserStates } from '../model/User'
-import { PostMethod } from '../utility/ApiConnection'
+import { ApiProps, ConnectApi } from '../utility/ApiConnection'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -71,10 +71,19 @@ function SignInDialog(props: DialogProps) {
     event.preventDefault()
     setIsProcessing(true)
     const params = new URLSearchParams(forms)
-    PostMethod('users/token', null, params, (data: UserStates) => {
-      window.localStorage.setItem('myBearerToken', data.access_token)
-      window.location.reload()
-    })
+    const props: ApiProps = {
+      method: 'post',
+      endpoint: 'users/token',
+      data: params,
+      callback: (data: UserStates) => {
+        window.localStorage.setItem('myBearerToken', data.access_token)
+        window.location.reload()
+      },
+      errorCallback: () => {
+        setIsProcessing(false)
+      },
+    }
+    ConnectApi(props)
   }
 
   const handleChange =

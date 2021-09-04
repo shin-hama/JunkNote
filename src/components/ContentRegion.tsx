@@ -8,7 +8,7 @@ import AddMemoDialog from './AddMemoDialog'
 import MemoList from './MemoList'
 import { DRAWER_WIDTH, TOKEN_KEY } from '../constants'
 import { IMemo } from '../model/Memo'
-import { GetMethod } from '../utility/ApiConnection'
+import { ApiProps, ConnectApi } from '../utility/ApiConnection'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -61,9 +61,14 @@ const ContentRegion: React.FC<Props> = ({ isDrawerOpen }) => {
   React.useEffect(() => {
     const token = window.localStorage.getItem(TOKEN_KEY)
     if (token) {
-      GetMethod('memos', null, (data: IMemo[]) => {
-        setMemos(data)
-      })
+      const props: ApiProps = {
+        method: 'get',
+        endpoint: 'memos',
+        callback: (data: IMemo[]) => {
+          setMemos(data)
+        },
+      }
+      ConnectApi(props)
     }
   }, [])
 

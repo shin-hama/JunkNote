@@ -12,7 +12,7 @@ import AttachFileIcon from '@material-ui/icons/AttachFile'
 import { MemoContext } from './App'
 import { MemosContext } from './ContentRegion'
 import { IMemo, IMemoCreate, IMemoUpdate } from '../model/Memo'
-import { PostMethod, PutMethod } from '../utility/ApiConnection'
+import { ApiProps, ConnectApi } from '../utility/ApiConnection'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -49,9 +49,15 @@ const AddMemoDialog: React.FC = () => {
           reference: '',
         }
         const params = { memo: memoParam }
-        PostMethod('memos', null, params, (data: IMemo) => {
-          setMemos([data, ...memos])
-        })
+        const props: ApiProps = {
+          method: 'post',
+          endpoint: `memos`,
+          data: params,
+          callback: (data: IMemo) => {
+            setMemos([data, ...memos])
+          },
+        }
+        ConnectApi(props)
       } else {
         const memoParam: IMemoUpdate = {
           containts: text,
@@ -59,11 +65,17 @@ const AddMemoDialog: React.FC = () => {
           isRemoved: false,
         }
         const params = { memo: memoParam }
-        PutMethod(`memos/${memo.id}`, null, params, (data: IMemo) => {
-          const updatedIndex = memos.findIndex((item) => item.id === data.id)
-          memos[updatedIndex].containts = data.containts
-          setMemos([...memos])
-        })
+        const props: ApiProps = {
+          method: 'put',
+          endpoint: `memos/${memo.id}`,
+          data: params,
+          callback: (data: IMemo) => {
+            const updatedIndex = memos.findIndex((item) => item.id === data.id)
+            memos[updatedIndex].containts = data.containts
+            setMemos([...memos])
+          },
+        }
+        ConnectApi(props)
       }
     }
     setMemo(null)

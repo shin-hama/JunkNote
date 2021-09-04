@@ -5,7 +5,7 @@ import Typography from '@material-ui/core/Typography'
 
 import AccountComponent from './Account'
 import { UserStates } from '../model/User'
-import { GetMethod } from '../utility/ApiConnection'
+import { ApiProps, ConnectApi } from '../utility/ApiConnection'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -30,11 +30,16 @@ const AccountButton = () => {
   }
 
   const getCurrentUser = () => {
-    GetMethod('users/me', null, (data: UserStates) => {
-      setUser(data)
-      // Update stored token to extend the expiration.
-      window.localStorage.setItem('myBearerToken', data.access_token)
-    })
+    const props: ApiProps = {
+      method: 'get',
+      endpoint: 'users/me',
+      callback: (data: UserStates) => {
+        setUser(data)
+        // Update stored token to extend the expiration.
+        window.localStorage.setItem('myBearerToken', data.access_token)
+      },
+    }
+    ConnectApi(props)
   }
 
   React.useEffect(() => {
