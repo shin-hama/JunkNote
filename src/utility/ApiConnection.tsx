@@ -3,8 +3,9 @@ import axios from 'axios'
 import { TOKEN_KEY } from '../constants'
 
 const host = process.env.REACT_APP_API_SERVER_HOST
-const baseApiHost = `//${host}/api`
 
+axios.defaults.baseURL = `//${host}/api`
+axios.defaults.timeout = 5000
 axios.defaults.withCredentials = true
 
 export const GetMethod = async (
@@ -71,7 +72,5 @@ const Config = () => {
 }
 
 const BuildUri = (endpoint: string, query: string | null): string => {
-  return query
-    ? `${baseApiHost}/${endpoint}?${query}`
-    : `${baseApiHost}/${endpoint}`
+  return query ? `/${endpoint}?${query}` : `/${endpoint}`
 }
