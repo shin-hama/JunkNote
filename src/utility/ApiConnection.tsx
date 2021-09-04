@@ -1,77 +1,50 @@
-import axios from 'axios'
+import axios, { Method } from 'axios'
 
 import { TOKEN_KEY } from '../constants'
 
 const host = process.env.REACT_APP_API_SERVER_HOST
-const baseApiHost = `//${host}/api`
 
+axios.defaults.baseURL = `//${host}/api`
+axios.defaults.timeout = 5000
 axios.defaults.withCredentials = true
 
-export const GetMethod = async (
-  endpoint: string,
-  query: string | null,
-  callback: CallableFunction
-) => {
-  const uri = BuildUri(endpoint, query)
-  await axios
-    .get(uri, Config())
+export const ConnectApi = async (props: ApiProps) => {
+  const uri = buildUri(props.endpoint, props.query)
+  await axios({
+    method: props.method,
+    url: uri,
+    data: props.data ?? null,
+    headers: getHeaders(),
+  })
     .then((response) => {
-      callback?.(response.data)
+      props.callback?.(response.data)
     })
     .catch(() => {
       console.log('fail to communicate with api')
+      props.errorCallback?.()
     })
 }
 
-export const PostMethod = async (
-  endpoint: string,
-  query: string | null,
-  data: unknown,
-  callback: CallableFunction
-) => {
-  const uri = BuildUri(endpoint, query)
-  await axios
-    .post(uri, data, Config())
-    .then((response) => {
-      callback?.(response.data)
-    })
-    .catch(() => {
-      console.log('fail to communicate with api')
-    })
-}
-
-export const PutMethod = async (
-  endpoint: string,
-  query: string | null,
-  data: unknown,
-  callback: CallableFunction
-) => {
-  const uri = BuildUri(endpoint, query)
-  await axios
-    .put(uri, data, Config())
-    .then((response) => {
-      callback?.(response.data)
-    })
-    .catch(() => {
-      console.log('fail to communicate with api')
-    })
-}
-
-const Config = () => {
+const getHeaders = () => {
   const token = window.localStorage.getItem(TOKEN_KEY)
   if (token) {
     return {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      Authorization: `Bearer ${token}`,
     }
   } else {
     return {}
   }
 }
 
-const BuildUri = (endpoint: string, query: string | null): string => {
-  return query
-    ? `${baseApiHost}/${endpoint}?${query}`
-    : `${baseApiHost}/${endpoint}`
+const buildUri = (endpoint: string, query?: string | null): string => {
+  return query ? `/${endpoint}?${query}` : `/${endpoint}`
+}
+
+export type ApiProps = {
+  method: Method
+  endpoint: string
+  query?: string
+  data?: URLSearchParams | Record<string, unknown>
+  callback?: CallableFunction
+  errorCallback?: CallableFunction
 }

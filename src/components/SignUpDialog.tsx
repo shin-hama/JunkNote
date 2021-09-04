@@ -16,7 +16,7 @@ import Visibility from '@material-ui/icons/Visibility'
 import VisibilityOff from '@material-ui/icons/VisibilityOff'
 
 import { UserStates } from '../model/User'
-import { PostMethod } from '../utility/ApiConnection'
+import { ApiProps, ConnectApi } from '../utility/ApiConnection'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -66,10 +66,16 @@ const SignUpDialog = (props: DialogProps) => {
   const executeSignUp = (event: React.FormEvent) => {
     event.preventDefault()
     const params = { user: forms }
-    PostMethod('users', null, params, (data: UserStates) => {
-      window.localStorage.setItem('myBearerToken', data.access_token)
-      window.location.reload()
-    })
+    const props: ApiProps = {
+      method: 'post',
+      endpoint: 'users',
+      data: params,
+      callback: (data: UserStates) => {
+        window.localStorage.setItem('myBearerToken', data.access_token)
+        window.location.reload()
+      },
+    }
+    ConnectApi(props)
   }
 
   const handleChange =
