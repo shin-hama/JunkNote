@@ -80,7 +80,7 @@ const ContentRegion: React.FC<Props> = ({ isDrawerOpen }) => {
           className={clsx(classes.content, {
             [classes.contentShift]: isDrawerOpen,
           })}>
-          <MemoList />
+          {memos.length > 0 ? <MemoList /> : <></>}
         </Container>
         <AddButton />
         <AddMemoDialog />
