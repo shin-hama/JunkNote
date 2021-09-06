@@ -12,9 +12,14 @@ import { Typography } from '@material-ui/core'
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     item: {
+      marginTop: '5px',
+      marginBottom: '5px',
       '& .MuiGrid-root': {
         minWidth: '240px',
       },
+    },
+    title: {
+      marginLeft: '10px',
     },
   })
 )
@@ -27,16 +32,21 @@ const MemoList: React.FC = () => {
   const [common, setCommon] = React.useState<IMemo[]>([])
 
   React.useEffect(() => {
+    const _latest: IMemo[] = []
+    const _common: IMemo[] = []
     memos.forEach((memo) => {
       if (new Date(Date.parse(memo.created)) > getAccessedTimestamp()) {
-        setLatest((prev) => [...prev, memo])
+        _latest.push(memo)
       } else {
-        setCommon((prev) => [...prev, memo])
+        _common.push(memo)
       }
     })
+    setLatest(_latest)
+    setCommon(_common)
   }, [memos])
 
   React.useEffect(() => {
+    console.log(common)
     setIndexes(GetRandomIndexes(common))
   }, [common])
 
@@ -44,34 +54,43 @@ const MemoList: React.FC = () => {
     <div>
       {latest.length > 0 ? (
         <div>
-          <Typography>Latest Added</Typography>
-          <Cards items={latest}></Cards>
+          <CardsGroup title={'Latest Added'} items={latest}></CardsGroup>
         </div>
       ) : (
         <></>
       )}
-      <Cards items={indexes} />
+      <CardsGroup title={latest.length ? 'Common' : null} items={indexes} />
     </div>
   )
 }
 
 type CardsProps = {
   items: Array<IMemo>
+  title: string | null
 }
-const Cards: React.FC<CardsProps> = ({ items }: CardsProps) => {
+const CardsGroup: React.FC<CardsProps> = ({ items, title }: CardsProps) => {
   const classes = useStyles()
   return (
-    <Grid
-      container
-      justifyContent="flex-start"
-      spacing={2}
-      className={classes.item}>
-      {items.map((item, i) => (
-        <Grid key={i} item xs={6} sm={4} md={4}>
-          <MemoCard memo={item} />
-        </Grid>
-      ))}
-    </Grid>
+    <div>
+      {title ? (
+        <Typography variant="subtitle2" className={classes.title}>
+          {title}
+        </Typography>
+      ) : (
+        <></>
+      )}
+      <Grid
+        container
+        justifyContent="flex-start"
+        spacing={2}
+        className={classes.item}>
+        {items.map((item, i) => (
+          <Grid key={i} item xs={6} sm={4} md={4}>
+            <MemoCard memo={item} />
+          </Grid>
+        ))}
+      </Grid>
+    </div>
   )
 }
 
