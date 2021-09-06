@@ -5,6 +5,7 @@ import ContentRegion from './ContentRegion'
 import Header from './Header'
 import LeftDrawer from './LeftDrawer'
 import { IMemo } from '../model/Memo'
+import { setAccessedTimestamp } from '../utility/AccessedTimestamp'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -38,6 +39,10 @@ export default function App({ handleTheme }: Props) {
   const handleOpen = () => {
     setIsDrawerOpen(!isDrawerOpen)
   }
+
+  React.useEffect(() => {
+    setAccessedTimestamp(new Date())
+  }, [])
 
   return (
     <div className={classes.root}>
