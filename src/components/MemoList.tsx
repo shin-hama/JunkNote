@@ -5,7 +5,7 @@ import Grid from '@material-ui/core/Grid'
 import { MemosContext } from './ContentRegion'
 import MemoCard from './MemoCard'
 import { IMemo } from '../model/Memo'
-import { GetRandomIndexes } from '../utility/utility'
+import { SortRandomly } from '../utility/utility'
 import { getAccessedTimestamp } from '../utility/AccessedTimestamp'
 import { Typography } from '@material-ui/core'
 
@@ -46,8 +46,7 @@ const MemoList: React.FC = () => {
   }, [memos])
 
   React.useEffect(() => {
-    console.log(common)
-    setIndexes(GetRandomIndexes(common))
+    setIndexes(SortRandomly(common))
   }, [common])
 
   return (
