@@ -45,7 +45,7 @@ const AddMemoDialog: React.FC = () => {
       if (memo.id === -1) {
         // Create new memo
         const memoParam: IMemoCreate = {
-          containts: text,
+          contents: text,
           reference: '',
         }
         const params = { memo: memoParam }
@@ -60,7 +60,7 @@ const AddMemoDialog: React.FC = () => {
         ConnectApi(props)
       } else {
         const memoParam: IMemoUpdate = {
-          containts: text,
+          contents: text,
           reference: '',
           isRemoved: false,
         }
@@ -71,7 +71,7 @@ const AddMemoDialog: React.FC = () => {
           data: params,
           callback: (data: IMemo) => {
             const updatedIndex = memos.findIndex((item) => item.id === data.id)
-            memos[updatedIndex].containts = data.containts
+            memos[updatedIndex].contents = data.contents
             setMemos([...memos])
           },
         }
@@ -87,7 +87,7 @@ const AddMemoDialog: React.FC = () => {
       setIsOpen(false)
       setText('')
     } else {
-      setText(memo.containts)
+      setText(memo.contents)
       setIsOpen(true)
     }
   }, [memo])
