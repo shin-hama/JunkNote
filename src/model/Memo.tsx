@@ -5,7 +5,7 @@ export function MemoFactory({
   reference = '',
 }): IMemo {
   return {
-    containts: text,
+    contents: text,
     reference: reference,
     created: created,
     id: id,
@@ -13,19 +13,19 @@ export function MemoFactory({
 }
 
 export interface IMemo {
-  containts: string
+  contents: string
   reference: string
   created: string
   id: number
 }
 
 export interface IMemoCreate {
-  containts: string
+  contents: string
   reference: string
 }
 
 export interface IMemoUpdate {
-  containts: string
+  contents: string
   reference: string
   isRemoved: boolean
 }

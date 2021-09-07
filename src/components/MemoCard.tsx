@@ -50,7 +50,7 @@ const MemoCard: React.FC<Props> = ({ memo }) => {
   const [isOver, setIsOver] = React.useState(false)
   const { setMemo } = React.useContext(MemoContext)
   const handleOpen = () => {
-    setMemo(MemoFactory({ id: memo.id, text: memo.containts }))
+    setMemo(MemoFactory({ id: memo.id, text: memo.contents }))
   }
 
   const handleMouseEnter = () => {
@@ -78,7 +78,7 @@ const MemoCard: React.FC<Props> = ({ memo }) => {
         }}>
         <CardContent>
           <Typography display="inline" style={{ whiteSpace: 'pre-line' }}>
-            {memo.containts}
+            {memo.contents}
           </Typography>
         </CardContent>
       </CardActionArea>
