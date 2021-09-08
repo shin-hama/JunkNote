@@ -11,6 +11,7 @@ import DeleteIcon from '@material-ui/icons/Delete'
 import PushPinOutlinedIcon from '@material-ui/icons/PushPinOutlined'
 
 import { MemoContext } from './App'
+import { MemosContext } from './ContentRegion'
 import { IMemo, MemoFactory } from '../model/Memo'
 import { ApiProps, ConnectApi } from '../utility/ApiConnection'
 
@@ -51,6 +52,10 @@ type Props = { memo: IMemo }
 const MemoCard: React.FC<Props> = ({ memo }) => {
   const classes = useStyles()
   const [isMouseOver, setIsMouseOver] = React.useState(false)
+  const { setMemos } = React.useContext(MemosContext)
+  const removeMemo = (removedMemo: IMemo) => {
+    setMemos((prev) => prev.filter((item) => item !== removedMemo))
+  }
   const { setMemo } = React.useContext(MemoContext)
   const handleOpen = () => {
     setMemo(MemoFactory({ id: memo.id, text: memo.contents }))
@@ -73,7 +78,7 @@ const MemoCard: React.FC<Props> = ({ memo }) => {
     const props: ApiProps = {
       endpoint: `/memos/${memo.id}`,
       method: 'delete',
-      callback: () => window.location.reload(),
+      callback: () => removeMemo(memo),
     }
     ConnectApi(props)
   }
