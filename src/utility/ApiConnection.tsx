@@ -9,10 +9,10 @@ axios.defaults.timeout = 5000
 axios.defaults.withCredentials = true
 
 export const ConnectApi = async (props: ApiProps) => {
-  const uri = buildUri(props.endpoint, props.query)
   await axios({
     method: props.method,
-    url: uri,
+    url: props.endpoint,
+    params: props.query,
     data: props.data ?? null,
     headers: getHeaders(),
   })
@@ -36,14 +36,10 @@ const getHeaders = () => {
   }
 }
 
-const buildUri = (endpoint: string, query?: string | null): string => {
-  return query ? `/${endpoint}?${query}` : `/${endpoint}`
-}
-
 export type ApiProps = {
   method: Method
   endpoint: string
-  query?: string
+  query?: Record<string, string | number>
   data?: URLSearchParams | Record<string, unknown>
   callback?: CallableFunction
   errorCallback?: CallableFunction

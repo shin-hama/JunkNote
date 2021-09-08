@@ -12,6 +12,7 @@ import PushPinOutlinedIcon from '@material-ui/icons/PushPinOutlined'
 
 import { MemoContext } from './App'
 import { IMemo, MemoFactory } from '../model/Memo'
+import { ApiProps, ConnectApi } from '../utility/ApiConnection'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -62,9 +63,19 @@ const MemoCard: React.FC<Props> = ({ memo }) => {
     setIsMouseOver(false)
   }
 
-  const handleDelete = (event: React.MouseEvent) => {
+  const handlePinClicked = (event: React.MouseEvent) => {
     console.log('Push pin is clicked')
+    // Prevent click events from going to layers below the icon
     event.stopPropagation()
+  }
+
+  const handleDeleteButton = () => {
+    const props: ApiProps = {
+      endpoint: `/memos/${memo.id}`,
+      method: 'delete',
+      callback: () => window.location.reload(),
+    }
+    ConnectApi(props)
   }
 
   return (
@@ -87,14 +98,14 @@ const MemoCard: React.FC<Props> = ({ memo }) => {
       {isMouseOver ? (
         <div>
           <CardActions>
-            <IconButton size="small">
+            <IconButton size="small" onClick={handleDeleteButton}>
               <DeleteIcon fontSize="small" />
             </IconButton>
           </CardActions>
           <Fab
             aria-label="delete"
             color="inherit"
-            onClick={handleDelete}
+            onClick={handlePinClicked}
             size="small"
             className={classes.fab}>
             <PushPinOutlinedIcon fontSize="small" />
