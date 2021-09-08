@@ -1,15 +1,19 @@
 import React from 'react'
-import clsx from 'clsx'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import Card from '@material-ui/core/Card'
 import CardActionArea from '@material-ui/core/CardActionArea'
+import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
 import Fab from '@material-ui/core/Fab'
+import IconButton from '@material-ui/core/IconButton'
 import Typography from '@material-ui/core/Typography'
+import DeleteIcon from '@material-ui/icons/Delete'
 import PushPinOutlinedIcon from '@material-ui/icons/PushPinOutlined'
 
 import { MemoContext } from './App'
+import { MemosContext } from './ContentRegion'
 import { IMemo, MemoFactory } from '../model/Memo'
+import { ApiProps, ConnectApi } from '../utility/ApiConnection'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -47,22 +51,36 @@ const useStyles = makeStyles((theme: Theme) =>
 type Props = { memo: IMemo }
 const MemoCard: React.FC<Props> = ({ memo }) => {
   const classes = useStyles()
-  const [isOver, setIsOver] = React.useState(false)
+  const [isMouseOver, setIsMouseOver] = React.useState(false)
+  const { setMemos } = React.useContext(MemosContext)
+  const removeMemo = (removedMemo: IMemo) => {
+    setMemos((prev) => prev.filter((item) => item !== removedMemo))
+  }
   const { setMemo } = React.useContext(MemoContext)
   const handleOpen = () => {
     setMemo(MemoFactory({ id: memo.id, text: memo.contents }))
   }
 
   const handleMouseEnter = () => {
-    setIsOver(true)
+    setIsMouseOver(true)
   }
   const handleMouseLeave = () => {
-    setIsOver(false)
+    setIsMouseOver(false)
   }
 
-  const handleDelete = (event: React.MouseEvent) => {
+  const handlePinClicked = (event: React.MouseEvent) => {
     console.log('Push pin is clicked')
+    // Prevent click events from going to layers below the icon
     event.stopPropagation()
+  }
+
+  const handleDeleteButton = () => {
+    const props: ApiProps = {
+      endpoint: `/memos/${memo.id}`,
+      method: 'delete',
+      callback: () => removeMemo(memo),
+    }
+    ConnectApi(props)
   }
 
   return (
@@ -82,16 +100,25 @@ const MemoCard: React.FC<Props> = ({ memo }) => {
           </Typography>
         </CardContent>
       </CardActionArea>
-      <Fab
-        aria-label="delete"
-        color="inherit"
-        onClick={handleDelete}
-        size="small"
-        className={clsx(classes.fab, {
-          [classes.hidden]: !isOver,
-        })}>
-        <PushPinOutlinedIcon fontSize="small" />
-      </Fab>
+      {isMouseOver ? (
+        <div>
+          <CardActions>
+            <IconButton size="small" onClick={handleDeleteButton}>
+              <DeleteIcon fontSize="small" />
+            </IconButton>
+          </CardActions>
+          <Fab
+            aria-label="delete"
+            color="inherit"
+            onClick={handlePinClicked}
+            size="small"
+            className={classes.fab}>
+            <PushPinOutlinedIcon fontSize="small" />
+          </Fab>
+        </div>
+      ) : (
+        <></>
+      )}
     </Card>
   )
 }
