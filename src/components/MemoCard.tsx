@@ -1,11 +1,13 @@
 import React from 'react'
-import clsx from 'clsx'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import Card from '@material-ui/core/Card'
 import CardActionArea from '@material-ui/core/CardActionArea'
+import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
 import Fab from '@material-ui/core/Fab'
+import IconButton from '@material-ui/core/IconButton'
 import Typography from '@material-ui/core/Typography'
+import DeleteIcon from '@material-ui/icons/Delete'
 import PushPinOutlinedIcon from '@material-ui/icons/PushPinOutlined'
 
 import { MemoContext } from './App'
@@ -47,17 +49,17 @@ const useStyles = makeStyles((theme: Theme) =>
 type Props = { memo: IMemo }
 const MemoCard: React.FC<Props> = ({ memo }) => {
   const classes = useStyles()
-  const [isOver, setIsOver] = React.useState(false)
+  const [isMouseOver, setIsMouseOver] = React.useState(false)
   const { setMemo } = React.useContext(MemoContext)
   const handleOpen = () => {
     setMemo(MemoFactory({ id: memo.id, text: memo.contents }))
   }
 
   const handleMouseEnter = () => {
-    setIsOver(true)
+    setIsMouseOver(true)
   }
   const handleMouseLeave = () => {
-    setIsOver(false)
+    setIsMouseOver(false)
   }
 
   const handleDelete = (event: React.MouseEvent) => {
@@ -82,16 +84,25 @@ const MemoCard: React.FC<Props> = ({ memo }) => {
           </Typography>
         </CardContent>
       </CardActionArea>
-      <Fab
-        aria-label="delete"
-        color="inherit"
-        onClick={handleDelete}
-        size="small"
-        className={clsx(classes.fab, {
-          [classes.hidden]: !isOver,
-        })}>
-        <PushPinOutlinedIcon fontSize="small" />
-      </Fab>
+      {isMouseOver ? (
+        <div>
+          <CardActions>
+            <IconButton size="small">
+              <DeleteIcon fontSize="small" />
+            </IconButton>
+          </CardActions>
+          <Fab
+            aria-label="delete"
+            color="inherit"
+            onClick={handleDelete}
+            size="small"
+            className={classes.fab}>
+            <PushPinOutlinedIcon fontSize="small" />
+          </Fab>
+        </div>
+      ) : (
+        <></>
+      )}
     </Card>
   )
 }
