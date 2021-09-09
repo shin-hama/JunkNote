@@ -12,7 +12,7 @@ import PushPinOutlinedIcon from '@material-ui/icons/PushPinOutlined'
 
 import { MemoContext } from './App'
 import { MemosContext } from './ContentRegion'
-import { IMemo, MemoFactory } from '../model/Memo'
+import { IMemo, IMemoUpdate, MemoFactory } from '../model/Memo'
 import { ApiProps, ConnectApi } from '../utility/ApiConnection'
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -75,9 +75,15 @@ const MemoCard: React.FC<Props> = ({ memo }) => {
   }
 
   const handleDeleteButton = () => {
+    const memoUpdate: IMemoUpdate = {
+      contents: memo.contents,
+      reference: memo.reference,
+      removed: true,
+    }
     const props: ApiProps = {
       endpoint: `/memos/${memo.id}`,
-      method: 'delete',
+      method: 'put',
+      data: { memo: memoUpdate },
       callback: () => removeMemo(memo),
     }
     ConnectApi(props)

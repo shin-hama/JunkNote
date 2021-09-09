@@ -62,13 +62,12 @@ const AddMemoDialog: React.FC = () => {
         const memoParam: IMemoUpdate = {
           contents: text,
           reference: '',
-          isRemoved: false,
+          removed: false,
         }
-        const params = { memo: memoParam }
         const props: ApiProps = {
           method: 'put',
           endpoint: `memos/${memo.id}`,
-          data: params,
+          data: { memo: memoParam },
           callback: (data: IMemo) => {
             const updatedIndex = memos.findIndex((item) => item.id === data.id)
             memos[updatedIndex].contents = data.contents
