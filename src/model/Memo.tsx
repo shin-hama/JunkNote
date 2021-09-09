@@ -27,5 +27,5 @@ export interface IMemoCreate {
 export interface IMemoUpdate {
   contents: string
   reference: string
-  isRemoved: boolean
+  removed: boolean
 }
