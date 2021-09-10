@@ -58,7 +58,7 @@ const AccountButton = () => {
   return (
     <div>
       <Button
-        color="primary"
+        color="secondary"
         onClick={handleButtonClick}
         variant="contained"
         className={classes.button}>
