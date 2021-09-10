@@ -10,8 +10,7 @@ import Typography from '@material-ui/core/Typography'
 import DeleteIcon from '@material-ui/icons/Delete'
 import PushPinOutlinedIcon from '@material-ui/icons/PushPinOutlined'
 
-import { MemoContext } from './App'
-import { MemosContext } from './ContentRegion'
+import { MemoContext, MemosContext } from './ContentRegion'
 import { IMemo, IMemoUpdate, MemoFactory } from '../model/Memo'
 import { ApiProps, ConnectApi } from '../utility/ApiConnection'
 

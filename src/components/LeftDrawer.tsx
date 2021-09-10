@@ -6,13 +6,11 @@ import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
 import Toolbar from '@material-ui/core/Toolbar'
-import Create from '@material-ui/icons/Create'
 import DeleteIcon from '@material-ui/icons/Delete'
 import HomeIcon from '@material-ui/icons/Home'
 
-import { MemoContext, ContentKind, ContentKindContext } from './App'
+import { ContentKind, ContentKindContext } from './App'
 import { DRAWER_WIDTH } from '../constants'
-import { MemoFactory } from '../model/Memo'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -29,10 +27,6 @@ const useStyles = makeStyles((theme: Theme) =>
 )
 
 const DrawerItems = (): React.ReactElement => {
-  const { setMemo } = React.useContext(MemoContext)
-  const handleOpen = () => {
-    setMemo(MemoFactory({}))
-  }
   const { setKind } = React.useContext(ContentKindContext)
 
   interface IItem {
@@ -41,11 +35,6 @@ const DrawerItems = (): React.ReactElement => {
     func: React.MouseEventHandler
   }
   const items: Array<IItem> = [
-    {
-      name: 'Add Memo',
-      icon: <Create />,
-      func: handleOpen,
-    },
     {
       name: 'Home',
       icon: <HomeIcon />,
