@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography'
 import AccountComponent from './Account'
 import { UserStates } from '../model/User'
 import { ApiProps, ConnectApi } from '../utility/ApiConnection'
+import { TOKEN_KEY } from '../constants'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -38,12 +39,13 @@ const AccountButton = () => {
         // Update stored token to extend the expiration.
         window.localStorage.setItem('myBearerToken', data.access_token)
       },
+      errorCallback: () => window.localStorage.removeItem(TOKEN_KEY),
     }
     ConnectApi(props)
   }
 
   React.useEffect(() => {
-    const token = window.localStorage.getItem('myBearerToken')
+    const token = window.localStorage.getItem(TOKEN_KEY)
     if (token) {
       getCurrentUser()
     }

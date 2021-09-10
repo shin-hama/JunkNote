@@ -5,6 +5,7 @@ import Container from '@material-ui/core/Container'
 
 import AddButton from './AddButton'
 import AddMemoDialog from './AddMemoDialog'
+import { ContentKind, ContentKindContext } from './App'
 import MemoList from './MemoList'
 import { DRAWER_WIDTH, TOKEN_KEY } from '../constants'
 import { IMemo } from '../model/Memo'
@@ -58,19 +59,22 @@ const ContentRegion: React.FC<Props> = ({ isDrawerOpen }) => {
     setMemos: setMemos,
   }
 
+  const { kind } = React.useContext(ContentKindContext)
+
   React.useEffect(() => {
     const token = window.localStorage.getItem(TOKEN_KEY)
     if (token) {
       const props: ApiProps = {
         method: 'get',
         endpoint: 'memos',
+        query: { removed: kind === ContentKind.Trash },
         callback: (data: IMemo[]) => {
           setMemos(data)
         },
       }
       ConnectApi(props)
     }
-  }, [])
+  }, [kind])
 
   return (
     <div>

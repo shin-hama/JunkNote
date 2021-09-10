@@ -10,9 +10,9 @@ import Create from '@material-ui/icons/Create'
 import DeleteIcon from '@material-ui/icons/Delete'
 import HomeIcon from '@material-ui/icons/Home'
 
+import { MemoContext, ContentKind, ContentKindContext } from './App'
 import { DRAWER_WIDTH } from '../constants'
 import { MemoFactory } from '../model/Memo'
-import { MemoContext } from './App'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -33,6 +33,7 @@ const DrawerItems = (): React.ReactElement => {
   const handleOpen = () => {
     setMemo(MemoFactory({}))
   }
+  const { setKind } = React.useContext(ContentKindContext)
 
   interface IItem {
     name: string
@@ -49,14 +50,14 @@ const DrawerItems = (): React.ReactElement => {
       name: 'Home',
       icon: <HomeIcon />,
       func: () => {
-        /* not implemented */
+        setKind(ContentKind.Home)
       },
     },
     {
       name: 'Trash',
       icon: <DeleteIcon />,
       func: () => {
-        /* not implemented */
+        setKind(ContentKind.Trash)
       },
     },
   ]
