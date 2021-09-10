@@ -87,18 +87,30 @@ const MemoCard: React.FC<Props> = ({ memo }) => {
       removed: true,
     }
     if (kind === ContentKind.Trash) {
-      console.log('before dialog')
       setAlertOpen(true)
+    } else {
+      const props: ApiProps = {
+        endpoint: `/memos/${memo.id}`,
+        method: 'put',
+        data: { memo: memoUpdate },
+        callback: () => removeMemo(memo),
+      }
+      ConnectApi(props)
     }
-    console.log('after dialog')
-    // TODO: Popup alert for permanently delete
+  }
+
+  const handleAlertOk = () => {
     const props: ApiProps = {
       endpoint: `/memos/${memo.id}`,
-      method: kind === ContentKind.Home ? 'put' : 'delete',
-      data: { memo: memoUpdate },
+      method: 'delete',
       callback: () => removeMemo(memo),
     }
     ConnectApi(props)
+    setAlertOpen(false)
+  }
+
+  const handleAlertCancel = () => {
+    setAlertOpen(false)
   }
 
   return (
@@ -139,7 +151,11 @@ const MemoCard: React.FC<Props> = ({ memo }) => {
           <></>
         )}
       </Card>
-      <AlertDeleteDialog open={alertOpen} setOpen={setAlertOpen} />
+      <AlertDeleteDialog
+        open={alertOpen}
+        okCallback={handleAlertOk}
+        cancelCallback={handleAlertCancel}
+      />
     </div>
   )
 }

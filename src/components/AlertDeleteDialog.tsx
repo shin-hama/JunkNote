@@ -8,14 +8,19 @@ import DialogTitle from '@material-ui/core/DialogTitle'
 
 type Props = {
   open: boolean
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>
+  okCallback: CallableFunction
+  cancelCallback: CallableFunction
 }
-const AlertDeleteDialog: React.FC<Props> = ({ open, setOpen }) => {
-  const handleClose = () => {
-    setOpen(false)
+const AlertDeleteDialog: React.FC<Props> = ({
+  open,
+  okCallback,
+  cancelCallback,
+}) => {
+  const handleOk = () => {
+    okCallback(false)
   }
-  const handleDelete = () => {
-    setOpen(false)
+  const handleCancel = () => {
+    cancelCallback(false)
   }
   return (
     <Dialog
@@ -29,10 +34,10 @@ const AlertDeleteDialog: React.FC<Props> = ({ open, setOpen }) => {
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose} color="primary">
+        <Button onClick={handleCancel} color="primary">
           Cancel
         </Button>
-        <Button onClick={handleDelete} color="primary" autoFocus>
+        <Button onClick={handleOk} color="primary" autoFocus>
           OK
         </Button>
       </DialogActions>
