@@ -28,9 +28,9 @@ const useStyles = makeStyles((theme: Theme) =>
       width: DRAWER_WIDTH,
     },
     selectedDrawerItem: {
-      backgroundColor: alpha(theme.palette.primary.light, 0.35),
+      backgroundColor: alpha(theme.palette.secondary.main, 0.35),
       '&:hover': {
-        backgroundColor: alpha(theme.palette.primary.light, 0.75),
+        backgroundColor: alpha(theme.palette.secondary.main, 0.75),
       },
     },
   })

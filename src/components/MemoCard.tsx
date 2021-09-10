@@ -10,6 +10,7 @@ import Typography from '@material-ui/core/Typography'
 import DeleteIcon from '@material-ui/icons/Delete'
 import PushPinOutlinedIcon from '@material-ui/icons/PushPinOutlined'
 
+import AlertDeleteDialog from './AlertDeleteDialog'
 import { ContentKind, ContentKindContext } from './App'
 import { MemoContext, MemosContext } from './ContentRegion'
 import { IMemo, IMemoUpdate, MemoFactory } from '../model/Memo'
@@ -52,6 +53,7 @@ type Props = { memo: IMemo }
 const MemoCard: React.FC<Props> = ({ memo }) => {
   const classes = useStyles()
   const [isMouseOver, setIsMouseOver] = React.useState(false)
+  const [alertOpen, setAlertOpen] = React.useState(false)
   const { setMemos } = React.useContext(MemosContext)
   const { kind } = React.useContext(ContentKindContext)
   const removeMemo = (removedMemo: IMemo) => {
@@ -73,6 +75,7 @@ const MemoCard: React.FC<Props> = ({ memo }) => {
 
   const handlePinClicked = (event: React.MouseEvent) => {
     console.log('Push pin is clicked')
+    setAlertOpen(true)
     // Prevent click events from going to layers below the icon
     event.stopPropagation()
   }
@@ -83,6 +86,11 @@ const MemoCard: React.FC<Props> = ({ memo }) => {
       reference: memo.reference,
       removed: true,
     }
+    if (kind === ContentKind.Trash) {
+      console.log('before dialog')
+      setAlertOpen(true)
+    }
+    console.log('after dialog')
     // TODO: Popup alert for permanently delete
     const props: ApiProps = {
       endpoint: `/memos/${memo.id}`,
@@ -94,42 +102,45 @@ const MemoCard: React.FC<Props> = ({ memo }) => {
   }
 
   return (
-    <Card
-      className={classes.card}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}>
-      <CardActionArea
-        onClick={handleCardClicked}
-        classes={{
-          root: classes.actionArea,
-          focusHighlight: classes.focusHighlight,
-        }}>
-        <CardContent>
-          <Typography display="inline" style={{ whiteSpace: 'pre-line' }}>
-            {memo.contents}
-          </Typography>
-        </CardContent>
-      </CardActionArea>
-      {isMouseOver ? (
-        <div>
-          <CardActions>
-            <IconButton size="small" onClick={handleDeleteButton}>
-              <DeleteIcon fontSize="small" />
-            </IconButton>
-          </CardActions>
-          <Fab
-            aria-label="delete"
-            color="inherit"
-            onClick={handlePinClicked}
-            size="small"
-            className={classes.fab}>
-            <PushPinOutlinedIcon fontSize="small" />
-          </Fab>
-        </div>
-      ) : (
-        <></>
-      )}
-    </Card>
+    <div>
+      <Card
+        className={classes.card}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}>
+        <CardActionArea
+          onClick={handleCardClicked}
+          classes={{
+            root: classes.actionArea,
+            focusHighlight: classes.focusHighlight,
+          }}>
+          <CardContent>
+            <Typography display="inline" style={{ whiteSpace: 'pre-line' }}>
+              {memo.contents}
+            </Typography>
+          </CardContent>
+        </CardActionArea>
+        {isMouseOver ? (
+          <div>
+            <CardActions>
+              <IconButton size="small" onClick={handleDeleteButton}>
+                <DeleteIcon fontSize="small" />
+              </IconButton>
+            </CardActions>
+            <Fab
+              aria-label="delete"
+              color="inherit"
+              onClick={handlePinClicked}
+              size="small"
+              className={classes.fab}>
+              <PushPinOutlinedIcon fontSize="small" />
+            </Fab>
+          </div>
+        ) : (
+          <></>
+        )}
+      </Card>
+      <AlertDeleteDialog open={alertOpen} setOpen={setAlertOpen} />
+    </div>
   )
 }
 

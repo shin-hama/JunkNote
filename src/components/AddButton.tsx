@@ -25,7 +25,7 @@ function AddButton() {
 
   return (
     <div className={classes.root}>
-      <Fab color="primary" aria-label="add" onClick={handleOpen}>
+      <Fab color="secondary" aria-label="add" onClick={handleOpen}>
         <AddIcon />
       </Fab>
     </div>

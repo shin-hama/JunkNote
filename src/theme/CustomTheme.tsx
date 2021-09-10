@@ -15,16 +15,16 @@ const CustomTheme: React.FC<Props> = ({ children, isLightMode }) => {
     palette: {
       type: isLightMode ? 'light' : 'dark',
       primary: {
-        light: '#FFE97E',
-        main: '#ffe047',
-        dark: '#FFD837',
-        contrastText: '#000',
-      },
-      secondary: {
         light: '#50BDCE',
         main: '#319EAF',
         dark: '#24737F',
         contrastText: '#fff',
+      },
+      secondary: {
+        light: '#FFE97E',
+        main: '#ffe047',
+        dark: '#FFD837',
+        contrastText: '#000',
       },
     },
     props: {
