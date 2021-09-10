@@ -10,6 +10,7 @@ import Typography from '@material-ui/core/Typography'
 import DeleteIcon from '@material-ui/icons/Delete'
 import PushPinOutlinedIcon from '@material-ui/icons/PushPinOutlined'
 
+import { ContentKind, ContentKindContext } from './App'
 import { MemoContext, MemosContext } from './ContentRegion'
 import { IMemo, IMemoUpdate, MemoFactory } from '../model/Memo'
 import { ApiProps, ConnectApi } from '../utility/ApiConnection'
@@ -52,12 +53,15 @@ const MemoCard: React.FC<Props> = ({ memo }) => {
   const classes = useStyles()
   const [isMouseOver, setIsMouseOver] = React.useState(false)
   const { setMemos } = React.useContext(MemosContext)
+  const { kind } = React.useContext(ContentKindContext)
   const removeMemo = (removedMemo: IMemo) => {
     setMemos((prev) => prev.filter((item) => item !== removedMemo))
   }
   const { setMemo } = React.useContext(MemoContext)
-  const handleOpen = () => {
-    setMemo(MemoFactory({ id: memo.id, text: memo.contents }))
+  const handleCardClicked = () => {
+    if (kind === ContentKind.Home) {
+      setMemo(MemoFactory({ id: memo.id, text: memo.contents }))
+    }
   }
 
   const handleMouseEnter = () => {
@@ -79,9 +83,10 @@ const MemoCard: React.FC<Props> = ({ memo }) => {
       reference: memo.reference,
       removed: true,
     }
+    // TODO: Popup alert for permanently delete
     const props: ApiProps = {
       endpoint: `/memos/${memo.id}`,
-      method: 'put',
+      method: kind === ContentKind.Home ? 'put' : 'delete',
       data: { memo: memoUpdate },
       callback: () => removeMemo(memo),
     }
@@ -94,7 +99,7 @@ const MemoCard: React.FC<Props> = ({ memo }) => {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}>
       <CardActionArea
-        onClick={handleOpen}
+        onClick={handleCardClicked}
         classes={{
           root: classes.actionArea,
           focusHighlight: classes.focusHighlight,
