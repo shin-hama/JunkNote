@@ -8,11 +8,13 @@ import DialogTitle from '@material-ui/core/DialogTitle'
 
 type Props = {
   open: boolean
+  message: string
   okCallback: CallableFunction
   cancelCallback: CallableFunction
 }
-const AlertDeleteDialog: React.FC<Props> = ({
+const AlertDialog: React.FC<Props> = ({
   open,
+  message,
   okCallback,
   cancelCallback,
 }) => {
@@ -30,7 +32,7 @@ const AlertDeleteDialog: React.FC<Props> = ({
       <DialogTitle id="alert-dialog-title">{'Warning'}</DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
-          Your memos will be completely erased, are you sure?
+          {message}
         </DialogContentText>
       </DialogContent>
       <DialogActions>
@@ -45,4 +47,4 @@ const AlertDeleteDialog: React.FC<Props> = ({
   )
 }
 
-export default AlertDeleteDialog
+export default AlertDialog

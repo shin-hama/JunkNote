@@ -10,7 +10,7 @@ import Typography from '@material-ui/core/Typography'
 import DeleteIcon from '@material-ui/icons/Delete'
 import PushPinOutlinedIcon from '@material-ui/icons/PushPinOutlined'
 
-import AlertDeleteDialog from './AlertDeleteDialog'
+import AlertDialog from './AlertDialog'
 import { ContentKind, ContentKindContext } from './App'
 import { MemoContext, MemosContext } from './ContentRegion'
 import { IMemo, IMemoUpdate, MemoFactory } from '../model/Memo'
@@ -75,7 +75,6 @@ const MemoCard: React.FC<Props> = ({ memo }) => {
 
   const handlePinClicked = (event: React.MouseEvent) => {
     console.log('Push pin is clicked')
-    setAlertOpen(true)
     // Prevent click events from going to layers below the icon
     event.stopPropagation()
   }
@@ -151,8 +150,9 @@ const MemoCard: React.FC<Props> = ({ memo }) => {
           <></>
         )}
       </Card>
-      <AlertDeleteDialog
+      <AlertDialog
         open={alertOpen}
+        message="Do you want to delete the note completely?"
         okCallback={handleAlertOk}
         cancelCallback={handleAlertCancel}
       />
