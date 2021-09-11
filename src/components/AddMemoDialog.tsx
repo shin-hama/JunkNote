@@ -9,8 +9,7 @@ import DialogContent from '@material-ui/core/DialogContent'
 import Tooltip from '@material-ui/core/Tooltip'
 import AttachFileIcon from '@material-ui/icons/AttachFile'
 
-import { MemoContext } from './App'
-import { MemosContext } from './ContentRegion'
+import { MemoContext, MemosContext } from './ContentRegion'
 import { IMemo, IMemoCreate, IMemoUpdate } from '../model/Memo'
 import { ApiProps, ConnectApi } from '../utility/ApiConnection'
 

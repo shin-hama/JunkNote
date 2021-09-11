@@ -39,7 +39,7 @@ const getHeaders = () => {
 export type ApiProps = {
   method: Method
   endpoint: string
-  query?: Record<string, string | number>
+  query?: Record<string, boolean | string | number>
   data?: URLSearchParams | Record<string, unknown>
   callback?: CallableFunction
   errorCallback?: CallableFunction

@@ -2,6 +2,7 @@ import React from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid'
 
+import { ContentKind, ContentKindContext } from './App'
 import { MemosContext } from './ContentRegion'
 import MemoCard from './MemoCard'
 import { IMemo } from '../model/Memo'
@@ -30,20 +31,25 @@ const MemoList: React.FC = () => {
   const [latest, setLatest] = React.useState<IMemo[]>([])
   // const [pinned, setPinned] = React.useState<IMemo[]>([])
   const [common, setCommon] = React.useState<IMemo[]>([])
+  const { kind } = React.useContext(ContentKindContext)
 
   React.useEffect(() => {
     const _latest: IMemo[] = []
-    const _common: IMemo[] = []
-    memos.forEach((memo) => {
-      if (new Date(Date.parse(memo.created)) > getAccessedTimestamp()) {
-        _latest.push(memo)
-      } else {
-        _common.push(memo)
-      }
-    })
+    let _common: IMemo[] = []
+    if (kind === ContentKind.Home) {
+      memos.forEach((memo) => {
+        if (new Date(Date.parse(memo.created)) > getAccessedTimestamp()) {
+          _latest.push(memo)
+        } else {
+          _common.push(memo)
+        }
+      })
+    } else {
+      _common = memos
+    }
     setLatest(_latest)
     setCommon(_common)
-  }, [memos])
+  }, [kind, memos])
 
   React.useEffect(() => {
     setIndexes(SortRandomly(common))

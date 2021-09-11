@@ -3,7 +3,7 @@ import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import Fab from '@material-ui/core/Fab'
 import AddIcon from '@material-ui/icons/Add'
 
-import { MemoContext } from './App'
+import { MemoContext } from './ContentRegion'
 import { MemoFactory } from '../model/Memo'
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -25,7 +25,7 @@ function AddButton() {
 
   return (
     <div className={classes.root}>
-      <Fab color="primary" aria-label="add" onClick={handleOpen}>
+      <Fab color="secondary" aria-label="add" onClick={handleOpen}>
         <AddIcon />
       </Fab>
     </div>

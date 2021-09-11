@@ -5,6 +5,7 @@ import Container from '@material-ui/core/Container'
 
 import AddButton from './AddButton'
 import AddMemoDialog from './AddMemoDialog'
+import { ContentKind, ContentKindContext } from './App'
 import MemoList from './MemoList'
 import { DRAWER_WIDTH, TOKEN_KEY } from '../constants'
 import { IMemo } from '../model/Memo'
@@ -35,6 +36,17 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
+interface MemoContextProps {
+  memo: IMemo | null
+  setMemo: React.Dispatch<React.SetStateAction<IMemo | null>>
+}
+export const MemoContext = React.createContext<MemoContextProps>({
+  memo: null,
+  setMemo: () => {
+    // no run
+  },
+})
+
 interface MemosProps {
   memos: IMemo[]
   setMemos: React.Dispatch<React.SetStateAction<IMemo[]>>
@@ -52,11 +64,19 @@ type Props = {
 const ContentRegion: React.FC<Props> = ({ isDrawerOpen }) => {
   const classes = useStyles()
 
+  const [memo, setMemo] = React.useState<IMemo | null>(null)
+  const value: MemoContextProps = {
+    memo: memo,
+    setMemo: setMemo,
+  }
+
   const [memos, setMemos] = React.useState<IMemo[]>([])
   const contextValue = {
     memos: memos,
     setMemos: setMemos,
   }
+
+  const { kind } = React.useContext(ContentKindContext)
 
   React.useEffect(() => {
     const token = window.localStorage.getItem(TOKEN_KEY)
@@ -64,26 +84,29 @@ const ContentRegion: React.FC<Props> = ({ isDrawerOpen }) => {
       const props: ApiProps = {
         method: 'get',
         endpoint: 'memos',
+        query: { removed: kind === ContentKind.Trash },
         callback: (data: IMemo[]) => {
           setMemos(data)
         },
       }
       ConnectApi(props)
     }
-  }, [])
+  }, [kind])
 
   return (
     <div>
       <MemosContext.Provider value={contextValue}>
-        <Container
-          maxWidth="md"
-          className={clsx(classes.content, {
-            [classes.contentShift]: isDrawerOpen,
-          })}>
-          {memos.length > 0 ? <MemoList /> : <></>}
-        </Container>
-        <AddButton />
-        <AddMemoDialog />
+        <MemoContext.Provider value={value}>
+          <Container
+            maxWidth="md"
+            className={clsx(classes.content, {
+              [classes.contentShift]: isDrawerOpen,
+            })}>
+            {memos.length > 0 ? <MemoList /> : <></>}
+          </Container>
+          {kind === ContentKind.Home ? <AddButton /> : <></>}
+          <AddMemoDialog />
+        </MemoContext.Provider>
       </MemosContext.Provider>
     </div>
   )
