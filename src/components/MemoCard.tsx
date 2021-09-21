@@ -49,8 +49,10 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-type Props = { memo: IMemo }
-const MemoCard: React.FC<Props> = ({ memo }) => {
+type Props = { memoOrg: IMemo }
+const MemoCard: React.FC<Props> = ({ memoOrg }) => {
+  // TODO: Create custom hook to update memo with api
+  const [memo, updateMemo] = React.useState(memoOrg)
   const classes = useStyles()
   const [isMouseOver, setIsMouseOver] = React.useState(false)
   const [alertOpen, setAlertOpen] = React.useState(false)
@@ -75,9 +77,15 @@ const MemoCard: React.FC<Props> = ({ memo }) => {
 
   const handlePinClicked = (event: React.MouseEvent) => {
     console.log('Push pin is clicked')
-    console.log(memo.pinned)
     memo.pinned = !memo.pinned
-    setMemos((prev) => [...prev])
+    // const props: ApiProps = {
+    //   endpoint: `/memos/${memo.id}`,
+    //   method: 'put',
+    //   data: { memo: memo },
+    // }
+    // ConnectApi(props)
+
+    updateMemo({ ...memo })
     // Prevent click events from going to layers below the icon
     event.stopPropagation()
   }
@@ -114,6 +122,10 @@ const MemoCard: React.FC<Props> = ({ memo }) => {
   const handleAlertCancel = () => {
     setAlertOpen(false)
   }
+
+  React.useEffect(() => {
+    console.log(memo)
+  }, [memo])
 
   return (
     <div>

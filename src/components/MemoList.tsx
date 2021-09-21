@@ -99,7 +99,7 @@ const CardsGroup: React.FC<CardsProps> = ({ items, title }: CardsProps) => {
       <Grid container justifyContent="flex-start" spacing={2} className={classes.item}>
         {items.map((item, i) => (
           <Grid key={i} item xs={6} sm={4} md={4}>
-            <MemoCard memo={item} />
+            <MemoCard memoOrg={item} />
           </Grid>
         ))}
       </Grid>
