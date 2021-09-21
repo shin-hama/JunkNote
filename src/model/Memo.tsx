@@ -3,20 +3,23 @@ export function MemoFactory({
   text = '',
   created = Date(),
   reference = '',
+  pinned = false,
 }): IMemo {
   return {
     contents: text,
     reference: reference,
     created: created,
     id: id,
+    pinned: pinned,
   }
 }
 
 export interface IMemo {
+  id: number
   contents: string
   reference: string
   created: string
-  id: number
+  pinned: boolean
 }
 
 export interface IMemoCreate {

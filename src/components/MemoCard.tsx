@@ -75,6 +75,9 @@ const MemoCard: React.FC<Props> = ({ memo }) => {
 
   const handlePinClicked = (event: React.MouseEvent) => {
     console.log('Push pin is clicked')
+    console.log(memo.pinned)
+    memo.pinned = !memo.pinned
+    setMemos((prev) => [...prev])
     // Prevent click events from going to layers below the icon
     event.stopPropagation()
   }
@@ -117,13 +120,15 @@ const MemoCard: React.FC<Props> = ({ memo }) => {
       <Card
         className={classes.card}
         onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}>
+        onMouseLeave={handleMouseLeave}
+      >
         <CardActionArea
           onClick={handleCardClicked}
           classes={{
             root: classes.actionArea,
             focusHighlight: classes.focusHighlight,
-          }}>
+          }}
+        >
           <CardContent>
             <Typography display="inline" style={{ whiteSpace: 'pre-line' }}>
               {memo.contents}
@@ -142,7 +147,8 @@ const MemoCard: React.FC<Props> = ({ memo }) => {
               color="inherit"
               onClick={handlePinClicked}
               size="small"
-              className={classes.fab}>
+              className={classes.fab}
+            >
               <PushPinOutlinedIcon fontSize="small" />
             </Fab>
           </div>

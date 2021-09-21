@@ -28,17 +28,21 @@ const useStyles = makeStyles((theme: Theme) =>
 const MemoList: React.FC = () => {
   const [indexes, setIndexes] = React.useState<IMemo[]>([])
   const { memos } = React.useContext(MemosContext)
+  const [pinned, setPinned] = React.useState<IMemo[]>([])
   const [latest, setLatest] = React.useState<IMemo[]>([])
   // const [pinned, setPinned] = React.useState<IMemo[]>([])
   const [common, setCommon] = React.useState<IMemo[]>([])
   const { kind } = React.useContext(ContentKindContext)
 
   React.useEffect(() => {
+    const _pinned: IMemo[] = []
     const _latest: IMemo[] = []
     let _common: IMemo[] = []
     if (kind === ContentKind.Home) {
       memos.forEach((memo) => {
-        if (new Date(Date.parse(memo.created)) > getAccessedTimestamp()) {
+        if (memo.pinned) {
+          _pinned.push(memo)
+        } else if (new Date(Date.parse(memo.created)) > getAccessedTimestamp()) {
           _latest.push(memo)
         } else {
           _common.push(memo)
@@ -47,6 +51,7 @@ const MemoList: React.FC = () => {
     } else {
       _common = memos
     }
+    setPinned(_pinned)
     setLatest(_latest)
     setCommon(_common)
   }, [kind, memos])
@@ -57,6 +62,13 @@ const MemoList: React.FC = () => {
 
   return (
     <div>
+      {pinned.length > 0 ? (
+        <div>
+          <CardsGroup title={'Pinned'} items={pinned}></CardsGroup>
+        </div>
+      ) : (
+        <></>
+      )}
       {latest.length > 0 ? (
         <div>
           <CardsGroup title={'Latest Added'} items={latest}></CardsGroup>
@@ -64,7 +76,7 @@ const MemoList: React.FC = () => {
       ) : (
         <></>
       )}
-      <CardsGroup title={latest.length ? 'Common' : null} items={indexes} />
+      <CardsGroup title={latest.length || pinned.length ? 'Common' : null} items={indexes} />
     </div>
   )
 }
@@ -84,11 +96,7 @@ const CardsGroup: React.FC<CardsProps> = ({ items, title }: CardsProps) => {
       ) : (
         <></>
       )}
-      <Grid
-        container
-        justifyContent="flex-start"
-        spacing={2}
-        className={classes.item}>
+      <Grid container justifyContent="flex-start" spacing={2} className={classes.item}>
         {items.map((item, i) => (
           <Grid key={i} item xs={6} sm={4} md={4}>
             <MemoCard memo={item} />

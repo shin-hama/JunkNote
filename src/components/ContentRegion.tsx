@@ -86,6 +86,7 @@ const ContentRegion: React.FC<Props> = ({ isDrawerOpen }) => {
         endpoint: 'memos',
         query: { removed: kind === ContentKind.Trash },
         callback: (data: IMemo[]) => {
+          console.log(data)
           setMemos(data)
         },
       }
@@ -101,7 +102,8 @@ const ContentRegion: React.FC<Props> = ({ isDrawerOpen }) => {
             maxWidth="md"
             className={clsx(classes.content, {
               [classes.contentShift]: isDrawerOpen,
-            })}>
+            })}
+          >
             {memos.length > 0 ? <MemoList /> : <></>}
           </Container>
           {kind === ContentKind.Home ? <AddButton /> : <></>}
