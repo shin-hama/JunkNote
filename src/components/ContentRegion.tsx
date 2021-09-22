@@ -86,7 +86,6 @@ const ContentRegion: React.FC<Props> = ({ isDrawerOpen }) => {
         endpoint: 'memos',
         query: { removed: kind === ContentKind.Trash },
         callback: (data: IMemo[]) => {
-          console.log(data)
           setMemos(data)
         },
       }

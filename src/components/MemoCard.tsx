@@ -49,10 +49,29 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
+const useUpdateMemo = (orgMemo: IMemo) => {
+  const [memo, setMemo] = React.useState(orgMemo)
+  const updateMemo = React.useCallback(
+    (updated: IMemo, callback?: CallableFunction) => {
+      setMemo({ ...updated })
+      const props: ApiProps = {
+        endpoint: `/memos/${updated.id}`,
+        method: 'put',
+        data: { memo: updated },
+        callback: callback,
+      }
+      ConnectApi(props)
+    },
+    [setMemo]
+  )
+
+  return [memo, updateMemo] as const
+}
+
 type Props = { memoOrg: IMemo }
 const MemoCard: React.FC<Props> = ({ memoOrg }) => {
   // TODO: Create custom hook to update memo with api
-  const [memo, updateMemo] = React.useState(memoOrg)
+  const [memo, updateMemo] = useUpdateMemo(memoOrg)
   const classes = useStyles()
   const [isMouseOver, setIsMouseOver] = React.useState(false)
   const [alertOpen, setAlertOpen] = React.useState(false)
@@ -78,14 +97,10 @@ const MemoCard: React.FC<Props> = ({ memoOrg }) => {
   const handlePinClicked = (event: React.MouseEvent) => {
     console.log('Push pin is clicked')
     memo.pinned = !memo.pinned
-    // const props: ApiProps = {
-    //   endpoint: `/memos/${memo.id}`,
-    //   method: 'put',
-    //   data: { memo: memo },
-    // }
-    // ConnectApi(props)
+    updateMemo(memo, () => {
+      setMemos((prev) => [...prev])
+    })
 
-    updateMemo({ ...memo })
     // Prevent click events from going to layers below the icon
     event.stopPropagation()
   }
@@ -122,10 +137,6 @@ const MemoCard: React.FC<Props> = ({ memoOrg }) => {
   const handleAlertCancel = () => {
     setAlertOpen(false)
   }
-
-  React.useEffect(() => {
-    console.log(memo)
-  }, [memo])
 
   return (
     <div>
