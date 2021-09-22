@@ -35,10 +35,10 @@ const MemoList: React.FC = () => {
   const { kind } = React.useContext(ContentKindContext)
 
   React.useEffect(() => {
-    const _pinned: IMemo[] = []
-    const _latest: IMemo[] = []
-    let _common: IMemo[] = []
     if (kind === ContentKind.Home) {
+      const _pinned: IMemo[] = []
+      const _latest: IMemo[] = []
+      const _common: IMemo[] = []
       memos.forEach((memo) => {
         if (memo.pinned) {
           _pinned.push(memo)
@@ -48,12 +48,12 @@ const MemoList: React.FC = () => {
           _common.push(memo)
         }
       })
+      setPinned(_pinned)
+      setLatest(_latest)
+      setCommon(_common)
     } else {
-      _common = memos
+      setCommon(memos)
     }
-    setPinned(_pinned)
-    setLatest(_latest)
-    setCommon(_common)
   }, [kind, memos])
 
   React.useEffect(() => {
@@ -99,7 +99,7 @@ const CardsGroup: React.FC<CardsProps> = ({ items, title }: CardsProps) => {
       <Grid container justifyContent="flex-start" spacing={2} className={classes.item}>
         {items.map((item, i) => (
           <Grid key={i} item xs={6} sm={4} md={4}>
-            <MemoCard memoOrg={item} />
+            <MemoCard memo={item} />
           </Grid>
         ))}
       </Grid>

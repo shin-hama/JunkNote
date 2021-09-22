@@ -13,7 +13,7 @@ import PushPinOutlinedIcon from '@material-ui/icons/PushPinOutlined'
 import AlertDialog from './AlertDialog'
 import { ContentKind, ContentKindContext } from './App'
 import { MemoContext, MemosContext } from './ContentRegion'
-import { IMemo, IMemoUpdate, MemoFactory } from '../model/Memo'
+import { IMemo, MemoFactory } from '../model/Memo'
 import { ApiProps, ConnectApi } from '../utility/ApiConnection'
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -49,29 +49,19 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-const useUpdateMemo = (orgMemo: IMemo) => {
-  const [memo, setMemo] = React.useState(orgMemo)
-  const updateMemo = React.useCallback(
-    (updated: IMemo, callback?: CallableFunction) => {
-      setMemo({ ...updated })
-      const props: ApiProps = {
-        endpoint: `/memos/${updated.id}`,
-        method: 'put',
-        data: { memo: updated },
-        callback: callback,
-      }
-      ConnectApi(props)
-    },
-    [setMemo]
-  )
-
-  return [memo, updateMemo] as const
+const updateMemo = (updated: IMemo, callback?: CallableFunction) => {
+  const props: ApiProps = {
+    endpoint: `/memos/${updated.id}`,
+    method: 'put',
+    data: { memo: updated },
+    callback: callback,
+  }
+  ConnectApi(props)
 }
 
-type Props = { memoOrg: IMemo }
-const MemoCard: React.FC<Props> = ({ memoOrg }) => {
+type Props = { memo: IMemo }
+const MemoCard: React.FC<Props> = ({ memo }) => {
   // TODO: Create custom hook to update memo with api
-  const [memo, updateMemo] = useUpdateMemo(memoOrg)
   const classes = useStyles()
   const [isMouseOver, setIsMouseOver] = React.useState(false)
   const [alertOpen, setAlertOpen] = React.useState(false)
@@ -95,7 +85,6 @@ const MemoCard: React.FC<Props> = ({ memoOrg }) => {
   }
 
   const handlePinClicked = (event: React.MouseEvent) => {
-    console.log('Push pin is clicked')
     memo.pinned = !memo.pinned
     updateMemo(memo, () => {
       setMemos((prev) => [...prev])
@@ -106,21 +95,11 @@ const MemoCard: React.FC<Props> = ({ memoOrg }) => {
   }
 
   const handleDeleteButton = () => {
-    const memoUpdate: IMemoUpdate = {
-      contents: memo.contents,
-      reference: memo.reference,
-      removed: true,
-    }
     if (kind === ContentKind.Trash) {
       setAlertOpen(true)
     } else {
-      const props: ApiProps = {
-        endpoint: `/memos/${memo.id}`,
-        method: 'put',
-        data: { memo: memoUpdate },
-        callback: () => removeMemo(memo),
-      }
-      ConnectApi(props)
+      memo.removed = true
+      updateMemo(memo, () => removeMemo(memo))
     }
   }
 
