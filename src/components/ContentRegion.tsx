@@ -101,7 +101,8 @@ const ContentRegion: React.FC<Props> = ({ isDrawerOpen }) => {
             maxWidth="md"
             className={clsx(classes.content, {
               [classes.contentShift]: isDrawerOpen,
-            })}>
+            })}
+          >
             {memos.length > 0 ? <MemoList /> : <></>}
           </Container>
           {kind === ContentKind.Home ? <AddButton /> : <></>}
