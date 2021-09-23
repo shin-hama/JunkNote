@@ -31,7 +31,7 @@ const AccountButton = () => {
   }
 
   const getCurrentUser = () => {
-    const props: ApiProps = {
+    const props = ApiProps({
       method: 'get',
       endpoint: 'users/me',
       callback: (data: UserStates) => {
@@ -40,7 +40,7 @@ const AccountButton = () => {
         window.localStorage.setItem('myBearerToken', data.access_token)
       },
       errorCallback: () => window.localStorage.removeItem(TOKEN_KEY),
-    }
+    })
     ConnectApi(props)
   }
 
@@ -61,15 +61,11 @@ const AccountButton = () => {
         color="primary"
         onClick={handleButtonClick}
         variant="contained"
-        className={classes.button}>
+        className={classes.button}
+      >
         <Typography variant="button">{buttonText}</Typography>
       </Button>
-      <AccountComponent
-        isOpen={isOpen}
-        setIsOpen={setIsOpen}
-        anchorEl={anchorEl}
-        user={user}
-      />
+      <AccountComponent isOpen={isOpen} setIsOpen={setIsOpen} anchorEl={anchorEl} user={user} />
     </div>
   )
 }

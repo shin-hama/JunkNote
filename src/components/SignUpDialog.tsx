@@ -9,9 +9,7 @@ import FormControl from '@material-ui/core/FormControl'
 import IconButton from '@material-ui/core/IconButton'
 import InputAdornment from '@material-ui/core/InputAdornment/InputAdornment'
 import InputLabel from '@material-ui/core/InputLabel'
-import OutlinedInput, {
-  OutlinedInputProps,
-} from '@material-ui/core/OutlinedInput'
+import OutlinedInput, { OutlinedInputProps } from '@material-ui/core/OutlinedInput'
 import Visibility from '@material-ui/icons/Visibility'
 import VisibilityOff from '@material-ui/icons/VisibilityOff'
 
@@ -41,7 +39,8 @@ const SignInForm = (props: OutlinedInputProps) => {
       className={clsx(classes.margin, classes.textField)}
       margin="dense"
       required
-      variant="outlined">
+      variant="outlined"
+    >
       <InputLabel htmlFor={props.id}>{props.label}</InputLabel>
       <OutlinedInput {...props} />
     </FormControl>
@@ -66,7 +65,7 @@ const SignUpDialog = (props: DialogProps) => {
   const executeSignUp = (event: React.FormEvent) => {
     event.preventDefault()
     const params = { user: forms }
-    const props: ApiProps = {
+    const props = ApiProps({
       method: 'post',
       endpoint: 'users',
       data: params,
@@ -74,23 +73,19 @@ const SignUpDialog = (props: DialogProps) => {
         window.localStorage.setItem('myBearerToken', data.access_token)
         window.location.reload()
       },
-    }
+    })
     ConnectApi(props)
   }
 
-  const handleChange =
-    (prop: keyof FormStates) =>
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setForms({ ...forms, [prop]: event.target.value })
-    }
+  const handleChange = (prop: keyof FormStates) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    setForms({ ...forms, [prop]: event.target.value })
+  }
 
   const handleShowPassword = () => {
     setShowPassword(!showPassword)
   }
 
-  const handleMouseDownPassword = (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
+  const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation()
   }
 
@@ -129,7 +124,8 @@ const SignUpDialog = (props: DialogProps) => {
                     aria-label="toggle password visibility"
                     onClick={handleShowPassword}
                     onMouseDown={handleMouseDownPassword}
-                    edge="end">
+                    edge="end"
+                  >
                     {showPassword ? <Visibility /> : <VisibilityOff />}
                   </IconButton>
                 </InputAdornment>
@@ -137,11 +133,7 @@ const SignUpDialog = (props: DialogProps) => {
             />
           </Box>
           <Box textAlign="center" className={classes.margin}>
-            <Button
-              variant="contained"
-              color="primary"
-              type="submit"
-              className={classes.margin}>
+            <Button variant="contained" color="primary" type="submit" className={classes.margin}>
               Sign Up
             </Button>
           </Box>

@@ -48,14 +48,14 @@ const AddMemoDialog: React.FC = () => {
           reference: '',
         }
         const params = { memo: memoParam }
-        const props: ApiProps = {
+        const props = ApiProps({
           method: 'post',
           endpoint: `memos`,
           data: params,
           callback: (data: IMemo) => {
             setMemos([data, ...memos])
           },
-        }
+        })
         ConnectApi(props)
       } else {
         const memoParam: IMemoUpdate = {
@@ -63,7 +63,7 @@ const AddMemoDialog: React.FC = () => {
           reference: '',
           removed: false,
         }
-        const props: ApiProps = {
+        const props = ApiProps({
           method: 'put',
           endpoint: `memos/${memo.id}`,
           data: { memo: memoParam },
@@ -72,7 +72,7 @@ const AddMemoDialog: React.FC = () => {
             memos[updatedIndex].contents = data.contents
             setMemos([...memos])
           },
-        }
+        })
         ConnectApi(props)
       }
     }

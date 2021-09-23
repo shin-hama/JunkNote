@@ -49,13 +49,13 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-const updateMemo = (updated: IMemo, callback?: CallableFunction) => {
-  const props: ApiProps = {
+const updateMemo = (updated: IMemo, callback?: () => void) => {
+  const props = ApiProps({
     endpoint: `/memos/${updated.id}`,
     method: 'put',
     data: { memo: updated },
     callback: callback,
-  }
+  })
   ConnectApi(props)
 }
 
@@ -104,11 +104,11 @@ const MemoCard: React.FC<Props> = ({ memo }) => {
   }
 
   const handleAlertOk = () => {
-    const props: ApiProps = {
+    const props = ApiProps({
       endpoint: `/memos/${memo.id}`,
       method: 'delete',
       callback: () => removeMemo(memo),
-    }
+    })
     ConnectApi(props)
     setAlertOpen(false)
   }

@@ -49,6 +49,51 @@ export const MemoContext = React.createContext<MemoContextProps>({
   },
 })
 
+type MemosGroup = {
+  common: Array<IMemo>
+  latest: Array<IMemo>
+  pinned: Array<IMemo>
+}
+const initialMemosGroup: MemosGroup = {
+  common: [],
+  latest: [],
+  pinned: [],
+}
+type Action = {
+  type: 'pin' | 'remove' | 'add'
+  newValue: IMemo
+}
+
+const AssignMemos = (state: MemosGroup, action: Action) => {
+  if (action.type === 'pin') {
+    return state
+  } else if (action.type === 'remove') {
+    throw new Error('Not implemented error')
+  } else {
+    throw new Error('Not implemented error')
+  }
+}
+
+const InitMemosGroup = (memos: IMemo[]): MemosGroup => {
+  const _pinned: IMemo[] = []
+  const _latest: IMemo[] = []
+  const _common: IMemo[] = []
+  memos.forEach((memo) => {
+    if (memo.pinned) {
+      _pinned.push(memo)
+    } else if (new Date(Date.parse(memo.created)) > getAccessedTimestamp()) {
+      _latest.push(memo)
+    } else {
+      _common.push(memo)
+    }
+  })
+  return {
+    common: _common,
+    latest: _latest,
+    pinned: _pinned,
+  }
+}
+
 interface MemosProps {
   memos: IMemo[]
   setMemos: React.Dispatch<React.SetStateAction<IMemo[]>>
@@ -65,6 +110,24 @@ type Props = {
 }
 const ContentRegion: React.FC<Props> = ({ isDrawerOpen }) => {
   const classes = useStyles()
+
+  const InitMemos = async (arg: MemosGroup) => {
+    const token = window.localStorage.getItem(TOKEN_KEY)
+    if (token) {
+      const props = ApiProps({
+        method: 'get',
+        endpoint: 'memos',
+        query: { removed: kind === ContentKind.Trash },
+        callback: (data: IMemo[]) => {
+          return InitMemosGroup(data)
+        },
+      })
+      const result = await ConnectApi(props)
+      return result
+    }
+  }
+  const [memosGroup, setMemosGroup] = React.useReducer(AssignMemos, initialMemosGroup)
+  console.log(memosGroup, setMemosGroup, InitMemos)
 
   const [pinned, setPinned] = React.useState<IMemo[]>([])
   const [latest, setLatest] = React.useState<IMemo[]>([])
@@ -109,21 +172,6 @@ const ContentRegion: React.FC<Props> = ({ isDrawerOpen }) => {
       setCommon(memos)
     }
   }, [kind, memos])
-
-  React.useEffect(() => {
-    const token = window.localStorage.getItem(TOKEN_KEY)
-    if (token) {
-      const props: ApiProps = {
-        method: 'get',
-        endpoint: 'memos',
-        query: { removed: kind === ContentKind.Trash },
-        callback: (data: IMemo[]) => {
-          setMemos(data)
-        },
-      }
-      ConnectApi(props)
-    }
-  }, [kind])
 
   return (
     <div>
