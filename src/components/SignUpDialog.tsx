@@ -65,7 +65,7 @@ const SignUpDialog = (props: DialogProps) => {
   const executeSignUp = (event: React.FormEvent) => {
     event.preventDefault()
     const params = { user: forms }
-    const props = ApiProps({
+    const props: ApiProps<UserStates> = {
       method: 'post',
       endpoint: 'users',
       data: params,
@@ -73,7 +73,7 @@ const SignUpDialog = (props: DialogProps) => {
         window.localStorage.setItem('myBearerToken', data.access_token)
         window.location.reload()
       },
-    })
+    }
     ConnectApi(props)
   }
 

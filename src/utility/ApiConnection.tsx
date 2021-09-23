@@ -8,39 +8,16 @@ axios.defaults.baseURL = `//${host}/api`
 axios.defaults.timeout = 5000
 axios.defaults.withCredentials = true
 
-type ApiPropsType<T, U> = {
+export type ApiProps<T = undefined> = {
   method: Method
   endpoint: string
   query?: Record<string, boolean | string | number>
   data?: URLSearchParams | Record<string, unknown>
-  callback?: (arg: T) => U
+  callback?: (arg: T) => void
   errorCallback?: () => void
 }
 
-export const ApiProps = <T, U>({
-  method,
-  endpoint,
-  query,
-  data,
-  callback,
-  errorCallback,
-}: {
-  method: Method
-  endpoint: string
-  query?: Record<string, boolean | string | number>
-  data?: URLSearchParams | Record<string, unknown>
-  callback?: (arg: T) => U
-  errorCallback?: () => void
-}): ApiPropsType<T, U> => ({
-  method: method,
-  endpoint: endpoint,
-  query: query,
-  data: data,
-  callback: callback,
-  errorCallback: errorCallback,
-})
-
-export const ConnectApi = async <T, U>(props: ApiPropsType<T, U>) => {
+export const ConnectApi = async <T,>(props: ApiProps<T>) => {
   try {
     const response = await axios({
       method: props.method,

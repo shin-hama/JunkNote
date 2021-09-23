@@ -60,8 +60,9 @@ const initialMemosGroup: MemosGroup = {
   pinned: [],
 }
 type Action = {
-  type: 'pin' | 'remove' | 'add'
-  newValue: IMemo
+  type: 'pin' | 'remove' | 'add' | 'new'
+  newValue?: IMemo
+  newState?: MemosGroup
 }
 
 const AssignMemos = (state: MemosGroup, action: Action) => {
@@ -69,6 +70,8 @@ const AssignMemos = (state: MemosGroup, action: Action) => {
     return state
   } else if (action.type === 'remove') {
     throw new Error('Not implemented error')
+  } else if (action.type === 'new') {
+    return action.newState ?? initialMemosGroup
   } else {
     throw new Error('Not implemented error')
   }
@@ -111,33 +114,31 @@ type Props = {
 const ContentRegion: React.FC<Props> = ({ isDrawerOpen }) => {
   const classes = useStyles()
 
-  const InitMemos = async (arg: MemosGroup) => {
+  const { kind } = React.useContext(ContentKindContext)
+
+  const [memosGroup, setMemosGroup] = React.useReducer(AssignMemos, initialMemosGroup)
+
+  const [indexes, setIndexes] = React.useState<IMemo[]>([])
+
+  React.useEffect(() => {
+    setIndexes(SortRandomly(memosGroup.common))
+  }, [memosGroup.common])
+
+  React.useEffect(() => {
     const token = window.localStorage.getItem(TOKEN_KEY)
     if (token) {
-      const props = ApiProps({
+      const props: ApiProps<IMemo[]> = {
         method: 'get',
         endpoint: 'memos',
         query: { removed: kind === ContentKind.Trash },
         callback: (data: IMemo[]) => {
-          return InitMemosGroup(data)
+          setMemosGroup({ type: 'new', newState: InitMemosGroup(data) })
         },
-      })
-      const result = await ConnectApi(props)
-      return result
+      }
+
+      ConnectApi(props)
     }
-  }
-  const [memosGroup, setMemosGroup] = React.useReducer(AssignMemos, initialMemosGroup)
-  console.log(memosGroup, setMemosGroup, InitMemos)
-
-  const [pinned, setPinned] = React.useState<IMemo[]>([])
-  const [latest, setLatest] = React.useState<IMemo[]>([])
-  const [common, setCommon] = React.useState<IMemo[]>([])
-  const { kind } = React.useContext(ContentKindContext)
-  const [indexes, setIndexes] = React.useState<IMemo[]>([])
-
-  React.useEffect(() => {
-    setIndexes(SortRandomly(common))
-  }, [common])
+  }, [kind])
 
   const [memo, setMemo] = React.useState<IMemo | null>(null)
   const value: MemoContextProps = {
@@ -151,28 +152,6 @@ const ContentRegion: React.FC<Props> = ({ isDrawerOpen }) => {
     setMemos: setMemos,
   }
 
-  React.useEffect(() => {
-    if (kind === ContentKind.Home) {
-      const _pinned: IMemo[] = []
-      const _latest: IMemo[] = []
-      const _common: IMemo[] = []
-      memos.forEach((memo) => {
-        if (memo.pinned) {
-          _pinned.push(memo)
-        } else if (new Date(Date.parse(memo.created)) > getAccessedTimestamp()) {
-          _latest.push(memo)
-        } else {
-          _common.push(memo)
-        }
-      })
-      setPinned(_pinned)
-      setLatest(_latest)
-      setCommon(_common)
-    } else {
-      setCommon(memos)
-    }
-  }, [kind, memos])
-
   return (
     <div>
       <MemosContext.Provider value={contextValue}>
@@ -184,21 +163,24 @@ const ContentRegion: React.FC<Props> = ({ isDrawerOpen }) => {
             })}
           >
             <div>
-              {pinned.length > 0 ? (
+              {memosGroup.pinned.length > 0 ? (
                 <div>
-                  <Memos title={'Pinned'} items={pinned} />
+                  <Memos title={'Pinned'} items={memosGroup.pinned} />
                 </div>
               ) : (
                 <></>
               )}
-              {latest.length > 0 ? (
+              {memosGroup.latest.length > 0 ? (
                 <div>
-                  <Memos title={'Latest Added'} items={latest} />
+                  <Memos title={'Latest Added'} items={memosGroup.latest} />
                 </div>
               ) : (
                 <></>
               )}
-              <Memos title={latest.length || pinned.length ? 'Common' : null} items={indexes} />
+              <Memos
+                title={memosGroup.latest.length || memosGroup.pinned.length ? 'Common' : null}
+                items={indexes}
+              />
             </div>{' '}
           </Container>
           {kind === ContentKind.Home ? <AddButton /> : <></>}

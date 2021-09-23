@@ -31,7 +31,7 @@ const AccountButton = () => {
   }
 
   const getCurrentUser = () => {
-    const props = ApiProps({
+    const props: ApiProps<UserStates> = {
       method: 'get',
       endpoint: 'users/me',
       callback: (data: UserStates) => {
@@ -40,7 +40,7 @@ const AccountButton = () => {
         window.localStorage.setItem('myBearerToken', data.access_token)
       },
       errorCallback: () => window.localStorage.removeItem(TOKEN_KEY),
-    })
+    }
     ConnectApi(props)
   }
 

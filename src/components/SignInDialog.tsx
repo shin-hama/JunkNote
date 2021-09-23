@@ -70,7 +70,7 @@ function SignInDialog(props: DialogProps) {
     event.preventDefault()
     setIsProcessing(true)
     const params = new URLSearchParams(forms)
-    const props = ApiProps({
+    const props: ApiProps<UserStates> = {
       method: 'post',
       endpoint: 'users/token',
       data: params,
@@ -81,7 +81,7 @@ function SignInDialog(props: DialogProps) {
       errorCallback: () => {
         setIsProcessing(false)
       },
-    })
+    }
     ConnectApi(props)
   }
 
