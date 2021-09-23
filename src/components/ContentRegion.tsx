@@ -6,10 +6,12 @@ import Container from '@material-ui/core/Container'
 import AddButton from './AddButton'
 import AddMemoDialog from './AddMemoDialog'
 import { ContentKind, ContentKindContext } from './App'
-import MemoList from './MemoList'
+import Memos from './MemoList'
 import { DRAWER_WIDTH, TOKEN_KEY } from '../constants'
 import { IMemo } from '../model/Memo'
 import { ApiProps, ConnectApi } from '../utility/ApiConnection'
+import { getAccessedTimestamp } from '../utility/AccessedTimestamp'
+import { SortRandomly } from '../utility/utility'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -64,6 +66,16 @@ type Props = {
 const ContentRegion: React.FC<Props> = ({ isDrawerOpen }) => {
   const classes = useStyles()
 
+  const [pinned, setPinned] = React.useState<IMemo[]>([])
+  const [latest, setLatest] = React.useState<IMemo[]>([])
+  const [common, setCommon] = React.useState<IMemo[]>([])
+  const { kind } = React.useContext(ContentKindContext)
+  const [indexes, setIndexes] = React.useState<IMemo[]>([])
+
+  React.useEffect(() => {
+    setIndexes(SortRandomly(common))
+  }, [common])
+
   const [memo, setMemo] = React.useState<IMemo | null>(null)
   const value: MemoContextProps = {
     memo: memo,
@@ -76,7 +88,27 @@ const ContentRegion: React.FC<Props> = ({ isDrawerOpen }) => {
     setMemos: setMemos,
   }
 
-  const { kind } = React.useContext(ContentKindContext)
+  React.useEffect(() => {
+    if (kind === ContentKind.Home) {
+      const _pinned: IMemo[] = []
+      const _latest: IMemo[] = []
+      const _common: IMemo[] = []
+      memos.forEach((memo) => {
+        if (memo.pinned) {
+          _pinned.push(memo)
+        } else if (new Date(Date.parse(memo.created)) > getAccessedTimestamp()) {
+          _latest.push(memo)
+        } else {
+          _common.push(memo)
+        }
+      })
+      setPinned(_pinned)
+      setLatest(_latest)
+      setCommon(_common)
+    } else {
+      setCommon(memos)
+    }
+  }, [kind, memos])
 
   React.useEffect(() => {
     const token = window.localStorage.getItem(TOKEN_KEY)
@@ -103,7 +135,23 @@ const ContentRegion: React.FC<Props> = ({ isDrawerOpen }) => {
               [classes.contentShift]: isDrawerOpen,
             })}
           >
-            {memos.length > 0 ? <MemoList /> : <></>}
+            <div>
+              {pinned.length > 0 ? (
+                <div>
+                  <Memos title={'Pinned'} items={pinned} />
+                </div>
+              ) : (
+                <></>
+              )}
+              {latest.length > 0 ? (
+                <div>
+                  <Memos title={'Latest Added'} items={latest} />
+                </div>
+              ) : (
+                <></>
+              )}
+              <Memos title={latest.length || pinned.length ? 'Common' : null} items={indexes} />
+            </div>{' '}
           </Container>
           {kind === ContentKind.Home ? <AddButton /> : <></>}
           <AddMemoDialog />
