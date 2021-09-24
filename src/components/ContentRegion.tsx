@@ -54,11 +54,21 @@ type MemosGroup = {
   latest: Array<IMemo>
   pinned: Array<IMemo>
 }
-const initialMemosGroup: MemosGroup = {
-  common: [],
-  latest: [],
-  pinned: [],
+const initMemosGroup = (): MemosGroup => {
+  return {
+    common: [],
+    latest: [],
+    pinned: [],
+  }
 }
+const cloneMemosGroup = (org: MemosGroup): MemosGroup => {
+  return {
+    common: Array.from(org.common),
+    latest: Array.from(org.latest),
+    pinned: Array.from(org.pinned),
+  }
+}
+
 type Action =
   | {
       type: 'pin' | 'remove' | 'add' | 'update'
@@ -69,30 +79,36 @@ type Action =
       newState: MemosGroup
     }
 
-const RemoveMemo = (memosGroup: MemosGroup, target: IMemo): MemosGroup => {
-  const result = Object.create(initialMemosGroup)
-  ;(Object.keys(memosGroup) as (keyof MemosGroup)[]).forEach((key) => {
-    result[key] = memosGroup[key].filter((item) => item.id !== target.id)
-  })
+const AddMemo = (memosGroup: MemosGroup, newMemo: IMemo) => {
+  if (newMemo.pinned) {
+    memosGroup.pinned.push(newMemo)
+  } else if (new Date(Date.parse(newMemo.created)) > getAccessedTimestamp()) {
+    memosGroup.latest.push(newMemo)
+  } else {
+    memosGroup.common.push(newMemo)
+  }
+}
 
+const RemoveMemo = (memosGroup: MemosGroup, target: IMemo): MemosGroup => {
+  const result = Object.fromEntries(
+    Object.entries(memosGroup).map(([key, val]) => [
+      key,
+      val.filter((item) => item.id !== target.id),
+    ])
+  ) as MemosGroup
   return result
 }
 
 const AssignMemos = (state: MemosGroup, action: Action) => {
-  console.log('dispatch')
   if (action.type === 'pin') {
     const result = RemoveMemo(state, action.value)
-    if (action.value.pinned) {
-      result.pinned.push(action.value)
-    } else {
-      result.common.push(action.value)
-    }
+    AddMemo(result, action.value)
     return result
   } else if (action.type === 'remove') {
     return RemoveMemo(state, action.value)
   } else if (action.type === 'add') {
-    const result = Object.create(state)
-    result.latest.push(action.value)
+    const result = cloneMemosGroup(state)
+    AddMemo(result, action.value)
     return result
   } else if (action.type === 'update') {
     return state
@@ -104,19 +120,9 @@ const AssignMemos = (state: MemosGroup, action: Action) => {
 }
 
 const InitMemosGroup = (memos: IMemo[]): MemosGroup => {
-  const initialValues: MemosGroup = {
-    common: [],
-    latest: [],
-    pinned: [],
-  }
+  const initialValues = initMemosGroup()
   memos.forEach((memo) => {
-    if (memo.pinned) {
-      initialValues.pinned.push(memo)
-    } else if (new Date(Date.parse(memo.created)) > getAccessedTimestamp()) {
-      initialValues.latest.push(memo)
-    } else {
-      initialValues.common.push(memo)
-    }
+    AddMemo(initialValues, memo)
   })
   return initialValues
 }
@@ -126,7 +132,7 @@ interface MemosContextProps {
   setMemos: React.Dispatch<Action>
 }
 export const MemosContext = React.createContext<MemosContextProps>({
-  memos: initialMemosGroup,
+  memos: initMemosGroup(),
   setMemos: () => {
     // no run
   },
@@ -140,7 +146,7 @@ const ContentRegion: React.FC<Props> = ({ isDrawerOpen }) => {
 
   const { kind } = React.useContext(ContentKindContext)
 
-  const [memosGroup, setMemosGroup] = React.useReducer(AssignMemos, initialMemosGroup)
+  const [memosGroup, setMemosGroup] = React.useReducer(AssignMemos, initMemosGroup())
   const [indexes, setIndexes] = React.useState<IMemo[]>([])
   React.useEffect(() => {
     setIndexes(SortRandomly(memosGroup.common))

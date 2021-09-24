@@ -53,7 +53,6 @@ const AddMemoDialog: React.FC = () => {
           endpoint: `memos`,
           data: params,
           callback: (data: IMemo) => {
-            // setMemos([data, ...memos])
             setMemos({ type: 'add', value: data })
           },
         }

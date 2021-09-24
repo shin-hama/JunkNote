@@ -61,15 +61,11 @@ const updateMemo = (updated: IMemo, callback?: () => void) => {
 
 type Props = { memo: IMemo }
 const MemoCard: React.FC<Props> = ({ memo }) => {
-  // TODO: Create custom hook to update memo with api
   const classes = useStyles()
   const [isMouseOver, setIsMouseOver] = React.useState(false)
   const [alertOpen, setAlertOpen] = React.useState(false)
   const { setMemos } = React.useContext(MemosContext)
   const { kind } = React.useContext(ContentKindContext)
-  const removeMemo = (removedMemo: IMemo) => {
-    setMemos({ type: 'remove', value: removedMemo })
-  }
   const { setMemo } = React.useContext(MemoContext)
   const handleCardClicked = () => {
     if (kind === ContentKind.Home) {
@@ -100,7 +96,7 @@ const MemoCard: React.FC<Props> = ({ memo }) => {
       setAlertOpen(true)
     } else {
       memo.removed = true
-      updateMemo(memo, () => removeMemo(memo))
+      updateMemo(memo, () => setMemos({ type: 'remove', value: memo }))
     }
   }
 
@@ -108,7 +104,7 @@ const MemoCard: React.FC<Props> = ({ memo }) => {
     const props: ApiProps = {
       endpoint: `/memos/${memo.id}`,
       method: 'delete',
-      callback: () => removeMemo(memo),
+      callback: () => setMemos({ type: 'remove', value: memo }),
     }
     ConnectApi(props)
     setAlertOpen(false)
