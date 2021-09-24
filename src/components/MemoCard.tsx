@@ -68,7 +68,7 @@ const MemoCard: React.FC<Props> = ({ memo }) => {
   const { setMemos } = React.useContext(MemosContext)
   const { kind } = React.useContext(ContentKindContext)
   const removeMemo = (removedMemo: IMemo) => {
-    setMemos((prev) => prev.filter((item) => item !== removedMemo))
+    setMemos({ type: 'remove', value: removedMemo })
   }
   const { setMemo } = React.useContext(MemoContext)
   const handleCardClicked = () => {
@@ -87,7 +87,8 @@ const MemoCard: React.FC<Props> = ({ memo }) => {
   const handlePinClicked = (event: React.MouseEvent) => {
     memo.pinned = !memo.pinned
     updateMemo(memo, () => {
-      setMemos((prev) => [...prev])
+      // setMemos((prev) => [...prev])
+      setMemos({ type: 'pin', value: memo })
     })
 
     // Prevent click events from going to layers below the icon

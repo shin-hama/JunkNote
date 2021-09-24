@@ -59,50 +59,66 @@ const initialMemosGroup: MemosGroup = {
   latest: [],
   pinned: [],
 }
-type Action = {
-  type: 'pin' | 'remove' | 'add' | 'new'
-  newValue?: IMemo
-  newState?: MemosGroup
+type Action =
+  | {
+      type: 'pin' | 'remove' | 'add' | 'update'
+      value: IMemo
+    }
+  | {
+      type: 'new'
+      newState: MemosGroup
+    }
+
+const RemoveMemo = (memosGroup: MemosGroup, target: IMemo): MemosGroup => {
+  const result = Object.create(initialMemosGroup)
+  ;(Object.keys(memosGroup) as (keyof MemosGroup)[]).forEach(
+    (key) => (result[key] = memosGroup[key].filter((item) => item !== target))
+  )
+
+  return result
 }
 
 const AssignMemos = (state: MemosGroup, action: Action) => {
+  console.log('dispatch')
   if (action.type === 'pin') {
     return state
   } else if (action.type === 'remove') {
-    throw new Error('Not implemented error')
+    return RemoveMemo(state, action.value)
+  } else if (action.type === 'add') {
+    return state
+  } else if (action.type === 'update') {
+    return state
   } else if (action.type === 'new') {
-    return action.newState ?? initialMemosGroup
+    return action.newState
   } else {
     throw new Error('Not implemented error')
   }
 }
 
 const InitMemosGroup = (memos: IMemo[]): MemosGroup => {
-  const _pinned: IMemo[] = []
-  const _latest: IMemo[] = []
-  const _common: IMemo[] = []
+  const initialValues: MemosGroup = {
+    common: [],
+    latest: [],
+    pinned: [],
+  }
   memos.forEach((memo) => {
     if (memo.pinned) {
-      _pinned.push(memo)
+      initialValues.pinned.push(memo)
     } else if (new Date(Date.parse(memo.created)) > getAccessedTimestamp()) {
-      _latest.push(memo)
+      initialValues.latest.push(memo)
     } else {
-      _common.push(memo)
+      initialValues.common.push(memo)
     }
   })
-  return {
-    common: _common,
-    latest: _latest,
-    pinned: _pinned,
-  }
+  return initialValues
 }
 
-interface MemosProps {
-  memos: IMemo[]
-  setMemos: React.Dispatch<React.SetStateAction<IMemo[]>>
+interface MemosContextProps {
+  memos: MemosGroup
+  setMemos: React.Dispatch<Action>
 }
-export const MemosContext = React.createContext<MemosProps>({
-  memos: [],
+export const MemosContext = React.createContext<MemosContextProps>({
+  memos: initialMemosGroup,
   setMemos: () => {
     // no run
   },
@@ -117,9 +133,7 @@ const ContentRegion: React.FC<Props> = ({ isDrawerOpen }) => {
   const { kind } = React.useContext(ContentKindContext)
 
   const [memosGroup, setMemosGroup] = React.useReducer(AssignMemos, initialMemosGroup)
-
   const [indexes, setIndexes] = React.useState<IMemo[]>([])
-
   React.useEffect(() => {
     setIndexes(SortRandomly(memosGroup.common))
   }, [memosGroup.common])
@@ -146,15 +160,14 @@ const ContentRegion: React.FC<Props> = ({ isDrawerOpen }) => {
     setMemo: setMemo,
   }
 
-  const [memos, setMemos] = React.useState<IMemo[]>([])
-  const contextValue = {
-    memos: memos,
-    setMemos: setMemos,
+  const memosContextValue: MemosContextProps = {
+    memos: memosGroup,
+    setMemos: setMemosGroup,
   }
 
   return (
     <div>
-      <MemosContext.Provider value={contextValue}>
+      <MemosContext.Provider value={memosContextValue}>
         <MemoContext.Provider value={value}>
           <Container
             maxWidth="md"

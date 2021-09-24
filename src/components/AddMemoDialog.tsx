@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme: Theme) =>
 const AddMemoDialog: React.FC = () => {
   const classes = useStyles()
   const { memo, setMemo } = React.useContext(MemoContext)
-  const { memos, setMemos } = React.useContext(MemosContext)
+  const { setMemos } = React.useContext(MemosContext)
   const [isOpen, setIsOpen] = React.useState(false)
   const [text, setText] = React.useState('')
   const handleClose = () => {
@@ -53,7 +53,8 @@ const AddMemoDialog: React.FC = () => {
           endpoint: `memos`,
           data: params,
           callback: (data: IMemo) => {
-            setMemos([data, ...memos])
+            // setMemos([data, ...memos])
+            setMemos({ type: 'add', value: data })
           },
         }
         ConnectApi(props)
@@ -68,9 +69,10 @@ const AddMemoDialog: React.FC = () => {
           endpoint: `memos/${memo.id}`,
           data: { memo: memoParam },
           callback: (data: IMemo) => {
-            const updatedIndex = memos.findIndex((item) => item.id === data.id)
-            memos[updatedIndex].contents = data.contents
-            setMemos([...memos])
+            // const updatedIndex = memos.findIndex((item) => item.id === data.id)
+            // memos[updatedIndex].contents = data.contents
+            // setMemos([...memos])
+            setMemos({ type: 'update', value: data })
           },
         }
         ConnectApi(props)
