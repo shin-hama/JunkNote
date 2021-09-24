@@ -71,9 +71,9 @@ type Action =
 
 const RemoveMemo = (memosGroup: MemosGroup, target: IMemo): MemosGroup => {
   const result = Object.create(initialMemosGroup)
-  ;(Object.keys(memosGroup) as (keyof MemosGroup)[]).forEach(
-    (key) => (result[key] = memosGroup[key].filter((item) => item !== target))
-  )
+  ;(Object.keys(memosGroup) as (keyof MemosGroup)[]).forEach((key) => {
+    result[key] = memosGroup[key].filter((item) => item.id !== target.id)
+  })
 
   return result
 }
@@ -81,11 +81,19 @@ const RemoveMemo = (memosGroup: MemosGroup, target: IMemo): MemosGroup => {
 const AssignMemos = (state: MemosGroup, action: Action) => {
   console.log('dispatch')
   if (action.type === 'pin') {
-    return state
+    const result = RemoveMemo(state, action.value)
+    if (action.value.pinned) {
+      result.pinned.push(action.value)
+    } else {
+      result.common.push(action.value)
+    }
+    return result
   } else if (action.type === 'remove') {
     return RemoveMemo(state, action.value)
   } else if (action.type === 'add') {
-    return state
+    const result = Object.create(state)
+    result.latest.push(action.value)
+    return result
   } else if (action.type === 'update') {
     return state
   } else if (action.type === 'new') {
