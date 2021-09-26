@@ -13,7 +13,7 @@ import PushPinOutlinedIcon from '@material-ui/icons/PushPinOutlined'
 import AlertDialog from './AlertDialog'
 import { ContentKind, ContentKindContext } from './App'
 import { MemoContext, MemosContext } from './ContentRegion'
-import { IMemo, MemoFactory } from '../model/Memo'
+import { IMemo } from '../model/Memo'
 import { ApiProps, ConnectApi } from '../utility/ApiConnection'
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -69,7 +69,7 @@ const MemoCard: React.FC<Props> = ({ memo }) => {
   const { setMemo } = React.useContext(MemoContext)
   const handleCardClicked = () => {
     if (kind === ContentKind.Home) {
-      setMemo(MemoFactory({ id: memo.id, text: memo.contents }))
+      setMemo(memo)
     }
   }
 

@@ -31,7 +31,8 @@ export interface IMemoCreate {
 }
 
 export interface IMemoUpdate {
-  contents: string
-  reference: string
-  removed: boolean
+  contents?: string
+  reference?: string
+  removed?: boolean
+  pinned?: boolean
 }

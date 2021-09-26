@@ -111,7 +111,9 @@ const AssignMemos = (state: MemosGroup, action: Action) => {
     AddMemo(result, action.value)
     return result
   } else if (action.type === 'update') {
-    return state
+    const result = RemoveMemo(state, action.value)
+    AddMemo(result, action.value)
+    return result
   } else if (action.type === 'new') {
     return action.newState
   } else {

@@ -10,7 +10,7 @@ import Tooltip from '@material-ui/core/Tooltip'
 import AttachFileIcon from '@material-ui/icons/AttachFile'
 
 import { MemoContext, MemosContext } from './ContentRegion'
-import { IMemo, IMemoCreate, IMemoUpdate } from '../model/Memo'
+import { IMemo, IMemoCreate } from '../model/Memo'
 import { ApiProps, ConnectApi } from '../utility/ApiConnection'
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -40,7 +40,6 @@ const AddMemoDialog: React.FC = () => {
 
   const handleSave = () => {
     if (memo !== null) {
-      // TODO: Update memo when memo card is clicked that means memo.id !== -1
       if (memo.id === -1) {
         // Create new memo
         const memoParam: IMemoCreate = {
@@ -58,15 +57,11 @@ const AddMemoDialog: React.FC = () => {
         }
         ConnectApi(props)
       } else {
-        const memoParam: IMemoUpdate = {
-          contents: text,
-          reference: '',
-          removed: false,
-        }
+        memo.contents = text
         const props: ApiProps<IMemo> = {
           method: 'put',
           endpoint: `memos/${memo.id}`,
-          data: { memo: memoParam },
+          data: { memo: memo },
           callback: (data: IMemo) => {
             // const updatedIndex = memos.findIndex((item) => item.id === data.id)
             // memos[updatedIndex].contents = data.contents
