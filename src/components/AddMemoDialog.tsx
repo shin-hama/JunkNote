@@ -63,9 +63,6 @@ const AddMemoDialog: React.FC = () => {
           endpoint: `memos/${memo.id}`,
           data: { memo: memo },
           callback: (data: IMemo) => {
-            // const updatedIndex = memos.findIndex((item) => item.id === data.id)
-            // memos[updatedIndex].contents = data.contents
-            // setMemos([...memos])
             setMemos({ type: 'update', value: data })
           },
         }

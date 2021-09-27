@@ -83,8 +83,7 @@ const MemoCard: React.FC<Props> = ({ memo }) => {
   const handlePinClicked = (event: React.MouseEvent) => {
     memo.pinned = !memo.pinned
     updateMemo(memo, () => {
-      // setMemos((prev) => [...prev])
-      setMemos({ type: 'pin', value: memo })
+      setMemos({ type: 'update', value: memo })
     })
 
     // Prevent click events from going to layers below the icon

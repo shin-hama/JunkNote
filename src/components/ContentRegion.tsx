@@ -71,7 +71,7 @@ const cloneMemosGroup = (org: MemosGroup): MemosGroup => {
 
 type Action =
   | {
-      type: 'pin' | 'remove' | 'add' | 'update'
+      type: 'add' | 'update' | 'remove'
       value: IMemo
     }
   | {
@@ -100,16 +100,12 @@ const RemoveMemo = (memosGroup: MemosGroup, target: IMemo): MemosGroup => {
 }
 
 const AssignMemos = (state: MemosGroup, action: Action) => {
-  if (action.type === 'pin') {
-    const result = RemoveMemo(state, action.value)
+  if (action.type === 'add') {
+    const result = cloneMemosGroup(state)
     AddMemo(result, action.value)
     return result
   } else if (action.type === 'remove') {
     return RemoveMemo(state, action.value)
-  } else if (action.type === 'add') {
-    const result = cloneMemosGroup(state)
-    AddMemo(result, action.value)
-    return result
   } else if (action.type === 'update') {
     const result = RemoveMemo(state, action.value)
     AddMemo(result, action.value)
