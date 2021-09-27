@@ -11,7 +11,7 @@ import DeleteIcon from '@material-ui/icons/Delete'
 import PushPinOutlinedIcon from '@material-ui/icons/PushPinOutlined'
 
 import AlertDialog from './AlertDialog'
-import { ContentKind, ContentKindContext } from './App'
+import { ContentKind, ContentKindContext } from '../pages/MainView'
 import { MemoContext, MemosContext } from './ContentRegion'
 import { IMemo } from '../model/Memo'
 import { ApiProps, ConnectApi } from '../utility/ApiConnection'

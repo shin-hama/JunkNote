@@ -5,7 +5,7 @@ import Container from '@material-ui/core/Container'
 
 import AddButton from './AddButton'
 import AddMemoDialog from './AddMemoDialog'
-import { ContentKind, ContentKindContext } from './App'
+import { ContentKind, ContentKindContext } from '../pages/MainView'
 import Memos from './MemoList'
 import { DRAWER_WIDTH, TOKEN_KEY } from '../constants'
 import { IMemo } from '../model/Memo'
@@ -145,10 +145,6 @@ const ContentRegion: React.FC<Props> = ({ isDrawerOpen }) => {
   const { kind } = React.useContext(ContentKindContext)
 
   const [memosGroup, setMemosGroup] = React.useReducer(AssignMemos, initMemosGroup())
-  const [indexes, setIndexes] = React.useState<IMemo[]>([])
-  React.useEffect(() => {
-    setIndexes(SortRandomly(memosGroup.common))
-  }, [memosGroup.common])
 
   React.useEffect(() => {
     const token = window.localStorage.getItem(TOKEN_KEY)
@@ -187,26 +183,34 @@ const ContentRegion: React.FC<Props> = ({ isDrawerOpen }) => {
               [classes.contentShift]: isDrawerOpen,
             })}
           >
-            <div>
-              {memosGroup.pinned.length > 0 ? (
-                <div>
-                  <Memos title={'Pinned'} items={memosGroup.pinned} />
-                </div>
-              ) : (
-                <></>
-              )}
-              {memosGroup.latest.length > 0 ? (
-                <div>
-                  <Memos title={'Latest Added'} items={memosGroup.latest} />
-                </div>
-              ) : (
-                <></>
-              )}
-              <Memos
-                title={memosGroup.latest.length || memosGroup.pinned.length ? 'Common' : null}
-                items={indexes}
-              />
-            </div>{' '}
+            {kind === ContentKind.Home ? (
+              <div>
+                {memosGroup.pinned.length > 0 ? (
+                  <div>
+                    <Memos title={'Pinned'} items={memosGroup.pinned} />
+                  </div>
+                ) : (
+                  <></>
+                )}
+                {memosGroup.latest.length > 0 ? (
+                  <div>
+                    <Memos title={'Latest Added'} items={memosGroup.latest} />
+                  </div>
+                ) : (
+                  <></>
+                )}
+                <Memos
+                  title={memosGroup.latest.length || memosGroup.pinned.length ? 'Common' : ''}
+                  items={SortRandomly(memosGroup.common)}
+                />
+              </div>
+            ) : (
+              <div>
+                <Memos
+                  items={memosGroup.common.concat(memosGroup.latest.concat(memosGroup.pinned))}
+                />
+              </div>
+            )}
           </Container>
           {kind === ContentKind.Home ? <AddButton /> : <></>}
           <AddMemoDialog />

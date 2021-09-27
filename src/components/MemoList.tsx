@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 type MemosProps = {
   items: Array<IMemo>
-  title: string | null
+  title?: string
 }
 const Memos: React.FC<MemosProps> = ({ items, title }) => {
   const classes = useStyles()
