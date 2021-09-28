@@ -1,10 +1,5 @@
 import React from 'react'
-import {
-  alpha,
-  makeStyles,
-  createStyles,
-  Theme,
-} from '@material-ui/core/styles'
+import { alpha, makeStyles, createStyles, Theme } from '@material-ui/core/styles'
 import Drawer from '@material-ui/core/Drawer'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
@@ -14,7 +9,7 @@ import Toolbar from '@material-ui/core/Toolbar'
 import DeleteIcon from '@material-ui/icons/Delete'
 import HomeIcon from '@material-ui/icons/Home'
 
-import { ContentKind, ContentKindContext } from './App'
+import { ContentKind, ContentKindContext } from '../pages/MainView'
 import { DRAWER_WIDTH } from '../constants'
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -69,11 +64,7 @@ const DrawerItems = (): React.ReactElement => {
     <div role="presentation">
       <List>
         {items.map((item) => (
-          <ListItem
-            button
-            key={item.name}
-            onClick={item.func}
-            className={item.class}>
+          <ListItem button key={item.name} onClick={item.func} className={item.class}>
             <ListItemIcon>{item.icon}</ListItemIcon>
             <ListItemText primary={item.name} color="inherit" />
           </ListItem>
@@ -96,7 +87,8 @@ const LeftDrawer: React.FC<Props> = ({ open }) => {
       open={open}
       elevation={0}
       classes={{ paper: classes.paper }}
-      className={classes.drawer}>
+      className={classes.drawer}
+    >
       <Toolbar />
       {DrawerItems()}
     </Drawer>

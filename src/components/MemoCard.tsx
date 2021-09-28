@@ -11,9 +11,9 @@ import DeleteIcon from '@material-ui/icons/Delete'
 import PushPinOutlinedIcon from '@material-ui/icons/PushPinOutlined'
 
 import AlertDialog from './AlertDialog'
-import { ContentKind, ContentKindContext } from './App'
+import { ContentKind, ContentKindContext } from '../pages/MainView'
 import { MemoContext, MemosContext } from './ContentRegion'
-import { IMemo, MemoFactory } from '../model/Memo'
+import { IMemo } from '../model/Memo'
 import { ApiProps, ConnectApi } from '../utility/ApiConnection'
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-const updateMemo = (updated: IMemo, callback?: CallableFunction) => {
+const updateMemo = (updated: IMemo, callback?: () => void) => {
   const props: ApiProps = {
     endpoint: `/memos/${updated.id}`,
     method: 'put',
@@ -61,19 +61,15 @@ const updateMemo = (updated: IMemo, callback?: CallableFunction) => {
 
 type Props = { memo: IMemo }
 const MemoCard: React.FC<Props> = ({ memo }) => {
-  // TODO: Create custom hook to update memo with api
   const classes = useStyles()
   const [isMouseOver, setIsMouseOver] = React.useState(false)
   const [alertOpen, setAlertOpen] = React.useState(false)
   const { setMemos } = React.useContext(MemosContext)
   const { kind } = React.useContext(ContentKindContext)
-  const removeMemo = (removedMemo: IMemo) => {
-    setMemos((prev) => prev.filter((item) => item !== removedMemo))
-  }
   const { setMemo } = React.useContext(MemoContext)
   const handleCardClicked = () => {
     if (kind === ContentKind.Home) {
-      setMemo(MemoFactory({ id: memo.id, text: memo.contents }))
+      setMemo(memo)
     }
   }
 
@@ -87,7 +83,7 @@ const MemoCard: React.FC<Props> = ({ memo }) => {
   const handlePinClicked = (event: React.MouseEvent) => {
     memo.pinned = !memo.pinned
     updateMemo(memo, () => {
-      setMemos((prev) => [...prev])
+      setMemos({ type: 'update', value: memo })
     })
 
     // Prevent click events from going to layers below the icon
@@ -99,7 +95,7 @@ const MemoCard: React.FC<Props> = ({ memo }) => {
       setAlertOpen(true)
     } else {
       memo.removed = true
-      updateMemo(memo, () => removeMemo(memo))
+      updateMemo(memo, () => setMemos({ type: 'remove', value: memo }))
     }
   }
 
@@ -107,7 +103,7 @@ const MemoCard: React.FC<Props> = ({ memo }) => {
     const props: ApiProps = {
       endpoint: `/memos/${memo.id}`,
       method: 'delete',
-      callback: () => removeMemo(memo),
+      callback: () => setMemos({ type: 'remove', value: memo }),
     }
     ConnectApi(props)
     setAlertOpen(false)

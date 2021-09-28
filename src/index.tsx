@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import CssBaseline from '@material-ui/core/CssBaseline'
 
 import './index.css'
-import App from './components/App'
+import App from './App'
 import CustomTheme from './theme/CustomTheme'
 import reportWebVitals from './reportWebVitals'
 

@@ -8,21 +8,29 @@ axios.defaults.baseURL = `//${host}/api`
 axios.defaults.timeout = 5000
 axios.defaults.withCredentials = true
 
-export const ConnectApi = async (props: ApiProps) => {
-  await axios({
-    method: props.method,
-    url: props.endpoint,
-    params: props.query,
-    data: props.data ?? null,
-    headers: getHeaders(),
-  })
-    .then((response) => {
-      props.callback?.(response.data)
+export type ApiProps<T = undefined> = {
+  method: Method
+  endpoint: string
+  query?: Record<string, boolean | string | number>
+  data?: URLSearchParams | Record<string, unknown>
+  callback?: (arg: T) => void
+  errorCallback?: () => void
+}
+
+export const ConnectApi = async <T,>(props: ApiProps<T>) => {
+  try {
+    const response = await axios({
+      method: props.method,
+      url: props.endpoint,
+      params: props.query,
+      data: props.data ?? null,
+      headers: getHeaders(),
     })
-    .catch(() => {
-      console.log('fail to communicate with api')
-      props.errorCallback?.()
-    })
+    return props.callback?.(response.data)
+  } catch (error) {
+    console.log(error)
+    return props.errorCallback?.()
+  }
 }
 
 const getHeaders = () => {
@@ -34,13 +42,4 @@ const getHeaders = () => {
   } else {
     return {}
   }
-}
-
-export type ApiProps = {
-  method: Method
-  endpoint: string
-  query?: Record<string, boolean | string | number>
-  data?: URLSearchParams | Record<string, unknown>
-  callback?: CallableFunction
-  errorCallback?: CallableFunction
 }

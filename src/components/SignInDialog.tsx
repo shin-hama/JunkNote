@@ -11,9 +11,7 @@ import IconButton from '@material-ui/core/IconButton'
 import InputAdornment from '@material-ui/core/InputAdornment/InputAdornment'
 import InputLabel from '@material-ui/core/InputLabel'
 import Link from '@material-ui/core/Link'
-import OutlinedInput, {
-  OutlinedInputProps,
-} from '@material-ui/core/OutlinedInput'
+import OutlinedInput, { OutlinedInputProps } from '@material-ui/core/OutlinedInput'
 import Typography from '@material-ui/core/Typography'
 import Visibility from '@material-ui/icons/Visibility'
 import VisibilityOff from '@material-ui/icons/VisibilityOff'
@@ -45,7 +43,8 @@ const SignInForm = (props: OutlinedInputProps) => {
       className={clsx(classes.margin, classes.textField)}
       margin="dense"
       required
-      variant="outlined">
+      variant="outlined"
+    >
       <InputLabel htmlFor={props.id}>{props.label}</InputLabel>
       <OutlinedInput {...props} />
     </FormControl>
@@ -71,7 +70,7 @@ function SignInDialog(props: DialogProps) {
     event.preventDefault()
     setIsProcessing(true)
     const params = new URLSearchParams(forms)
-    const props: ApiProps = {
+    const props: ApiProps<UserStates> = {
       method: 'post',
       endpoint: 'users/token',
       data: params,
@@ -86,19 +85,15 @@ function SignInDialog(props: DialogProps) {
     ConnectApi(props)
   }
 
-  const handleChange =
-    (prop: keyof FormStates) =>
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setForms({ ...forms, [prop]: event.target.value })
-    }
+  const handleChange = (prop: keyof FormStates) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    setForms({ ...forms, [prop]: event.target.value })
+  }
 
   const handleShowPassword = () => {
     setShowPassword(!showPassword)
   }
 
-  const handleMouseDownPassword = (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
+  const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation()
   }
 
@@ -132,7 +127,8 @@ function SignInDialog(props: DialogProps) {
                     aria-label="toggle password visibility"
                     onClick={handleShowPassword}
                     onMouseDown={handleMouseDownPassword}
-                    edge="end">
+                    edge="end"
+                  >
                     {showPassword ? <Visibility /> : <VisibilityOff />}
                   </IconButton>
                 </InputAdornment>
@@ -143,11 +139,7 @@ function SignInDialog(props: DialogProps) {
             {isProcessing ? (
               <CircularProgress />
             ) : (
-              <Button
-                variant="contained"
-                color="primary"
-                type="submit"
-                className={classes.margin}>
+              <Button variant="contained" color="primary" type="submit" className={classes.margin}>
                 Sign in
               </Button>
             )}

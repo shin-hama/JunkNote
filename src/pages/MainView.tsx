@@ -1,9 +1,9 @@
 import React from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 
-import ContentRegion from './ContentRegion'
-import Header from './Header'
-import LeftDrawer from './LeftDrawer'
+import ContentRegion from '../components/ContentRegion'
+import Header from '../components/Header'
+import LeftDrawer from '../components/LeftDrawer'
 import { setAccessedTimestamp } from '../utility/AccessedTimestamp'
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -33,7 +33,7 @@ export const ContentKindContext = React.createContext<ContentKindProps>({
 })
 
 type Props = { handleTheme: React.MouseEventHandler }
-export default function App({ handleTheme }: Props) {
+export default function MainView({ handleTheme }: Props) {
   const classes = useStyles()
   const [isDrawerOpen, setIsDrawerOpen] = React.useState<boolean>(true)
 

@@ -29,9 +29,3 @@ export interface IMemoCreate {
   contents: string
   reference: string
 }
-
-export interface IMemoUpdate {
-  contents: string
-  reference: string
-  removed: boolean
-}
