@@ -1,24 +1,13 @@
 import React from 'react'
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
-import Button from '@material-ui/core/Button'
-import Typography from '@material-ui/core/Typography'
+import Button from '@mui/material/Button'
+import Typography from '@mui/material/Typography'
 
 import AccountComponent from './Account'
 import { UserStates } from '../model/User'
 import { ApiProps, ConnectApi } from '../utility/ApiConnection'
 import { TOKEN_KEY } from '../constants'
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    button: {
-      minWidth: '80px',
-    },
-  })
-)
-
 const AccountButton = () => {
-  const classes = useStyles()
-
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null)
   const [buttonText, setButtonText] = React.useState('')
   const [user, setUser] = React.useState<UserStates | null>(null)
@@ -61,11 +50,15 @@ const AccountButton = () => {
         color="primary"
         onClick={handleButtonClick}
         variant="contained"
-        className={classes.button}
-      >
+        sx={{ minWidth: '80px' }}>
         <Typography variant="button">{buttonText}</Typography>
       </Button>
-      <AccountComponent isOpen={isOpen} setIsOpen={setIsOpen} anchorEl={anchorEl} user={user} />
+      <AccountComponent
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        anchorEl={anchorEl}
+        user={user}
+      />
     </div>
   )
 }

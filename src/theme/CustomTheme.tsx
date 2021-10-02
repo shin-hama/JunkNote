@@ -1,5 +1,5 @@
 import React from 'react'
-import { createTheme, MuiThemeProvider } from '@material-ui/core/styles'
+import { createTheme, ThemeProvider, StyledEngineProvider } from '@mui/material/styles'
 
 type Props = {
   children: React.ReactNode
@@ -13,7 +13,7 @@ const CustomTheme: React.FC<Props> = ({ children, isLightMode }) => {
       },
     },
     palette: {
-      type: isLightMode ? 'light' : 'dark',
+      mode: isLightMode ? 'light' : 'dark',
       primary: {
         light: '#50BDCE',
         main: '#319EAF',
@@ -27,23 +27,6 @@ const CustomTheme: React.FC<Props> = ({ children, isLightMode }) => {
         contrastText: '#000',
       },
     },
-    props: {
-      MuiTextField: {
-        variant: 'outlined',
-      },
-      MuiList: {
-        dense: true,
-      },
-      MuiCheckbox: {
-        color: 'primary',
-      },
-      MuiRadio: {
-        color: 'primary',
-      },
-      MuiSwitch: {
-        color: 'primary',
-      },
-    },
     typography: {
       button: {
         textTransform: 'none',
@@ -52,9 +35,11 @@ const CustomTheme: React.FC<Props> = ({ children, isLightMode }) => {
   })
 
   return (
-    <MuiThemeProvider theme={customTheme}>
-      <div>{children}</div>
-    </MuiThemeProvider>
+    <StyledEngineProvider injectFirst>
+      <ThemeProvider theme={customTheme}>
+        <div>{children}</div>
+      </ThemeProvider>
+    </StyledEngineProvider>
   )
 }
 

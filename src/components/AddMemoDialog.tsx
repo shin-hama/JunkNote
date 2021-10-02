@@ -1,31 +1,23 @@
 import React from 'react'
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
-import Button from '@material-ui/core/Button'
-import IconButton from '@material-ui/core/IconButton'
-import TextField from '@material-ui/core/TextField'
-import Dialog from '@material-ui/core/Dialog'
-import DialogActions from '@material-ui/core/DialogActions'
-import DialogContent from '@material-ui/core/DialogContent'
-import Tooltip from '@material-ui/core/Tooltip'
+import { styled } from '@mui/material/styles'
+import Button from '@mui/material/Button'
+import IconButton from '@mui/material/IconButton'
+import TextField from '@mui/material/TextField'
+import Dialog from '@mui/material/Dialog'
+import DialogActions from '@mui/material/DialogActions'
+import DialogContent from '@mui/material/DialogContent'
+import Tooltip from '@mui/material/Tooltip'
 import AttachFileIcon from '@material-ui/icons/AttachFile'
 
 import { MemoContext, MemosContext } from './ContentRegion'
 import { IMemo, IMemoCreate } from '../model/Memo'
 import { ApiProps, ConnectApi } from '../utility/ApiConnection'
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      padding: theme.spacing(3),
-    },
-    grow: {
-      flexGrow: 1,
-    },
-  })
-)
+const FlexDiv = styled('div')(({ theme }) => ({
+  flexGrow: 1,
+}))
 
 const AddMemoDialog: React.FC = () => {
-  const classes = useStyles()
   const { memo, setMemo } = React.useContext(MemoContext)
   const { setMemos } = React.useContext(MemosContext)
   const [isOpen, setIsOpen] = React.useState(false)
@@ -107,10 +99,10 @@ const AddMemoDialog: React.FC = () => {
           />
         </DialogContent>
         <DialogActions>
-          <IconButton>
+          <IconButton size="large">
             <AttachFileIcon />
           </IconButton>
-          <div className={classes.grow} />
+          <FlexDiv />
           <Tooltip title="Save memo (Ctrl + Enter)" placement="top">
             <Button variant="contained" color="primary" onClick={handleSave}>
               Save Memo

@@ -1,10 +1,12 @@
 import React from 'react'
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
-import Grid from '@material-ui/core/Grid'
+import { Theme } from '@mui/material/styles';
+import makeStyles from '@mui/styles/makeStyles';
+import createStyles from '@mui/styles/createStyles';
+import Grid from '@mui/material/Grid'
 
 import MemoCard from './MemoCard'
 import { IMemo } from '../model/Memo'
-import { Typography } from '@material-ui/core'
+import { Typography } from '@mui/material'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

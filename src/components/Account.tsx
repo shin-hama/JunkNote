@@ -1,23 +1,12 @@
 import React from 'react'
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
-import Divider from '@material-ui/core/Divider'
-import Menu, { MenuProps } from '@material-ui/core/Menu'
-import MenuItem from '@material-ui/core/MenuItem'
-import Typography from '@material-ui/core/Typography'
+import Divider from '@mui/material/Divider'
+import Menu, { MenuProps } from '@mui/material/Menu'
+import MenuItem from '@mui/material/MenuItem'
+import Typography from '@mui/material/Typography'
 
 import SignInDialog from './SignInDialog'
 import SignUpDialog from './SignUpDialog'
 import { UserStates } from '../model/User'
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    menu: {
-      '& .MuiPaper-root': {
-        border: '1px solid #d3d4d5',
-      },
-    },
-  })
-)
 
 type ContextProps = React.Dispatch<React.SetStateAction<boolean>>
 export const SetSignUpDialogOpen = React.createContext<ContextProps>(() => {
@@ -29,8 +18,6 @@ type Props = {
   menuProps: MenuProps
 }
 const AccountMenu = ({ user, menuProps }: Props) => {
-  const classes = useStyles()
-
   const signOut = () => {
     window.localStorage.removeItem('myBearerToken')
     window.location.reload()
@@ -38,7 +25,6 @@ const AccountMenu = ({ user, menuProps }: Props) => {
 
   return (
     <Menu
-      getContentAnchorEl={null}
       elevation={0}
       anchorOrigin={{
         vertical: 'bottom',
@@ -48,15 +34,17 @@ const AccountMenu = ({ user, menuProps }: Props) => {
         vertical: 'top',
         horizontal: 'center',
       }}
-      className={classes.menu}
+      sx={{
+        '& .MuiPaper-root': {
+          border: '1px solid #d3d4d5',
+        },
+      }}
       {...menuProps}>
-      <MenuItem button={false}>
+      <MenuItem>
         <Typography>Signed in as {user.username}</Typography>
       </MenuItem>
       <Divider />
-      <MenuItem button onClick={signOut}>
-        Sign out
-      </MenuItem>
+      <MenuItem onClick={signOut}>Sign out</MenuItem>
     </Menu>
   )
 }

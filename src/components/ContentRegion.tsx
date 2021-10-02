@@ -1,7 +1,9 @@
 import React from 'react'
 import clsx from 'clsx'
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
-import Container from '@material-ui/core/Container'
+import { Theme } from '@mui/material/styles';
+import makeStyles from '@mui/styles/makeStyles';
+import createStyles from '@mui/styles/createStyles';
+import Container from '@mui/material/Container'
 
 import AddButton from './AddButton'
 import AddMemoDialog from './AddMemoDialog'

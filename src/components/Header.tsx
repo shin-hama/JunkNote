@@ -1,16 +1,12 @@
 import React from 'react'
-import {
-  alpha,
-  makeStyles,
-  Theme,
-  createStyles,
-} from '@material-ui/core/styles'
-import AppBar from '@material-ui/core/AppBar'
-import Toolbar from '@material-ui/core/Toolbar'
-import Typography from '@material-ui/core/Typography'
-import InputBase from '@material-ui/core/InputBase'
-import IconButton from '@material-ui/core/IconButton'
-import useTheme from '@material-ui/core/styles/useTheme'
+import { alpha, Theme, useTheme } from '@mui/material/styles'
+import makeStyles from '@mui/styles/makeStyles'
+import createStyles from '@mui/styles/createStyles'
+import AppBar from '@mui/material/AppBar'
+import Toolbar from '@mui/material/Toolbar'
+import Typography from '@mui/material/Typography'
+import InputBase from '@mui/material/InputBase'
+import IconButton from '@mui/material/IconButton'
 import MenuIcon from '@material-ui/icons/Menu'
 import SearchIcon from '@material-ui/icons/Search'
 import Brightness4 from '@material-ui/icons/Brightness4'
@@ -65,7 +61,7 @@ const useStyles = makeStyles((theme: Theme) =>
     inputInput: {
       padding: theme.spacing(1, 1, 1, 0),
       // vertical padding + font size from searchIcon
-      paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
+      paddingLeft: `calc(1em + ${theme.spacing(4)})`,
       transition: theme.transitions.create('width'),
       width: '100%',
       [theme.breakpoints.up('md')]: {
@@ -93,7 +89,7 @@ type Props = {
 }
 export default function Header({ handleOpen, handleTheme }: Props) {
   const classes = useStyles()
-  const themeType = useTheme().palette.type
+  const themeType = useTheme().palette.mode
 
   return (
     <div>
@@ -108,14 +104,15 @@ export default function Header({ handleOpen, handleTheme }: Props) {
               edge="start"
               onClick={handleOpen}
               className={classes.menuButton}
-              aria-label="menu">
+              aria-label="menu"
+              size="large">
               <MenuIcon />
             </IconButton>
             <Typography className={classes.title} variant="h6" noWrap>
               Junk Note
             </Typography>
             <div className={classes.grow} />
-            <IconButton onClick={handleTheme}>
+            <IconButton onClick={handleTheme} size="large">
               {themeType === 'light' ? <Brightness4 /> : <Brightness7 />}
             </IconButton>
             <div className={classes.search}>

@@ -1,13 +1,15 @@
 import React from 'react'
-import { alpha, makeStyles, createStyles, Theme } from '@material-ui/core/styles'
-import Drawer from '@material-ui/core/Drawer'
-import List from '@material-ui/core/List'
-import ListItem from '@material-ui/core/ListItem'
-import ListItemIcon from '@material-ui/core/ListItemIcon'
-import ListItemText from '@material-ui/core/ListItemText'
-import Toolbar from '@material-ui/core/Toolbar'
-import DeleteIcon from '@material-ui/icons/Delete'
-import HomeIcon from '@material-ui/icons/Home'
+import { alpha, Theme } from '@mui/material/styles';
+import makeStyles from '@mui/styles/makeStyles';
+import createStyles from '@mui/styles/createStyles';
+import Drawer from '@mui/material/Drawer'
+import List from '@mui/material/List'
+import ListItem from '@mui/material/ListItem'
+import ListItemIcon from '@mui/material/ListItemIcon'
+import ListItemText from '@mui/material/ListItemText'
+import Toolbar from '@mui/material/Toolbar'
+import DeleteIcon from '@mui/icons-material/Delete'
+import HomeIcon from '@mui/icons-material/Home'
 
 import { ContentKind, ContentKindContext } from '../pages/MainView'
 import { DRAWER_WIDTH } from '../constants'
