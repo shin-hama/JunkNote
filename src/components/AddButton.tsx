@@ -1,7 +1,7 @@
 import React from 'react'
 import { styled } from '@mui/material/styles'
 import Fab from '@mui/material/Fab'
-import AddIcon from '@material-ui/icons/Add'
+import AddIcon from '@mui/icons-material/Add'
 
 import { MemoContext } from './ContentRegion'
 import { MemoFactory } from '../model/Memo'

@@ -1,7 +1,4 @@
 import React from 'react'
-import { Theme } from '@mui/material/styles';
-import makeStyles from '@mui/styles/makeStyles';
-import createStyles from '@mui/styles/createStyles';
 import Card from '@mui/material/Card'
 import CardActionArea from '@mui/material/CardActionArea'
 import CardActions from '@mui/material/CardActions'
@@ -18,39 +15,6 @@ import { MemoContext, MemosContext } from './ContentRegion'
 import { IMemo } from '../model/Memo'
 import { ApiProps, ConnectApi } from '../utility/ApiConnection'
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    card: {
-      position: 'relative',
-      '&:hover': {
-        border: 'solid 1px dimgray',
-        margin: '-1px',
-      },
-    },
-    actionArea: {
-      '&:hover $focusHighlight': {
-        opacity: 0,
-      },
-    },
-    focusHighlight: {
-      transition: 'opacity 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
-    },
-    fab: {
-      position: 'absolute',
-      top: theme.spacing(0.5),
-      right: theme.spacing(0.5),
-      backgroundColor: 'transparent',
-      boxShadow: 'none',
-      '&:hover': {
-        backgroundColor: 'rgba(0, 0, 0, 0.1)',
-      },
-    },
-    hidden: {
-      display: 'none',
-    },
-  })
-)
-
 const updateMemo = (updated: IMemo, callback?: () => void) => {
   const props: ApiProps = {
     endpoint: `/memos/${updated.id}`,
@@ -63,7 +27,6 @@ const updateMemo = (updated: IMemo, callback?: () => void) => {
 
 type Props = { memo: IMemo }
 const MemoCard: React.FC<Props> = ({ memo }) => {
-  const classes = useStyles()
   const [isMouseOver, setIsMouseOver] = React.useState(false)
   const [alertOpen, setAlertOpen] = React.useState(false)
   const { setMemos } = React.useContext(MemosContext)
@@ -118,17 +81,27 @@ const MemoCard: React.FC<Props> = ({ memo }) => {
   return (
     <div>
       <Card
-        className={classes.card}
+        sx={{
+          position: 'relative',
+          '&:hover': {
+            border: 'solid 1px dimgray',
+            margin: '-1px',
+          },
+        }}
         onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-      >
+        onMouseLeave={handleMouseLeave}>
         <CardActionArea
           onClick={handleCardClicked}
-          classes={{
-            root: classes.actionArea,
-            focusHighlight: classes.focusHighlight,
-          }}
-        >
+          sx={{
+            root: {
+              '&:hover $focusHighlight': {
+                opacity: 0,
+              },
+            },
+            focusHighlight: {
+              transition: 'opacity 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
+            },
+          }}>
           <CardContent>
             <Typography display="inline" style={{ whiteSpace: 'pre-line' }}>
               {memo.contents}
@@ -147,8 +120,16 @@ const MemoCard: React.FC<Props> = ({ memo }) => {
               color="inherit"
               onClick={handlePinClicked}
               size="small"
-              className={classes.fab}
-            >
+              sx={{
+                position: 'absolute',
+                top: (theme) => theme.spacing(0.5),
+                right: (theme) => theme.spacing(0.5),
+                backgroundColor: 'transparent',
+                boxShadow: 'none',
+                '&:hover': {
+                  backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                },
+              }}>
               <PushPinOutlinedIcon fontSize="small" />
             </Fab>
           </div>

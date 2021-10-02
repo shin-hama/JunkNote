@@ -7,7 +7,7 @@ import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
 import Tooltip from '@mui/material/Tooltip'
-import AttachFileIcon from '@material-ui/icons/AttachFile'
+import AttachFileIcon from '@mui/icons-material/AttachFile'
 
 import { MemoContext, MemosContext } from './ContentRegion'
 import { IMemo, IMemoCreate } from '../model/Memo'

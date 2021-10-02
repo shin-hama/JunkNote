@@ -1,8 +1,4 @@
 import React from 'react'
-import clsx from 'clsx'
-import { Theme } from '@mui/material/styles';
-import makeStyles from '@mui/styles/makeStyles';
-import createStyles from '@mui/styles/createStyles';
 import Container from '@mui/material/Container'
 
 import AddButton from './AddButton'
@@ -14,31 +10,6 @@ import { IMemo } from '../model/Memo'
 import { ApiProps, ConnectApi } from '../utility/ApiConnection'
 import { getAccessedTimestamp } from '../utility/AccessedTimestamp'
 import { SortRandomly } from '../utility/utility'
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    content: {
-      width: 'auto',
-      flexGrow: 1,
-      paddingTop: theme.spacing(3),
-      paddingBottom: theme.spacing(3),
-      transition: theme.transitions.create('margin', {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
-      }),
-      '& .MuiContainer-maxWidthMd': {
-        maxWidth: '960px',
-      },
-    },
-    contentShift: {
-      transition: theme.transitions.create('margin', {
-        easing: theme.transitions.easing.easeOut,
-        duration: theme.transitions.duration.enteringScreen,
-      }),
-      paddingLeft: DRAWER_WIDTH,
-    },
-  })
-)
 
 interface MemoContextProps {
   memo: IMemo | null
@@ -142,11 +113,12 @@ type Props = {
   isDrawerOpen: boolean
 }
 const ContentRegion: React.FC<Props> = ({ isDrawerOpen }) => {
-  const classes = useStyles()
-
   const { kind } = React.useContext(ContentKindContext)
 
-  const [memosGroup, setMemosGroup] = React.useReducer(AssignMemos, initMemosGroup())
+  const [memosGroup, setMemosGroup] = React.useReducer(
+    AssignMemos,
+    initMemosGroup()
+  )
 
   React.useEffect(() => {
     const token = window.localStorage.getItem(TOKEN_KEY)
@@ -181,10 +153,31 @@ const ContentRegion: React.FC<Props> = ({ isDrawerOpen }) => {
         <MemoContext.Provider value={value}>
           <Container
             maxWidth="md"
-            className={clsx(classes.content, {
-              [classes.contentShift]: isDrawerOpen,
-            })}
-          >
+            sx={
+              isDrawerOpen
+                ? {
+                    width: 'auto',
+                    flexGrow: 1,
+                    paddingTop: (theme) => theme.spacing(3),
+                    paddingBottom: (theme) => theme.spacing(3),
+                    transition: (theme) =>
+                      theme.transitions.create('margin', {
+                        easing: theme.transitions.easing.sharp,
+                        duration: theme.transitions.duration.leavingScreen,
+                      }),
+                    '& .MuiContainer-maxWidthMd': {
+                      maxWidth: '960px',
+                    },
+                  }
+                : {
+                    transition: (theme) =>
+                      theme.transitions.create('margin', {
+                        easing: theme.transitions.easing.easeOut,
+                        duration: theme.transitions.duration.enteringScreen,
+                      }),
+                    paddingLeft: DRAWER_WIDTH,
+                  }
+            }>
             {kind === ContentKind.Home ? (
               <div>
                 {memosGroup.pinned.length > 0 ? (
@@ -202,14 +195,20 @@ const ContentRegion: React.FC<Props> = ({ isDrawerOpen }) => {
                   <></>
                 )}
                 <Memos
-                  title={memosGroup.latest.length || memosGroup.pinned.length ? 'Common' : ''}
+                  title={
+                    memosGroup.latest.length || memosGroup.pinned.length
+                      ? 'Common'
+                      : ''
+                  }
                   items={SortRandomly(memosGroup.common)}
                 />
               </div>
             ) : (
               <div>
                 <Memos
-                  items={memosGroup.common.concat(memosGroup.latest.concat(memosGroup.pinned))}
+                  items={memosGroup.common.concat(
+                    memosGroup.latest.concat(memosGroup.pinned)
+                  )}
                 />
               </div>
             )}

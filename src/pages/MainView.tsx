@@ -11,15 +11,15 @@ const Root = styled('div')(({ theme }) => ({
 }))
 
 export const ContentKind = {
-  Home: 0,
-  Trash: 1,
+  Home: 'Home',
+  Trash: 'Trash',
 } as const
 // eslint-disable-next-line @typescript-eslint/no-redeclare
-type ContentKind = typeof ContentKind[keyof typeof ContentKind]
+export type ContentKindType = typeof ContentKind[keyof typeof ContentKind]
 
 interface ContentKindProps {
-  kind: ContentKind
-  setKind: React.Dispatch<React.SetStateAction<ContentKind>>
+  kind: ContentKindType
+  setKind: React.Dispatch<React.SetStateAction<ContentKindType>>
 }
 export const ContentKindContext = React.createContext<ContentKindProps>({
   kind: ContentKind.Home,
@@ -32,7 +32,7 @@ type Props = { handleTheme: React.MouseEventHandler }
 export default function MainView({ handleTheme }: Props) {
   const [isDrawerOpen, setIsDrawerOpen] = React.useState<boolean>(true)
 
-  const [kind, setKind] = React.useState<ContentKind>(ContentKind.Home)
+  const [kind, setKind] = React.useState<ContentKindType>(ContentKind.Home)
   const kindValue: ContentKindProps = {
     kind: kind,
     setKind: setKind,

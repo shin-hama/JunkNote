@@ -1,50 +1,40 @@
 import React from 'react'
-import clsx from 'clsx'
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
-import Box from '@material-ui/core/Box'
-import Button from '@material-ui/core/Button'
-import CircularProgress from '@material-ui/core/CircularProgress'
-import Dialog, { DialogProps } from '@material-ui/core/Dialog'
-import DialogTitle from '@material-ui/core/DialogTitle'
-import FormControl from '@material-ui/core/FormControl'
-import IconButton from '@material-ui/core/IconButton'
-import InputAdornment from '@material-ui/core/InputAdornment/InputAdornment'
-import InputLabel from '@material-ui/core/InputLabel'
-import Link from '@material-ui/core/Link'
-import OutlinedInput, { OutlinedInputProps } from '@material-ui/core/OutlinedInput'
-import Typography from '@material-ui/core/Typography'
-import Visibility from '@material-ui/icons/Visibility'
-import VisibilityOff from '@material-ui/icons/VisibilityOff'
+import { styled } from '@mui/material/styles'
+import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
+import CircularProgress from '@mui/material/CircularProgress'
+import Dialog, { DialogProps } from '@mui/material/Dialog'
+import DialogTitle from '@mui/material/DialogTitle'
+import FormControl from '@mui/material/FormControl'
+import IconButton from '@mui/material/IconButton'
+import InputAdornment from '@mui/material/InputAdornment/InputAdornment'
+import InputLabel from '@mui/material/InputLabel'
+import Link from '@mui/material/Link'
+import OutlinedInput, { OutlinedInputProps } from '@mui/material/OutlinedInput'
+import Typography from '@mui/material/Typography'
+import Visibility from '@mui/icons-material/Visibility'
+import VisibilityOff from '@mui/icons-material/VisibilityOff'
 
 import { SetSignUpDialogOpen } from './Account'
 import { UserStates } from '../model/User'
 import { ApiProps, ConnectApi } from '../utility/ApiConnection'
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    margin: {
-      marginTop: theme.spacing(1),
-      marginBottom: theme.spacing(1),
-    },
-    textField: {
-      width: '40ch',
-    },
-    title: {
-      textAlign: 'center',
-    },
-  })
-)
+const MarginedBox = styled(Box)(({ theme }) => ({
+  marginTop: theme.spacing(1),
+  marginBottom: theme.spacing(1),
+}))
 
 const SignInForm = (props: OutlinedInputProps) => {
-  const classes = useStyles()
-
   return (
     <FormControl
-      className={clsx(classes.margin, classes.textField)}
+      sx={{
+        marginTop: (theme) => theme.spacing(1),
+        marginBottom: (theme) => theme.spacing(1),
+        width: '40ch',
+      }}
       margin="dense"
       required
-      variant="outlined"
-    >
+      variant="outlined">
       <InputLabel htmlFor={props.id}>{props.label}</InputLabel>
       <OutlinedInput {...props} />
     </FormControl>
@@ -57,7 +47,6 @@ type FormStates = Record<string, string> & {
 }
 
 function SignInDialog(props: DialogProps) {
-  const classes = useStyles()
   const setSignUpDialogOpen = React.useContext(SetSignUpDialogOpen)
   const [forms, setForms] = React.useState<FormStates>({
     username: '',
@@ -85,15 +74,19 @@ function SignInDialog(props: DialogProps) {
     ConnectApi(props)
   }
 
-  const handleChange = (prop: keyof FormStates) => (event: React.ChangeEvent<HTMLInputElement>) => {
-    setForms({ ...forms, [prop]: event.target.value })
-  }
+  const handleChange =
+    (prop: keyof FormStates) =>
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setForms({ ...forms, [prop]: event.target.value })
+    }
 
   const handleShowPassword = () => {
     setShowPassword(!showPassword)
   }
 
-  const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleMouseDownPassword = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
     event.stopPropagation()
   }
 
@@ -104,7 +97,7 @@ function SignInDialog(props: DialogProps) {
   return (
     <div>
       <Dialog id="sign-in-title" maxWidth="xs" fullWidth {...props}>
-        <DialogTitle className={classes.title}>Sign in</DialogTitle>
+        <DialogTitle sx={{ textAlign: 'center' }}>Sign in</DialogTitle>
         <form onSubmit={executeSignIn}>
           <Box textAlign="center">
             <SignInForm
@@ -127,35 +120,41 @@ function SignInDialog(props: DialogProps) {
                     aria-label="toggle password visibility"
                     onClick={handleShowPassword}
                     onMouseDown={handleMouseDownPassword}
-                    edge="end"
-                  >
+                    edge="end">
                     {showPassword ? <Visibility /> : <VisibilityOff />}
                   </IconButton>
                 </InputAdornment>
               }
             />
           </Box>
-          <Box textAlign="center" className={classes.margin}>
+          <MarginedBox textAlign="center">
             {isProcessing ? (
               <CircularProgress />
             ) : (
-              <Button variant="contained" color="primary" type="submit" className={classes.margin}>
+              <Button
+                variant="contained"
+                color="primary"
+                type="submit"
+                sx={{
+                  marginTop: (theme) => theme.spacing(1),
+                  marginBottom: (theme) => theme.spacing(1),
+                }}>
                 Sign in
               </Button>
             )}
-          </Box>
+          </MarginedBox>
         </form>
-        <Box textAlign="center" className={classes.margin}>
+        <MarginedBox textAlign="center">
           <Typography>Forgot password?</Typography>
-        </Box>
-        <Box textAlign="center" className={classes.margin}>
+        </MarginedBox>
+        <MarginedBox textAlign="center">
           <Typography>
             {" Don't have an account? "}
             <Link component="button" variant="body1" onClick={handleSignUpOpen}>
               Sign up
             </Link>
           </Typography>
-        </Box>
+        </MarginedBox>
       </Dialog>
     </div>
   )
