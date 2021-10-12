@@ -81,9 +81,9 @@ const LeftDrawer: React.FC<Props> = ({ open }) => {
       open={open}
       elevation={0}
       sx={{
-        paper: {
+        '& .MuiDrawer-paper': {
           background: 'transparent',
-          borderRight: '0',
+          borderRight: 'none',
           width: DRAWER_WIDTH,
         },
         width: DRAWER_WIDTH,

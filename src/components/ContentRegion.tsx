@@ -1,4 +1,5 @@
 import React from 'react'
+import { styled } from '@mui/material/styles'
 import Container from '@mui/material/Container'
 
 import AddButton from './AddButton'
@@ -10,6 +11,26 @@ import { IMemo } from '../model/Memo'
 import { ApiProps, ConnectApi } from '../utility/ApiConnection'
 import { getAccessedTimestamp } from '../utility/AccessedTimestamp'
 import { SortRandomly } from '../utility/utility'
+
+const Main = styled('main', {
+  shouldForwardProp: (prop) => prop !== 'open',
+})<{ open?: boolean }>(({ theme, open }) => ({
+  width: 'auto',
+  flexGrow: 1,
+  paddingTop: theme.spacing(3),
+  paddingBottom: theme.spacing(3),
+  transition: theme.transitions.create('margin', {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  ...(open && {
+    transition: theme.transitions.create('margin', {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+    marginLeft: `${DRAWER_WIDTH}px`,
+  }),
+}))
 
 interface MemoContextProps {
   memo: IMemo | null
@@ -148,36 +169,16 @@ const ContentRegion: React.FC<Props> = ({ isDrawerOpen }) => {
   }
 
   return (
-    <div>
+    <Main open={isDrawerOpen}>
       <MemosContext.Provider value={memosContextValue}>
         <MemoContext.Provider value={value}>
           <Container
             maxWidth="md"
-            sx={
-              isDrawerOpen
-                ? {
-                    width: 'auto',
-                    flexGrow: 1,
-                    paddingTop: (theme) => theme.spacing(3),
-                    paddingBottom: (theme) => theme.spacing(3),
-                    transition: (theme) =>
-                      theme.transitions.create('margin', {
-                        easing: theme.transitions.easing.sharp,
-                        duration: theme.transitions.duration.leavingScreen,
-                      }),
-                    '& .MuiContainer-maxWidthMd': {
-                      maxWidth: '960px',
-                    },
-                  }
-                : {
-                    transition: (theme) =>
-                      theme.transitions.create('margin', {
-                        easing: theme.transitions.easing.easeOut,
-                        duration: theme.transitions.duration.enteringScreen,
-                      }),
-                    paddingLeft: DRAWER_WIDTH,
-                  }
-            }>
+            sx={{
+              '& .MuiContainer-maxWidthMd': {
+                maxWidth: '960px',
+              },
+            }}>
             {kind === ContentKind.Home ? (
               <div>
                 {memosGroup.pinned.length > 0 ? (
@@ -217,7 +218,7 @@ const ContentRegion: React.FC<Props> = ({ isDrawerOpen }) => {
           <AddMemoDialog />
         </MemoContext.Provider>
       </MemosContext.Provider>
-    </div>
+    </Main>
   )
 }
 
