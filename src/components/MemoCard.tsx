@@ -83,9 +83,9 @@ const MemoCard: React.FC<Props> = ({ memo }) => {
       <Card
         sx={{
           position: 'relative',
+          margin: '1px',
           '&:hover': {
             border: 'solid 1px dimgray',
-            margin: '-1px',
           },
         }}
         onMouseEnter={handleMouseEnter}
