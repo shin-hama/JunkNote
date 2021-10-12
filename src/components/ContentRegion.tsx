@@ -1,7 +1,6 @@
 import React from 'react'
-import clsx from 'clsx'
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
-import Container from '@material-ui/core/Container'
+import { styled } from '@mui/material/styles'
+import Container from '@mui/material/Container'
 
 import AddButton from './AddButton'
 import AddMemoDialog from './AddMemoDialog'
@@ -13,30 +12,25 @@ import { ApiProps, ConnectApi } from '../utility/ApiConnection'
 import { getAccessedTimestamp } from '../utility/AccessedTimestamp'
 import { SortRandomly } from '../utility/utility'
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    content: {
-      width: 'auto',
-      flexGrow: 1,
-      paddingTop: theme.spacing(3),
-      paddingBottom: theme.spacing(3),
-      transition: theme.transitions.create('margin', {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
-      }),
-      '& .MuiContainer-maxWidthMd': {
-        maxWidth: '960px',
-      },
-    },
-    contentShift: {
-      transition: theme.transitions.create('margin', {
-        easing: theme.transitions.easing.easeOut,
-        duration: theme.transitions.duration.enteringScreen,
-      }),
-      paddingLeft: DRAWER_WIDTH,
-    },
-  })
-)
+const Main = styled('main', {
+  shouldForwardProp: (prop) => prop !== 'open',
+})<{ open?: boolean }>(({ theme, open }) => ({
+  width: 'auto',
+  flexGrow: 1,
+  paddingTop: theme.spacing(3),
+  paddingBottom: theme.spacing(3),
+  transition: theme.transitions.create('margin', {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  ...(open && {
+    transition: theme.transitions.create('margin', {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+    marginLeft: `${DRAWER_WIDTH}px`,
+  }),
+}))
 
 interface MemoContextProps {
   memo: IMemo | null
@@ -140,11 +134,12 @@ type Props = {
   isDrawerOpen: boolean
 }
 const ContentRegion: React.FC<Props> = ({ isDrawerOpen }) => {
-  const classes = useStyles()
-
   const { kind } = React.useContext(ContentKindContext)
 
-  const [memosGroup, setMemosGroup] = React.useReducer(AssignMemos, initMemosGroup())
+  const [memosGroup, setMemosGroup] = React.useReducer(
+    AssignMemos,
+    initMemosGroup()
+  )
 
   React.useEffect(() => {
     const token = window.localStorage.getItem(TOKEN_KEY)
@@ -174,15 +169,16 @@ const ContentRegion: React.FC<Props> = ({ isDrawerOpen }) => {
   }
 
   return (
-    <div>
+    <Main open={isDrawerOpen}>
       <MemosContext.Provider value={memosContextValue}>
         <MemoContext.Provider value={value}>
           <Container
             maxWidth="md"
-            className={clsx(classes.content, {
-              [classes.contentShift]: isDrawerOpen,
-            })}
-          >
+            sx={{
+              '& .MuiContainer-maxWidthMd': {
+                maxWidth: '960px',
+              },
+            }}>
             {kind === ContentKind.Home ? (
               <div>
                 {memosGroup.pinned.length > 0 ? (
@@ -200,14 +196,20 @@ const ContentRegion: React.FC<Props> = ({ isDrawerOpen }) => {
                   <></>
                 )}
                 <Memos
-                  title={memosGroup.latest.length || memosGroup.pinned.length ? 'Common' : ''}
+                  title={
+                    memosGroup.latest.length || memosGroup.pinned.length
+                      ? 'Common'
+                      : ''
+                  }
                   items={SortRandomly(memosGroup.common)}
                 />
               </div>
             ) : (
               <div>
                 <Memos
-                  items={memosGroup.common.concat(memosGroup.latest.concat(memosGroup.pinned))}
+                  items={memosGroup.common.concat(
+                    memosGroup.latest.concat(memosGroup.pinned)
+                  )}
                 />
               </div>
             )}
@@ -216,7 +218,7 @@ const ContentRegion: React.FC<Props> = ({ isDrawerOpen }) => {
           <AddMemoDialog />
         </MemoContext.Provider>
       </MemosContext.Provider>
-    </div>
+    </Main>
   )
 }
 

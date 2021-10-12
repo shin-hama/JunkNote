@@ -1,29 +1,25 @@
 import React from 'react'
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
+import { styled } from '@mui/material/styles'
 
 import ContentRegion from '../components/ContentRegion'
 import Header from '../components/Header'
 import LeftDrawer from '../components/LeftDrawer'
 import { setAccessedTimestamp } from '../utility/AccessedTimestamp'
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      height: '100vh',
-    },
-  })
-)
+const Root = styled('div')(({ theme }) => ({
+  height: '100vh',
+}))
 
 export const ContentKind = {
-  Home: 0,
-  Trash: 1,
+  Home: 'Home',
+  Trash: 'Trash',
 } as const
 // eslint-disable-next-line @typescript-eslint/no-redeclare
-type ContentKind = typeof ContentKind[keyof typeof ContentKind]
+export type ContentKindType = typeof ContentKind[keyof typeof ContentKind]
 
 interface ContentKindProps {
-  kind: ContentKind
-  setKind: React.Dispatch<React.SetStateAction<ContentKind>>
+  kind: ContentKindType
+  setKind: React.Dispatch<React.SetStateAction<ContentKindType>>
 }
 export const ContentKindContext = React.createContext<ContentKindProps>({
   kind: ContentKind.Home,
@@ -34,10 +30,9 @@ export const ContentKindContext = React.createContext<ContentKindProps>({
 
 type Props = { handleTheme: React.MouseEventHandler }
 export default function MainView({ handleTheme }: Props) {
-  const classes = useStyles()
   const [isDrawerOpen, setIsDrawerOpen] = React.useState<boolean>(true)
 
-  const [kind, setKind] = React.useState<ContentKind>(ContentKind.Home)
+  const [kind, setKind] = React.useState<ContentKindType>(ContentKind.Home)
   const kindValue: ContentKindProps = {
     kind: kind,
     setKind: setKind,
@@ -52,12 +47,12 @@ export default function MainView({ handleTheme }: Props) {
   }, [])
 
   return (
-    <div className={classes.root}>
+    <Root>
       <Header handleOpen={handleOpen} handleTheme={handleTheme} />
       <ContentKindContext.Provider value={kindValue}>
         <LeftDrawer open={isDrawerOpen} />
         <ContentRegion isDrawerOpen={isDrawerOpen} />
       </ContentKindContext.Provider>
-    </div>
+    </Root>
   )
 }
