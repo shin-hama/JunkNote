@@ -1,4 +1,6 @@
 import React from 'react'
+import { useTheme } from '@mui/material/styles'
+import useMediaQuery from '@mui/material/useMediaQuery'
 import Masonry from '@mui/lab/Masonry'
 import MasonryItem from '@mui/lab/MasonryItem'
 
@@ -11,6 +13,9 @@ type MemosProps = {
   title?: string
 }
 const Memos: React.FC<MemosProps> = ({ items, title }) => {
+  const theme = useTheme()
+  const isUpperSm = useMediaQuery(theme.breakpoints.up('sm'))
+  console.log(isUpperSm)
   return (
     <div>
       {title ? (
@@ -20,10 +25,7 @@ const Memos: React.FC<MemosProps> = ({ items, title }) => {
       ) : (
         <></>
       )}
-      <Masonry
-        columns={3}
-        spacing={1}
-        sx={{ margin: (theme) => theme.spacing(2) }}>
+      <Masonry columns={isUpperSm ? 3 : 2} spacing={1}>
         {items.map((item, i) => (
           <MasonryItem key={i}>
             <MemoCard memo={item} />
