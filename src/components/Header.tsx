@@ -11,6 +11,7 @@ import Brightness4 from '@mui/icons-material/Brightness4'
 import Brightness7 from '@mui/icons-material/Brightness7'
 
 import AccountButton from './AccountButton'
+import { QueryContext } from '../pages/MainView'
 
 const Root = styled('div')(({ theme }) => ({
   flexGrow: 1,
@@ -62,6 +63,11 @@ type Props = {
 }
 export default function Header({ handleOpen, handleTheme }: Props) {
   const themeType = useTheme().palette.mode
+  const { query, setQuery } = React.useContext(QueryContext)
+
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setQuery(event.target.value)
+  }
 
   return (
     <Root>
@@ -90,6 +96,8 @@ export default function Header({ handleOpen, handleTheme }: Props) {
               <SearchIcon />
             </SearchIconWrapper>
             <StyledInputBase
+              value={query}
+              onChange={handleSearch}
               placeholder="Search…"
               inputProps={{ 'aria-label': 'search' }}
             />

@@ -15,7 +15,7 @@ type MemosProps = {
 const Memos: React.FC<MemosProps> = ({ items, title }) => {
   const theme = useTheme()
   const isUpperSm = useMediaQuery(theme.breakpoints.up('sm'))
-  console.log(isUpperSm)
+
   return (
     <div>
       {title ? (
