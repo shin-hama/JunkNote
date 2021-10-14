@@ -3,14 +3,17 @@ import { alpha, styled, useTheme } from '@mui/material/styles'
 import AppBar from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
+import InputAdornment from '@mui/material/InputAdornment'
 import InputBase from '@mui/material/InputBase'
 import IconButton from '@mui/material/IconButton'
+import ClearIcon from '@mui/icons-material/Clear'
 import MenuIcon from '@mui/icons-material/Menu'
 import SearchIcon from '@mui/icons-material/Search'
 import Brightness4 from '@mui/icons-material/Brightness4'
 import Brightness7 from '@mui/icons-material/Brightness7'
 
 import AccountButton from './AccountButton'
+import { QueryContext } from '../pages/MainView'
 
 const Root = styled('div')(({ theme }) => ({
   flexGrow: 1,
@@ -51,7 +54,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     transition: theme.transitions.create('width'),
     width: '100%',
     [theme.breakpoints.up('md')]: {
-      width: '20ch',
+      width: '14ch',
     },
   },
 }))
@@ -62,6 +65,19 @@ type Props = {
 }
 export default function Header({ handleOpen, handleTheme }: Props) {
   const themeType = useTheme().palette.mode
+  const { query, setQuery } = React.useContext(QueryContext)
+
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setQuery(event.target.value)
+  }
+
+  const handleClickClear = () => {
+    setQuery('')
+  }
+
+  const handleMouseDownClear = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault()
+  }
 
   return (
     <Root>
@@ -90,8 +106,22 @@ export default function Header({ handleOpen, handleTheme }: Props) {
               <SearchIcon />
             </SearchIconWrapper>
             <StyledInputBase
+              value={query}
+              onChange={handleSearch}
               placeholder="Search…"
               inputProps={{ 'aria-label': 'search' }}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickClear}
+                    onMouseDown={handleMouseDownClear}
+                    size="small"
+                    sx={query ? {} : { visibility: 'hidden' }}>
+                    <ClearIcon fontSize="small" />
+                  </IconButton>
+                </InputAdornment>
+              }
             />
           </Search>{' '}
           <AccountButton />

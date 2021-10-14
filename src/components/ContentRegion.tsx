@@ -4,7 +4,11 @@ import Container from '@mui/material/Container'
 
 import AddButton from './AddButton'
 import AddMemoDialog from './AddMemoDialog'
-import { ContentKind, ContentKindContext } from '../pages/MainView'
+import {
+  ContentKind,
+  ContentKindContext,
+  QueryContext,
+} from '../pages/MainView'
 import Memos from './MemoList'
 import { DRAWER_WIDTH, TOKEN_KEY } from '../constants'
 import { IMemo } from '../model/Memo'
@@ -135,6 +139,7 @@ type Props = {
 }
 const ContentRegion: React.FC<Props> = ({ isDrawerOpen }) => {
   const { kind } = React.useContext(ContentKindContext)
+  const { query } = React.useContext(QueryContext)
 
   const [memosGroup, setMemosGroup] = React.useReducer(
     AssignMemos,
@@ -147,7 +152,7 @@ const ContentRegion: React.FC<Props> = ({ isDrawerOpen }) => {
       const props: ApiProps<IMemo[]> = {
         method: 'get',
         endpoint: 'memos',
-        query: { removed: kind === ContentKind.Trash },
+        query: { removed: kind === ContentKind.Trash, q: query },
         callback: (data: IMemo[]) => {
           setMemosGroup({ type: 'new', newState: InitMemosGroup(data) })
         },
@@ -155,7 +160,7 @@ const ContentRegion: React.FC<Props> = ({ isDrawerOpen }) => {
 
       ConnectApi(props)
     }
-  }, [kind])
+  }, [kind, query])
 
   const [memo, setMemo] = React.useState<IMemo | null>(null)
   const value: MemoContextProps = {

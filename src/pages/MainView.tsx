@@ -28,6 +28,17 @@ export const ContentKindContext = React.createContext<ContentKindProps>({
   },
 })
 
+type QueryProps = {
+  query: string
+  setQuery: React.Dispatch<React.SetStateAction<string>>
+}
+export const QueryContext = React.createContext<QueryProps>({
+  query: '',
+  setQuery: () => {
+    // no run
+  },
+})
+
 type Props = { handleTheme: React.MouseEventHandler }
 export default function MainView({ handleTheme }: Props) {
   const [isDrawerOpen, setIsDrawerOpen] = React.useState<boolean>(true)
@@ -37,6 +48,8 @@ export default function MainView({ handleTheme }: Props) {
     kind: kind,
     setKind: setKind,
   }
+
+  const [query, setQuery] = React.useState('')
 
   const handleOpen = () => {
     setIsDrawerOpen(!isDrawerOpen)
@@ -48,11 +61,13 @@ export default function MainView({ handleTheme }: Props) {
 
   return (
     <Root>
-      <Header handleOpen={handleOpen} handleTheme={handleTheme} />
-      <ContentKindContext.Provider value={kindValue}>
-        <LeftDrawer open={isDrawerOpen} />
-        <ContentRegion isDrawerOpen={isDrawerOpen} />
-      </ContentKindContext.Provider>
+      <QueryContext.Provider value={{ query, setQuery }}>
+        <Header handleOpen={handleOpen} handleTheme={handleTheme} />
+        <ContentKindContext.Provider value={kindValue}>
+          <LeftDrawer open={isDrawerOpen} />
+          <ContentRegion isDrawerOpen={isDrawerOpen} />
+        </ContentKindContext.Provider>
+      </QueryContext.Provider>
     </Root>
   )
 }
