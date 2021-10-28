@@ -3,6 +3,7 @@ import { alpha, styled, useTheme } from '@mui/material/styles'
 import AppBar from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
+import Hidden from '@mui/material/Hidden'
 import InputAdornment from '@mui/material/InputAdornment'
 import InputBase from '@mui/material/InputBase'
 import IconButton from '@mui/material/IconButton'
@@ -28,10 +29,9 @@ const Search = styled('div')(({ theme }) => ({
   },
   marginRight: theme.spacing(2),
   marginLeft: 0,
-  width: '100%',
-  [theme.breakpoints.up('sm')]: {
-    marginLeft: theme.spacing(3),
-    width: 'auto',
+  width: 'auto',
+  [theme.breakpoints.up('md')]: {
+    width: '20em',
   },
 }))
 
@@ -47,15 +47,12 @@ const SearchIconWrapper = styled('div')(({ theme }) => ({
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: 'inherit',
+  position: 'relative',
+  width: '100%',
   '& .MuiInputBase-input': {
-    padding: theme.spacing(1, 1, 1, 0),
+    padding: theme.spacing(1, 1, 1, 1),
     // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create('width'),
-    width: '100%',
-    [theme.breakpoints.up('md')]: {
-      width: '14ch',
-    },
   },
 }))
 
@@ -95,12 +92,16 @@ export default function Header({ handleOpen, handleTheme }: Props) {
             size="large">
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Junk Note
-          </Typography>
-          <IconButton onClick={handleTheme} size="large">
-            {themeType === 'light' ? <Brightness4 /> : <Brightness7 />}
-          </IconButton>
+          <Hidden smDown>
+            <Typography
+              noWrap
+              variant="h6"
+              component="div"
+              sx={{ minWidth: '105px' }}>
+              Junk Note
+            </Typography>
+          </Hidden>
+          <Root />
           <Search>
             <SearchIconWrapper>
               <SearchIcon />
@@ -123,7 +124,10 @@ export default function Header({ handleOpen, handleTheme }: Props) {
                 </InputAdornment>
               }
             />
-          </Search>{' '}
+          </Search>
+          <IconButton onClick={handleTheme} size="large">
+            {themeType === 'light' ? <Brightness4 /> : <Brightness7 />}
+          </IconButton>
           <AccountButton />
         </Toolbar>
       </AppBar>
