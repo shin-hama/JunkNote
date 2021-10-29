@@ -1,3 +1,6 @@
+import { useTheme } from '@mui/material/styles'
+import useMediaQuery from '@mui/material/useMediaQuery'
+
 export function SortRandomly<T>(array: Array<T>) {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1))
@@ -7,4 +10,10 @@ export function SortRandomly<T>(array: Array<T>) {
   }
 
   return array
+}
+
+export const IsMobile = () => {
+  const theme = useTheme()
+  const matches = useMediaQuery(theme.breakpoints.up('md'))
+  return matches
 }

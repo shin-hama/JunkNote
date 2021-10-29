@@ -1,6 +1,6 @@
 import React from 'react'
 import { alpha } from '@mui/material/styles'
-import Drawer from '@mui/material/Drawer'
+import Drawer, { DrawerProps } from '@mui/material/Drawer'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import ListItemIcon from '@mui/material/ListItemIcon'
@@ -8,6 +8,8 @@ import ListItemText from '@mui/material/ListItemText'
 import Toolbar from '@mui/material/Toolbar'
 import DeleteIcon from '@mui/icons-material/Delete'
 import HomeIcon from '@mui/icons-material/Home'
+
+import { IsMobile } from '../utility/utility'
 
 import {
   ContentKind,
@@ -70,27 +72,34 @@ const DrawerItems = (): React.ReactElement => {
   )
 }
 
+type ResponsiveDrawerProps = DrawerProps
+const ResponsiveDrawer: React.FC<ResponsiveDrawerProps> = ({ ...props }) => {
+  const matches = IsMobile()
+  return (
+    <Drawer
+      {...props}
+      variant={matches ? 'persistent' : 'temporary'}
+      anchor="left"
+      elevation={0}
+      sx={{
+        '& .MuiDrawer-paper': {
+          borderRight: 'none',
+          width: DRAWER_WIDTH,
+        },
+        width: DRAWER_WIDTH,
+      }}></Drawer>
+  )
+}
+
 type Props = {
   open: boolean
 }
 const LeftDrawer: React.FC<Props> = ({ open }) => {
   return (
-    <Drawer
-      variant="persistent"
-      anchor="left"
-      open={open}
-      elevation={0}
-      sx={{
-        '& .MuiDrawer-paper': {
-          background: 'transparent',
-          borderRight: 'none',
-          width: DRAWER_WIDTH,
-        },
-        width: DRAWER_WIDTH,
-      }}>
+    <ResponsiveDrawer open={open}>
       <Toolbar />
       {DrawerItems()}
-    </Drawer>
+    </ResponsiveDrawer>
   )
 }
 
