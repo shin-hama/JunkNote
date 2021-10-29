@@ -9,7 +9,7 @@ import Toolbar from '@mui/material/Toolbar'
 import DeleteIcon from '@mui/icons-material/Delete'
 import HomeIcon from '@mui/icons-material/Home'
 
-import { IsMobile } from '../utility/utility'
+import { IsDesktop } from '../utility/utility'
 
 import {
   ContentKind,
@@ -18,13 +18,19 @@ import {
 } from '../pages/MainView'
 import { DRAWER_WIDTH } from '../constants'
 
-const DrawerItems = (): React.ReactElement => {
+type ItemProps = {
+  handleClose: () => void
+}
+const DrawerItems: React.FC<ItemProps> = ({
+  handleClose,
+}): React.ReactElement => {
   const { kind, setKind } = React.useContext(ContentKindContext)
+  const matches = IsDesktop()
 
   interface IItem {
     name: ContentKindType
     icon: React.ReactElement
-    func: React.MouseEventHandler
+    func?: React.MouseEventHandler
   }
   const items: Array<IItem> = [
     {
@@ -50,7 +56,12 @@ const DrawerItems = (): React.ReactElement => {
           <ListItem
             button
             key={item.name}
-            onClick={item.func}
+            onClick={(e) => {
+              if (matches === false) {
+                handleClose()
+              }
+              item.func?.(e)
+            }}
             sx={
               kind === item.name
                 ? {
@@ -74,7 +85,7 @@ const DrawerItems = (): React.ReactElement => {
 
 type ResponsiveDrawerProps = DrawerProps
 const ResponsiveDrawer: React.FC<ResponsiveDrawerProps> = ({ ...props }) => {
-  const matches = IsMobile()
+  const matches = IsDesktop()
   return (
     <Drawer
       {...props}
@@ -93,12 +104,16 @@ const ResponsiveDrawer: React.FC<ResponsiveDrawerProps> = ({ ...props }) => {
 
 type Props = {
   open: boolean
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
-const LeftDrawer: React.FC<Props> = ({ open }) => {
+const LeftDrawer: React.FC<Props> = ({ open, setOpen }) => {
+  const handleClose = React.useCallback(() => {
+    setOpen(false)
+  }, [setOpen])
   return (
-    <ResponsiveDrawer open={open}>
+    <ResponsiveDrawer open={open} onClose={handleClose}>
       <Toolbar />
-      {DrawerItems()}
+      <DrawerItems handleClose={handleClose} />
     </ResponsiveDrawer>
   )
 }

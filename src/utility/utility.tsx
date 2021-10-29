@@ -12,7 +12,7 @@ export function SortRandomly<T>(array: Array<T>) {
   return array
 }
 
-export const IsMobile = () => {
+export const IsDesktop = () => {
   const theme = useTheme()
   const matches = useMediaQuery(theme.breakpoints.up('md'))
   return matches
