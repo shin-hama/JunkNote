@@ -1,13 +1,20 @@
 import React from 'react'
-import { alpha } from '@mui/material/styles'
-import Drawer from '@mui/material/Drawer'
+import { alpha, styled, useTheme } from '@mui/material/styles'
+import Drawer, { DrawerProps } from '@mui/material/Drawer'
+import IconButton from '@mui/material/IconButton'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
+import Stack from '@mui/material/Stack'
 import Toolbar from '@mui/material/Toolbar'
+import Brightness4 from '@mui/icons-material/Brightness4'
+import Brightness7 from '@mui/icons-material/Brightness7'
 import DeleteIcon from '@mui/icons-material/Delete'
 import HomeIcon from '@mui/icons-material/Home'
+
+import { IsLightModeContext } from '../theme/CustomTheme'
+import { IsDesktop } from '../utility/utility'
 
 import {
   ContentKind,
@@ -16,13 +23,19 @@ import {
 } from '../pages/MainView'
 import { DRAWER_WIDTH } from '../constants'
 
-const DrawerItems = (): React.ReactElement => {
+type ItemProps = {
+  handleClose: () => void
+}
+const DrawerItems: React.FC<ItemProps> = ({
+  handleClose,
+}): React.ReactElement => {
   const { kind, setKind } = React.useContext(ContentKindContext)
+  const matches = IsDesktop()
 
   interface IItem {
     name: ContentKindType
     icon: React.ReactElement
-    func: React.MouseEventHandler
+    func?: React.MouseEventHandler
   }
   const items: Array<IItem> = [
     {
@@ -48,7 +61,12 @@ const DrawerItems = (): React.ReactElement => {
           <ListItem
             button
             key={item.name}
-            onClick={item.func}
+            onClick={(e) => {
+              if (matches === false) {
+                handleClose()
+              }
+              item.func?.(e)
+            }}
             sx={
               kind === item.name
                 ? {
@@ -70,27 +88,51 @@ const DrawerItems = (): React.ReactElement => {
   )
 }
 
-type Props = {
-  open: boolean
-}
-const LeftDrawer: React.FC<Props> = ({ open }) => {
+type ResponsiveDrawerProps = DrawerProps
+const ResponsiveDrawer: React.FC<ResponsiveDrawerProps> = ({ ...props }) => {
+  const matches = IsDesktop()
   return (
     <Drawer
-      variant="persistent"
+      {...props}
+      variant={matches ? 'persistent' : 'temporary'}
       anchor="left"
-      open={open}
       elevation={0}
       sx={{
         '& .MuiDrawer-paper': {
-          background: 'transparent',
-          borderRight: 'none',
           width: DRAWER_WIDTH,
         },
         width: DRAWER_WIDTH,
-      }}>
+      }}></Drawer>
+  )
+}
+
+const Flexed = styled('div')(({ theme }) => ({
+  flex: 1,
+}))
+
+type Props = {
+  open: boolean
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>
+}
+const LeftDrawer: React.FC<Props> = ({ open, setOpen }) => {
+  const themeType = useTheme().palette.mode
+  const { isLightMode, setIsLightMode } = React.useContext(IsLightModeContext)
+
+  const handleClose = React.useCallback(() => {
+    setOpen(false)
+  }, [setOpen])
+  return (
+    <ResponsiveDrawer open={open} onClose={handleClose}>
       <Toolbar />
-      {DrawerItems()}
-    </Drawer>
+      <DrawerItems handleClose={handleClose} />
+      <Flexed />
+      <Stack direction="row">
+        <Flexed />
+        <IconButton onClick={() => setIsLightMode(!isLightMode)} size="large">
+          {themeType === 'light' ? <Brightness4 /> : <Brightness7 />}
+        </IconButton>
+      </Stack>
+    </ResponsiveDrawer>
   )
 }
 

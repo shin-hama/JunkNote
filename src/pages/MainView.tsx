@@ -5,6 +5,7 @@ import ContentRegion from '../components/ContentRegion'
 import Header from '../components/Header'
 import LeftDrawer from '../components/LeftDrawer'
 import { setAccessedTimestamp } from '../utility/AccessedTimestamp'
+import { IsDesktop } from '../utility/utility'
 
 const Root = styled('div')(({ theme }) => ({
   height: '100vh',
@@ -39,9 +40,9 @@ export const QueryContext = React.createContext<QueryProps>({
   },
 })
 
-type Props = { handleTheme: React.MouseEventHandler }
-export default function MainView({ handleTheme }: Props) {
-  const [isDrawerOpen, setIsDrawerOpen] = React.useState<boolean>(true)
+export default function MainView() {
+  const matches = IsDesktop()
+  const [isDrawerOpen, setIsDrawerOpen] = React.useState<boolean>(matches)
 
   const [kind, setKind] = React.useState<ContentKindType>(ContentKind.Home)
   const kindValue: ContentKindProps = {
@@ -59,12 +60,16 @@ export default function MainView({ handleTheme }: Props) {
     setAccessedTimestamp(new Date())
   }, [])
 
+  React.useEffect(() => {
+    setIsDrawerOpen(matches)
+  }, [matches])
+
   return (
     <Root>
       <QueryContext.Provider value={{ query, setQuery }}>
-        <Header handleOpen={handleOpen} handleTheme={handleTheme} />
+        <Header handleOpen={handleOpen} />
         <ContentKindContext.Provider value={kindValue}>
-          <LeftDrawer open={isDrawerOpen} />
+          <LeftDrawer open={isDrawerOpen} setOpen={setIsDrawerOpen} />
           <ContentRegion isDrawerOpen={isDrawerOpen} />
         </ContentKindContext.Provider>
       </QueryContext.Provider>

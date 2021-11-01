@@ -23,17 +23,19 @@ const Main = styled('main', {
   flexGrow: 1,
   paddingTop: theme.spacing(3),
   paddingBottom: theme.spacing(3),
-  transition: theme.transitions.create('margin', {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-  ...(open && {
+  [theme.breakpoints.up('md')]: {
     transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
     }),
-    marginLeft: `${DRAWER_WIDTH}px`,
-  }),
+    ...(open && {
+      transition: theme.transitions.create('margin', {
+        easing: theme.transitions.easing.easeOut,
+        duration: theme.transitions.duration.enteringScreen,
+      }),
+      marginLeft: `${DRAWER_WIDTH}px`,
+    }),
+  },
 }))
 
 interface MemoContextProps {

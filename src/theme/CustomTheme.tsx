@@ -1,11 +1,27 @@
 import React from 'react'
-import { createTheme, ThemeProvider, StyledEngineProvider } from '@mui/material/styles'
+import {
+  createTheme,
+  ThemeProvider,
+  StyledEngineProvider,
+} from '@mui/material/styles'
+
+type ContextProps = {
+  isLightMode: boolean
+  setIsLightMode: React.Dispatch<React.SetStateAction<boolean>>
+}
+export const IsLightModeContext = React.createContext<ContextProps>({
+  isLightMode: true,
+  setIsLightMode: () => {
+    // no run
+  },
+})
 
 type Props = {
   children: React.ReactNode
-  isLightMode: boolean
 }
-const CustomTheme: React.FC<Props> = ({ children, isLightMode }) => {
+const CustomTheme: React.FC<Props> = ({ children }) => {
+  const [isLightMode, setIsLightMode] = React.useState<boolean>(true)
+
   const customTheme = createTheme({
     mixins: {
       toolbar: {
@@ -37,7 +53,9 @@ const CustomTheme: React.FC<Props> = ({ children, isLightMode }) => {
   return (
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={customTheme}>
-        <div>{children}</div>
+        <IsLightModeContext.Provider value={{ isLightMode, setIsLightMode }}>
+          <div>{children}</div>
+        </IsLightModeContext.Provider>
       </ThemeProvider>
     </StyledEngineProvider>
   )
