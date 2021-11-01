@@ -202,14 +202,18 @@ const ContentRegion: React.FC<Props> = ({ isDrawerOpen }) => {
                 ) : (
                   <></>
                 )}
-                <Memos
-                  title={
-                    memosGroup.latest.length || memosGroup.pinned.length
-                      ? 'Common'
-                      : ''
-                  }
-                  items={SortRandomly(memosGroup.common)}
-                />
+                {memosGroup.common.length > 0 ? (
+                  <Memos
+                    title={
+                      memosGroup.latest.length || memosGroup.pinned.length
+                        ? 'Common'
+                        : ''
+                    }
+                    items={SortRandomly(memosGroup.common)}
+                  />
+                ) : (
+                  <></>
+                )}
               </div>
             ) : (
               <div>

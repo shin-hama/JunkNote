@@ -1,20 +1,44 @@
 import React from 'react'
-import { useTheme } from '@mui/material/styles'
-import useMediaQuery from '@mui/material/useMediaQuery'
 import Masonry from '@mui/lab/Masonry'
+import Typography from '@mui/material/Typography'
 
+import AlertDialog from './AlertDialog'
+import { MemosContext } from './ContentRegion'
 import MemoCard from './MemoCard'
 import { IMemo } from '../model/Memo'
-import { Typography } from '@mui/material'
+import { ApiProps, ConnectApi } from '../utility/ApiConnection'
 
 type MemosProps = {
   items: Array<IMemo>
   title?: string
 }
 const Memos: React.FC<MemosProps> = ({ items, title }) => {
-  const theme = useTheme()
-  const isUpperSm = useMediaQuery(theme.breakpoints.up('sm'))
+  const [targetMemo, setTargetMemo] = React.useState<IMemo | null>(null)
+  const { setMemos } = React.useContext(MemosContext)
 
+  const handleAlertOk = () => {
+    if (targetMemo) {
+      const props: ApiProps = {
+        endpoint: `/memos/${targetMemo.id}`,
+        method: 'delete',
+        callback: () => setMemos({ type: 'remove', value: targetMemo }),
+      }
+      ConnectApi(props)
+    }
+    handleAlertClose()
+  }
+
+  const handleAlertOpen = (memo: IMemo) => {
+    setTargetMemo(memo)
+  }
+
+  const handleAlertClose = () => {
+    setTargetMemo(null)
+  }
+
+  if (items.length === 0) {
+    return <></>
+  }
   return (
     <div>
       {title ? (
@@ -24,11 +48,18 @@ const Memos: React.FC<MemosProps> = ({ items, title }) => {
       ) : (
         <></>
       )}
-      <Masonry columns={isUpperSm ? 4 : 2} spacing={1}>
+      <Masonry columns={{ md: 4, sm: 2 }} spacing={1}>
         {items.map((item, i) => (
-          <MemoCard key={i} memo={item} />
+          <MemoCard key={i} memo={item} handleAlertOpen={handleAlertOpen} />
         ))}
       </Masonry>
+
+      <AlertDialog
+        open={targetMemo !== null}
+        message="Do you want to delete the note completely?"
+        okCallback={handleAlertOk}
+        cancelCallback={handleAlertClose}
+      />
     </div>
   )
 }
