@@ -25,45 +25,42 @@ const Memos: React.FC<MemosProps> = ({ items, title }) => {
       }
       ConnectApi(props)
     }
-    setTargetMemo(null)
+    handleAlertClose()
   }
 
   const handleAlertOpen = (memo: IMemo) => {
     setTargetMemo(memo)
   }
 
-  const handleAlertCancel = () => {
+  const handleAlertClose = () => {
     setTargetMemo(null)
   }
 
+  if (items.length === 0) {
+    return <></>
+  }
   return (
-    <>
-      {items.length > 0 ? (
-        <div>
-          {title ? (
-            <Typography variant="subtitle2" sx={{ marginLeft: '10px' }}>
-              {title}
-            </Typography>
-          ) : (
-            <></>
-          )}
-          <Masonry columns={{ md: 4, sm: 2 }} spacing={1}>
-            {items.map((item, i) => (
-              <MemoCard key={i} memo={item} handleAlertOpen={handleAlertOpen} />
-            ))}
-          </Masonry>
-
-          <AlertDialog
-            open={targetMemo !== null}
-            message="Do you want to delete the note completely?"
-            okCallback={handleAlertOk}
-            cancelCallback={handleAlertCancel}
-          />
-        </div>
+    <div>
+      {title ? (
+        <Typography variant="subtitle2" sx={{ marginLeft: '10px' }}>
+          {title}
+        </Typography>
       ) : (
         <></>
       )}
-    </>
+      <Masonry columns={{ md: 4, sm: 2 }} spacing={1}>
+        {items.map((item, i) => (
+          <MemoCard key={i} memo={item} handleAlertOpen={handleAlertOpen} />
+        ))}
+      </Masonry>
+
+      <AlertDialog
+        open={targetMemo !== null}
+        message="Do you want to delete the note completely?"
+        okCallback={handleAlertOk}
+        cancelCallback={handleAlertClose}
+      />
+    </div>
   )
 }
 
