@@ -2,7 +2,6 @@ import React from 'react'
 import { useTheme } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import Masonry from '@mui/lab/Masonry'
-import MasonryItem from '@mui/lab/MasonryItem'
 
 import MemoCard from './MemoCard'
 import { IMemo } from '../model/Memo'
@@ -25,11 +24,9 @@ const Memos: React.FC<MemosProps> = ({ items, title }) => {
       ) : (
         <></>
       )}
-      <Masonry columns={isUpperSm ? 3 : 2} spacing={1}>
+      <Masonry columns={isUpperSm ? 4 : 2} spacing={1}>
         {items.map((item, i) => (
-          <MasonryItem key={i}>
-            <MemoCard memo={item} />
-          </MasonryItem>
+          <MemoCard key={i} memo={item} />
         ))}
       </Masonry>
     </div>
