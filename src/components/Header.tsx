@@ -1,5 +1,5 @@
 import React from 'react'
-import { alpha, styled, useTheme } from '@mui/material/styles'
+import { alpha, styled } from '@mui/material/styles'
 import AppBar from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
@@ -10,8 +10,6 @@ import IconButton from '@mui/material/IconButton'
 import ClearIcon from '@mui/icons-material/Clear'
 import MenuIcon from '@mui/icons-material/Menu'
 import SearchIcon from '@mui/icons-material/Search'
-import Brightness4 from '@mui/icons-material/Brightness4'
-import Brightness7 from '@mui/icons-material/Brightness7'
 
 import AccountButton from './AccountButton'
 import { QueryContext } from '../pages/MainView'
@@ -58,10 +56,8 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 type Props = {
   handleOpen: React.MouseEventHandler
-  handleTheme: React.MouseEventHandler
 }
-export default function Header({ handleOpen, handleTheme }: Props) {
-  const themeType = useTheme().palette.mode
+export default function Header({ handleOpen }: Props) {
   const { query, setQuery } = React.useContext(QueryContext)
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -125,9 +121,6 @@ export default function Header({ handleOpen, handleTheme }: Props) {
               }
             />
           </Search>
-          <IconButton onClick={handleTheme} size="large">
-            {themeType === 'light' ? <Brightness4 /> : <Brightness7 />}
-          </IconButton>
           <AccountButton />
         </Toolbar>
       </AppBar>

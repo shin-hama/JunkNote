@@ -40,8 +40,7 @@ export const QueryContext = React.createContext<QueryProps>({
   },
 })
 
-type Props = { handleTheme: React.MouseEventHandler }
-export default function MainView({ handleTheme }: Props) {
+export default function MainView() {
   const matches = IsDesktop()
   const [isDrawerOpen, setIsDrawerOpen] = React.useState<boolean>(matches)
 
@@ -68,7 +67,7 @@ export default function MainView({ handleTheme }: Props) {
   return (
     <Root>
       <QueryContext.Provider value={{ query, setQuery }}>
-        <Header handleOpen={handleOpen} handleTheme={handleTheme} />
+        <Header handleOpen={handleOpen} />
         <ContentKindContext.Provider value={kindValue}>
           <LeftDrawer open={isDrawerOpen} setOpen={setIsDrawerOpen} />
           <ContentRegion isDrawerOpen={isDrawerOpen} />

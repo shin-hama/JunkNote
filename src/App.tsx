@@ -2,10 +2,8 @@ import React from 'react'
 
 import MainView from './pages/MainView'
 
-type Props = { handleTheme: React.MouseEventHandler }
-
-const App: React.FC<Props> = ({ handleTheme }) => {
-  return <MainView handleTheme={handleTheme} />
+const App: React.FC = () => {
+  return <MainView />
 }
 
 export default App

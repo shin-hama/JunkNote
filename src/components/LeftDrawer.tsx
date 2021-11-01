@@ -1,14 +1,19 @@
 import React from 'react'
-import { alpha } from '@mui/material/styles'
+import { alpha, styled, useTheme } from '@mui/material/styles'
 import Drawer, { DrawerProps } from '@mui/material/Drawer'
+import IconButton from '@mui/material/IconButton'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
+import Stack from '@mui/material/Stack'
 import Toolbar from '@mui/material/Toolbar'
+import Brightness4 from '@mui/icons-material/Brightness4'
+import Brightness7 from '@mui/icons-material/Brightness7'
 import DeleteIcon from '@mui/icons-material/Delete'
 import HomeIcon from '@mui/icons-material/Home'
 
+import { IsLightModeContext } from '../theme/CustomTheme'
 import { IsDesktop } from '../utility/utility'
 
 import {
@@ -94,7 +99,6 @@ const ResponsiveDrawer: React.FC<ResponsiveDrawerProps> = ({ ...props }) => {
       elevation={0}
       sx={{
         '& .MuiDrawer-paper': {
-          borderRight: 'none',
           width: DRAWER_WIDTH,
         },
         width: DRAWER_WIDTH,
@@ -102,11 +106,18 @@ const ResponsiveDrawer: React.FC<ResponsiveDrawerProps> = ({ ...props }) => {
   )
 }
 
+const Flexed = styled('div')(({ theme }) => ({
+  flex: 1,
+}))
+
 type Props = {
   open: boolean
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 const LeftDrawer: React.FC<Props> = ({ open, setOpen }) => {
+  const themeType = useTheme().palette.mode
+  const { isLightMode, setIsLightMode } = React.useContext(IsLightModeContext)
+
   const handleClose = React.useCallback(() => {
     setOpen(false)
   }, [setOpen])
@@ -114,6 +125,13 @@ const LeftDrawer: React.FC<Props> = ({ open, setOpen }) => {
     <ResponsiveDrawer open={open} onClose={handleClose}>
       <Toolbar />
       <DrawerItems handleClose={handleClose} />
+      <Flexed />
+      <Stack direction="row">
+        <Flexed />
+        <IconButton onClick={() => setIsLightMode(!isLightMode)} size="large">
+          {themeType === 'light' ? <Brightness4 /> : <Brightness7 />}
+        </IconButton>
+      </Stack>
     </ResponsiveDrawer>
   )
 }

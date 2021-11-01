@@ -8,14 +8,11 @@ import CustomTheme from './theme/CustomTheme'
 import reportWebVitals from './reportWebVitals'
 
 const Index: React.FC = () => {
-  const [isLightMode, setIsLightMode] = React.useState<boolean>(true)
-  const handleThemeMode = () => setIsLightMode(!isLightMode)
-
   return (
     <React.StrictMode>
-      <CustomTheme isLightMode={isLightMode}>
+      <CustomTheme>
         <CssBaseline />
-        <App handleTheme={handleThemeMode} />
+        <App />
       </CustomTheme>
     </React.StrictMode>
   )
