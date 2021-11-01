@@ -9,7 +9,6 @@ import Typography from '@mui/material/Typography'
 import DeleteIcon from '@mui/icons-material/Delete'
 import PushPinOutlinedIcon from '@mui/icons-material/PushPinOutlined'
 
-import AlertDialog from './AlertDialog'
 import { ContentKind, ContentKindContext } from '../pages/MainView'
 import { MemoContext, MemosContext } from './ContentRegion'
 import { IMemo } from '../model/Memo'
@@ -25,10 +24,9 @@ const updateMemo = (updated: IMemo, callback?: () => void) => {
   ConnectApi(props)
 }
 
-type Props = { memo: IMemo }
-const MemoCard: React.FC<Props> = ({ memo }) => {
+type Props = { memo: IMemo; handleAlertOpen: (memo: IMemo) => void }
+const MemoCard: React.FC<Props> = ({ memo, handleAlertOpen }) => {
   const [isMouseOver, setIsMouseOver] = React.useState(false)
-  const [alertOpen, setAlertOpen] = React.useState(false)
   const { setMemos } = React.useContext(MemosContext)
   const { kind } = React.useContext(ContentKindContext)
   const { setMemo } = React.useContext(MemoContext)
@@ -57,93 +55,71 @@ const MemoCard: React.FC<Props> = ({ memo }) => {
 
   const handleDeleteButton = () => {
     if (kind === ContentKind.Trash) {
-      setAlertOpen(true)
+      handleAlertOpen(memo)
     } else {
       memo.removed = true
       updateMemo(memo, () => setMemos({ type: 'remove', value: memo }))
     }
   }
 
-  const handleAlertOk = () => {
-    const props: ApiProps = {
-      endpoint: `/memos/${memo.id}`,
-      method: 'delete',
-      callback: () => setMemos({ type: 'remove', value: memo }),
-    }
-    ConnectApi(props)
-    setAlertOpen(false)
-  }
-
-  const handleAlertCancel = () => {
-    setAlertOpen(false)
-  }
-
   return (
-    <div>
-      <Card
+    <Card
+      sx={{
+        position: 'relative',
+        margin: '1px',
+        '&:hover': {
+          border: 'solid 1px dimgray',
+        },
+      }}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}>
+      <CardActionArea
+        onClick={handleCardClicked}
         sx={{
-          position: 'relative',
-          margin: '1px',
-          '&:hover': {
-            border: 'solid 1px dimgray',
+          root: {
+            '&:hover $focusHighlight': {
+              opacity: 0,
+            },
           },
-        }}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}>
-        <CardActionArea
-          onClick={handleCardClicked}
-          sx={{
-            root: {
-              '&:hover $focusHighlight': {
-                opacity: 0,
+          focusHighlight: {
+            transition: 'opacity 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
+          },
+        }}>
+        <CardContent>
+          <Typography display="inline" style={{ whiteSpace: 'pre-line' }}>
+            {memo.contents}
+          </Typography>
+        </CardContent>
+      </CardActionArea>
+      {isMouseOver ? (
+        <div>
+          <CardActions>
+            <IconButton size="small" onClick={handleDeleteButton}>
+              <DeleteIcon fontSize="small" />
+            </IconButton>
+          </CardActions>
+          <Fab
+            aria-label="delete"
+            color="inherit"
+            onClick={handlePinClicked}
+            size="small"
+            sx={{
+              position: 'absolute',
+              top: (theme) => theme.spacing(0.5),
+              right: (theme) => theme.spacing(0.5),
+              backgroundColor: 'transparent',
+              boxShadow: 'none',
+              '&:hover': {
+                backgroundColor: 'rgba(0, 0, 0, 0.1)',
               },
-            },
-            focusHighlight: {
-              transition: 'opacity 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
-            },
-          }}>
-          <CardContent>
-            <Typography display="inline" style={{ whiteSpace: 'pre-line' }}>
-              {memo.contents}
-            </Typography>
-          </CardContent>
-        </CardActionArea>
-        {isMouseOver ? (
-          <div>
-            <CardActions>
-              <IconButton size="small" onClick={handleDeleteButton}>
-                <DeleteIcon fontSize="small" />
-              </IconButton>
-            </CardActions>
-            <Fab
-              aria-label="delete"
-              color="inherit"
-              onClick={handlePinClicked}
-              size="small"
-              sx={{
-                position: 'absolute',
-                top: (theme) => theme.spacing(0.5),
-                right: (theme) => theme.spacing(0.5),
-                backgroundColor: 'transparent',
-                boxShadow: 'none',
-                '&:hover': {
-                  backgroundColor: 'rgba(0, 0, 0, 0.1)',
-                },
-              }}>
-              <PushPinOutlinedIcon fontSize="small" />
-            </Fab>
-          </div>
-        ) : (
-          <></>
-        )}
-      </Card>
-      <AlertDialog
-        open={alertOpen}
-        message="Do you want to delete the note completely?"
-        okCallback={handleAlertOk}
-        cancelCallback={handleAlertCancel}
-      />
-    </div>
+            }}>
+            <PushPinOutlinedIcon fontSize="small" />
+          </Fab>
+        </div>
+      ) : (
+        <></>
+      )}
+    </Card>
   )
 }
 
