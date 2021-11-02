@@ -10,6 +10,7 @@ import { ContentKind, ContentKindContext } from '../pages/MainView'
 import { MemoContext, MemosContext } from './ContentRegion'
 import { IMemo } from '../model/Memo'
 import { ApiProps, ConnectApi } from '../utility/ApiConnection'
+import useLongPress from '../hooks/useLongPress'
 
 const updateMemo = (updated: IMemo, callback?: () => void) => {
   const props: ApiProps = {
@@ -50,6 +51,17 @@ const MemoCard: React.FC<Props> = ({ memo, handleAlertOpen }) => {
     event.stopPropagation()
   }
 
+  const onLongPress = () => {
+    console.log('long press is triggered')
+  }
+  const onClick = () => {
+    handleCardClicked()
+    console.log('click is triggered')
+  }
+  const longPressEvent = useLongPress(onLongPress, onClick, {
+    shouldPreventDefault: true,
+    delay: 500,
+  })
   // const handleDeleteButton = () => {
   //   if (kind === ContentKind.Trash) {
   //     handleAlertOpen(memo)
@@ -71,7 +83,7 @@ const MemoCard: React.FC<Props> = ({ memo, handleAlertOpen }) => {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}>
       <CardActionArea
-        onClick={handleCardClicked}
+        {...longPressEvent}
         sx={{
           root: {
             '&:hover $focusHighlight': {
