@@ -1,12 +1,9 @@
 import React from 'react'
 import Card from '@mui/material/Card'
 import CardActionArea from '@mui/material/CardActionArea'
-import CardActions from '@mui/material/CardActions'
 import CardContent from '@mui/material/CardContent'
 import Fab from '@mui/material/Fab'
-import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
-import DeleteIcon from '@mui/icons-material/Delete'
 import PushPinOutlinedIcon from '@mui/icons-material/PushPinOutlined'
 
 import { ContentKind, ContentKindContext } from '../pages/MainView'
@@ -53,14 +50,14 @@ const MemoCard: React.FC<Props> = ({ memo, handleAlertOpen }) => {
     event.stopPropagation()
   }
 
-  const handleDeleteButton = () => {
-    if (kind === ContentKind.Trash) {
-      handleAlertOpen(memo)
-    } else {
-      memo.removed = true
-      updateMemo(memo, () => setMemos({ type: 'remove', value: memo }))
-    }
-  }
+  // const handleDeleteButton = () => {
+  //   if (kind === ContentKind.Trash) {
+  //     handleAlertOpen(memo)
+  //   } else {
+  //     memo.removed = true
+  //     updateMemo(memo, () => setMemos({ type: 'remove', value: memo }))
+  //   }
+  // }
 
   return (
     <Card
@@ -93,11 +90,6 @@ const MemoCard: React.FC<Props> = ({ memo, handleAlertOpen }) => {
       </CardActionArea>
       {isMouseOver ? (
         <div>
-          <CardActions>
-            <IconButton size="small" onClick={handleDeleteButton}>
-              <DeleteIcon fontSize="small" />
-            </IconButton>
-          </CardActions>
           <Fab
             aria-label="delete"
             color="inherit"
@@ -110,7 +102,7 @@ const MemoCard: React.FC<Props> = ({ memo, handleAlertOpen }) => {
               backgroundColor: 'transparent',
               boxShadow: 'none',
               '&:hover': {
-                backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                backgroundColor: 'rgba(1, 0, 0, 0.1)',
               },
             }}>
             <PushPinOutlinedIcon fontSize="small" />
