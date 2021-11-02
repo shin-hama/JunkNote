@@ -22,9 +22,18 @@ const updateMemo = (updated: IMemo, callback?: () => void) => {
   ConnectApi(props)
 }
 
-type Props = { memo: IMemo; handleAlertOpen: (memo: IMemo) => void }
-const MemoCard: React.FC<Props> = ({ memo, handleAlertOpen }) => {
+type Props = {
+  memo: IMemo
+  handleAlertOpen: (memo: IMemo) => void
+  setSelectedMemos: React.Dispatch<React.SetStateAction<IMemo[]>>
+}
+const MemoCard: React.FC<Props> = ({
+  memo,
+  handleAlertOpen,
+  setSelectedMemos,
+}) => {
   const [isMouseOver, setIsMouseOver] = React.useState(false)
+  const [selected, setSelected] = React.useState(false)
   const { setMemos } = React.useContext(MemosContext)
   const { kind } = React.useContext(ContentKindContext)
   const { setMemo } = React.useContext(MemoContext)
@@ -52,8 +61,17 @@ const MemoCard: React.FC<Props> = ({ memo, handleAlertOpen }) => {
   }
 
   const onLongPress = () => {
+    setSelected(!selected)
     console.log('long press is triggered')
   }
+  React.useEffect(() => {
+    console.log(selected)
+    if (selected) {
+      setSelectedMemos((prev) => Array.from(new Set([...prev, memo])))
+    } else {
+      setSelectedMemos((prev) => prev.filter((item) => item !== memo))
+    }
+  }, [setSelectedMemos, memo, selected])
   const onClick = () => {
     handleCardClicked()
     console.log('click is triggered')
