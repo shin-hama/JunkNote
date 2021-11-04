@@ -1,18 +1,16 @@
 import React from 'react'
 import Card from '@mui/material/Card'
 import CardActionArea from '@mui/material/CardActionArea'
-import CardActions from '@mui/material/CardActions'
 import CardContent from '@mui/material/CardContent'
 import Fab from '@mui/material/Fab'
-import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
-import DeleteIcon from '@mui/icons-material/Delete'
 import PushPinOutlinedIcon from '@mui/icons-material/PushPinOutlined'
 
 import { ContentKind, ContentKindContext } from '../pages/MainView'
 import { MemoContext, MemosContext } from './ContentRegion'
 import { IMemo } from '../model/Memo'
 import { ApiProps, ConnectApi } from '../utility/ApiConnection'
+import useLongPress from '../hooks/useLongPress'
 
 const updateMemo = (updated: IMemo, callback?: () => void) => {
   const props: ApiProps = {
@@ -24,9 +22,18 @@ const updateMemo = (updated: IMemo, callback?: () => void) => {
   ConnectApi(props)
 }
 
-type Props = { memo: IMemo; handleAlertOpen: (memo: IMemo) => void }
-const MemoCard: React.FC<Props> = ({ memo, handleAlertOpen }) => {
+type Props = {
+  memo: IMemo
+  handleAlertOpen: (memo: IMemo) => void
+  setSelectedMemos: React.Dispatch<React.SetStateAction<IMemo[]>>
+}
+const MemoCard: React.FC<Props> = ({
+  memo,
+  handleAlertOpen,
+  setSelectedMemos,
+}) => {
   const [isMouseOver, setIsMouseOver] = React.useState(false)
+  const [selected, setSelected] = React.useState(false)
   const { setMemos } = React.useContext(MemosContext)
   const { kind } = React.useContext(ContentKindContext)
   const { setMemo } = React.useContext(MemoContext)
@@ -53,14 +60,34 @@ const MemoCard: React.FC<Props> = ({ memo, handleAlertOpen }) => {
     event.stopPropagation()
   }
 
-  const handleDeleteButton = () => {
-    if (kind === ContentKind.Trash) {
-      handleAlertOpen(memo)
-    } else {
-      memo.removed = true
-      updateMemo(memo, () => setMemos({ type: 'remove', value: memo }))
-    }
+  const onLongPress = () => {
+    setSelected(!selected)
+    console.log('long press is triggered')
   }
+  React.useEffect(() => {
+    console.log(selected)
+    if (selected) {
+      setSelectedMemos((prev) => Array.from(new Set([...prev, memo])))
+    } else {
+      setSelectedMemos((prev) => prev.filter((item) => item !== memo))
+    }
+  }, [setSelectedMemos, memo, selected])
+  const onClick = () => {
+    handleCardClicked()
+    console.log('click is triggered')
+  }
+  const longPressEvent = useLongPress(onLongPress, onClick, {
+    shouldPreventDefault: true,
+    delay: 500,
+  })
+  // const handleDeleteButton = () => {
+  //   if (kind === ContentKind.Trash) {
+  //     handleAlertOpen(memo)
+  //   } else {
+  //     memo.removed = true
+  //     updateMemo(memo, () => setMemos({ type: 'remove', value: memo }))
+  //   }
+  // }
 
   return (
     <Card
@@ -74,7 +101,7 @@ const MemoCard: React.FC<Props> = ({ memo, handleAlertOpen }) => {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}>
       <CardActionArea
-        onClick={handleCardClicked}
+        {...longPressEvent}
         sx={{
           root: {
             '&:hover $focusHighlight': {
@@ -93,11 +120,6 @@ const MemoCard: React.FC<Props> = ({ memo, handleAlertOpen }) => {
       </CardActionArea>
       {isMouseOver ? (
         <div>
-          <CardActions>
-            <IconButton size="small" onClick={handleDeleteButton}>
-              <DeleteIcon fontSize="small" />
-            </IconButton>
-          </CardActions>
           <Fab
             aria-label="delete"
             color="inherit"
@@ -110,7 +132,7 @@ const MemoCard: React.FC<Props> = ({ memo, handleAlertOpen }) => {
               backgroundColor: 'transparent',
               boxShadow: 'none',
               '&:hover': {
-                backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                backgroundColor: 'rgba(1, 0, 0, 0.1)',
               },
             }}>
             <PushPinOutlinedIcon fontSize="small" />
