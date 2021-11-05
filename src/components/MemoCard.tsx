@@ -1,4 +1,5 @@
 import React from 'react'
+import { styled, useTheme } from '@mui/material'
 import Card from '@mui/material/Card'
 import CardActionArea from '@mui/material/CardActionArea'
 import CardContent from '@mui/material/CardContent'
@@ -11,6 +12,13 @@ import { MemoContext, MemosContext } from './ContentRegion'
 import { IMemo } from '../model/Memo'
 import { ApiProps, ConnectApi } from '../utility/ApiConnection'
 import useLongPress from '../hooks/useLongPress'
+
+const StyledCard = styled(Card)((theme) => ({
+  position: 'relative',
+  '&:hover': {
+    border: 'solid 1px dimgray',
+  },
+}))
 
 const updateMemo = (updated: IMemo, callback?: () => void) => {
   const props: ApiProps = {
@@ -32,6 +40,7 @@ const MemoCard: React.FC<Props> = ({
   handleAlertOpen,
   setSelectedMemos,
 }) => {
+  const theme = useTheme()
   const [isMouseOver, setIsMouseOver] = React.useState(false)
   const [selected, setSelected] = React.useState(false)
   const { setMemos } = React.useContext(MemosContext)
@@ -65,7 +74,6 @@ const MemoCard: React.FC<Props> = ({
     console.log('long press is triggered')
   }
   React.useEffect(() => {
-    console.log(selected)
     if (selected) {
       setSelectedMemos((prev) => Array.from(new Set([...prev, memo])))
     } else {
@@ -89,15 +97,13 @@ const MemoCard: React.FC<Props> = ({
   //   }
   // }
 
+  const selectedStyle = {
+    border: `solid 2px ${theme.palette.primary.main}`,
+  }
+
   return (
-    <Card
-      sx={{
-        position: 'relative',
-        margin: '1px',
-        '&:hover': {
-          border: 'solid 1px dimgray',
-        },
-      }}
+    <StyledCard
+      sx={selected ? selectedStyle : {}}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}>
       <CardActionArea
@@ -141,7 +147,7 @@ const MemoCard: React.FC<Props> = ({
       ) : (
         <></>
       )}
-    </Card>
+    </StyledCard>
   )
 }
 

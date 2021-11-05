@@ -53,7 +53,7 @@ const Memos: React.FC<MemosProps> = ({ items, title }) => {
       ) : (
         <></>
       )}
-      <Masonry columns={{ md: 4, sm: 2 }} spacing={1}>
+      <Masonry columns={{ md: 4, sm: 2 }} spacing={2}>
         {items.map((item, i) => (
           <MemoCard
             key={i}
