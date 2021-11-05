@@ -98,7 +98,7 @@ const MemoCard: React.FC<Props> = ({
           ? `solid 2px ${theme.palette.primary.main}`
           : 'solid 2px transparent',
         '&:hover': {
-          border: selected ? '' : 'solid 2px dimgray',
+          border: selected ? '' : `solid 2px ${theme.palette.grey['800']}`,
         },
       }}
       onMouseEnter={handleMouseEnter}
