@@ -1,5 +1,5 @@
 import React from 'react'
-import { styled, useTheme } from '@mui/material'
+import { useTheme } from '@mui/material'
 import Card from '@mui/material/Card'
 import CardActionArea from '@mui/material/CardActionArea'
 import CardContent from '@mui/material/CardContent'
@@ -12,13 +12,6 @@ import { MemoContext, MemosContext } from './ContentRegion'
 import { IMemo } from '../model/Memo'
 import { ApiProps, ConnectApi } from '../utility/ApiConnection'
 import useLongPress from '../hooks/useLongPress'
-
-const StyledCard = styled(Card)((theme) => ({
-  position: 'relative',
-  '&:hover': {
-    border: 'solid 1px dimgray',
-  },
-}))
 
 const updateMemo = (updated: IMemo, callback?: () => void) => {
   const props: ApiProps = {
@@ -86,7 +79,7 @@ const MemoCard: React.FC<Props> = ({
   }
   const longPressEvent = useLongPress(onLongPress, onClick, {
     shouldPreventDefault: true,
-    delay: 500,
+    delay: 400,
   })
   // const handleDeleteButton = () => {
   //   if (kind === ContentKind.Trash) {
@@ -97,13 +90,17 @@ const MemoCard: React.FC<Props> = ({
   //   }
   // }
 
-  const selectedStyle = {
-    border: `solid 2px ${theme.palette.primary.main}`,
-  }
-
   return (
-    <StyledCard
-      sx={selected ? selectedStyle : {}}
+    <Card
+      sx={{
+        position: 'relative',
+        border: selected
+          ? `solid 2px ${theme.palette.primary.main}`
+          : 'solid 2px transparent',
+        '&:hover': {
+          border: selected ? '' : 'solid 2px dimgray',
+        },
+      }}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}>
       <CardActionArea
@@ -124,30 +121,28 @@ const MemoCard: React.FC<Props> = ({
           </Typography>
         </CardContent>
       </CardActionArea>
-      {isMouseOver ? (
-        <div>
-          <Fab
-            aria-label="delete"
-            color="inherit"
-            onClick={handlePinClicked}
-            size="small"
-            sx={{
-              position: 'absolute',
-              top: (theme) => theme.spacing(0.5),
-              right: (theme) => theme.spacing(0.5),
-              backgroundColor: 'transparent',
-              boxShadow: 'none',
-              '&:hover': {
-                backgroundColor: 'rgba(1, 0, 0, 0.1)',
-              },
-            }}>
-            <PushPinOutlinedIcon fontSize="small" />
-          </Fab>
-        </div>
-      ) : (
-        <></>
-      )}
-    </StyledCard>
+      <Fab
+        aria-label="delete"
+        color="inherit"
+        onClick={handlePinClicked}
+        size="small"
+        disabled={!isMouseOver}
+        sx={{
+          position: 'absolute',
+          top: (theme) => theme.spacing(0.5),
+          right: (theme) => theme.spacing(0.5),
+          backgroundColor: 'transparent',
+          boxShadow: 'none',
+          '&:hover': {
+            backgroundColor: 'rgba(1, 0, 0, 0.1)',
+          },
+          '&.Mui-disabled': {
+            display: 'none',
+          },
+        }}>
+        <PushPinOutlinedIcon fontSize="small" />
+      </Fab>
+    </Card>
   )
 }
 
