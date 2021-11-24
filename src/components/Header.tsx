@@ -12,7 +12,7 @@ import MenuIcon from '@mui/icons-material/Menu'
 import SearchIcon from '@mui/icons-material/Search'
 
 import AccountButton from './AccountButton'
-import { QueryContext } from '../pages/MainView'
+import { QueryContext, SelectedMemosContext } from '../pages/MainView'
 
 const Root = styled('div')(({ theme }) => ({
   flexGrow: 1,
@@ -59,6 +59,8 @@ type Props = {
 }
 export default function Header({ handleOpen }: Props) {
   const { query, setQuery } = React.useContext(QueryContext)
+  const [selected, setSelected] = React.useState(false)
+  const { selectedMemos } = React.useContext(SelectedMemosContext)
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(event.target.value)
@@ -71,6 +73,10 @@ export default function Header({ handleOpen }: Props) {
   const handleMouseDownClear = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
   }
+
+  React.useEffect(() => {
+    setSelected(selectedMemos.length !== 0)
+  }, [selectedMemos])
 
   return (
     <Root>
@@ -94,7 +100,7 @@ export default function Header({ handleOpen }: Props) {
               variant="h6"
               component="div"
               sx={{ minWidth: '105px' }}>
-              Junk Note
+              Junk Note {`${selected}`}
             </Typography>
           </Hidden>
           <Root />

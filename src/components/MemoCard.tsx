@@ -7,7 +7,11 @@ import Fab from '@mui/material/Fab'
 import Typography from '@mui/material/Typography'
 import PushPinOutlinedIcon from '@mui/icons-material/PushPinOutlined'
 
-import { ContentKind, ContentKindContext } from '../pages/MainView'
+import {
+  ContentKind,
+  ContentKindContext,
+  SelectedMemosContext,
+} from '../pages/MainView'
 import { MemoContext, MemosContext } from './ContentRegion'
 import { IMemo } from '../model/Memo'
 import { ApiProps, ConnectApi } from '../utility/ApiConnection'
@@ -26,13 +30,8 @@ const updateMemo = (updated: IMemo, callback?: () => void) => {
 type Props = {
   memo: IMemo
   handleAlertOpen: (memo: IMemo) => void
-  setSelectedMemos: React.Dispatch<React.SetStateAction<IMemo[]>>
 }
-const MemoCard: React.FC<Props> = ({
-  memo,
-  handleAlertOpen,
-  setSelectedMemos,
-}) => {
+const MemoCard: React.FC<Props> = ({ memo, handleAlertOpen }) => {
   const theme = useTheme()
   const [isMouseOver, setIsMouseOver] = React.useState(false)
   const [selected, setSelected] = React.useState(false)
@@ -62,6 +61,7 @@ const MemoCard: React.FC<Props> = ({
     event.stopPropagation()
   }
 
+  const { setSelectedMemos } = React.useContext(SelectedMemosContext)
   const onLongPress = () => {
     setSelected(!selected)
     console.log('long press is triggered')
@@ -72,7 +72,7 @@ const MemoCard: React.FC<Props> = ({
     } else {
       setSelectedMemos((prev) => prev.filter((item) => item !== memo))
     }
-  }, [setSelectedMemos, memo, selected])
+  }, [selected, setSelectedMemos, memo])
   const onClick = () => {
     handleCardClicked()
     console.log('click is triggered')

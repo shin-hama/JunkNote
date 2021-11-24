@@ -175,6 +175,10 @@ const ContentRegion: React.FC<Props> = ({ isDrawerOpen }) => {
     setMemos: setMemosGroup,
   }
 
+  React.useEffect(() => {
+    memosGroup.common = SortRandomly(memosGroup.common)
+  }, [memosGroup, memosGroup.common])
+
   return (
     <Main open={isDrawerOpen}>
       <MemosContext.Provider value={memosContextValue}>
@@ -209,7 +213,7 @@ const ContentRegion: React.FC<Props> = ({ isDrawerOpen }) => {
                         ? 'Common'
                         : ''
                     }
-                    items={SortRandomly(memosGroup.common)}
+                    items={memosGroup.common}
                   />
                 ) : (
                   <></>

@@ -14,7 +14,6 @@ type MemosProps = {
 }
 const Memos: React.FC<MemosProps> = ({ items, title }) => {
   const [targetMemo, setTargetMemo] = React.useState<IMemo | null>(null)
-  const [selectedMemos, setSelectedMemos] = React.useState<IMemo[]>([])
   const { setMemos } = React.useContext(MemosContext)
 
   const handleAlertOk = () => {
@@ -37,10 +36,6 @@ const Memos: React.FC<MemosProps> = ({ items, title }) => {
     setTargetMemo(null)
   }
 
-  React.useEffect(() => {
-    console.log(selectedMemos)
-  }, [selectedMemos])
-
   if (items.length === 0) {
     return <></>
   }
@@ -55,12 +50,7 @@ const Memos: React.FC<MemosProps> = ({ items, title }) => {
       )}
       <Masonry columns={{ md: 4, sm: 2 }} spacing={3}>
         {items.map((item, i) => (
-          <MemoCard
-            key={i}
-            memo={item}
-            handleAlertOpen={handleAlertOpen}
-            setSelectedMemos={setSelectedMemos}
-          />
+          <MemoCard key={i} memo={item} handleAlertOpen={handleAlertOpen} />
         ))}
       </Masonry>
 

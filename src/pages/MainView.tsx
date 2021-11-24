@@ -4,6 +4,7 @@ import { styled } from '@mui/material/styles'
 import ContentRegion from '../components/ContentRegion'
 import Header from '../components/Header'
 import LeftDrawer from '../components/LeftDrawer'
+import { IMemo } from '../model/Memo'
 import { setAccessedTimestamp } from '../utility/AccessedTimestamp'
 import { IsDesktop } from '../utility/utility'
 
@@ -40,6 +41,17 @@ export const QueryContext = React.createContext<QueryProps>({
   },
 })
 
+type SelectedMemosProps = {
+  selectedMemos: IMemo[]
+  setSelectedMemos: React.Dispatch<React.SetStateAction<IMemo[]>>
+}
+export const SelectedMemosContext = React.createContext<SelectedMemosProps>({
+  selectedMemos: [],
+  setSelectedMemos: () => {
+    // no run
+  },
+})
+
 export default function MainView() {
   const matches = IsDesktop()
   const [isDrawerOpen, setIsDrawerOpen] = React.useState<boolean>(matches)
@@ -51,6 +63,7 @@ export default function MainView() {
   }
 
   const [query, setQuery] = React.useState('')
+  const [selectedMemos, setSelectedMemos] = React.useState<IMemo[]>([])
 
   const handleOpen = () => {
     setIsDrawerOpen(!isDrawerOpen)
@@ -67,11 +80,17 @@ export default function MainView() {
   return (
     <Root>
       <QueryContext.Provider value={{ query, setQuery }}>
-        <Header handleOpen={handleOpen} />
-        <ContentKindContext.Provider value={kindValue}>
-          <LeftDrawer open={isDrawerOpen} setOpen={setIsDrawerOpen} />
-          <ContentRegion isDrawerOpen={isDrawerOpen} />
-        </ContentKindContext.Provider>
+        <SelectedMemosContext.Provider
+          value={{
+            selectedMemos,
+            setSelectedMemos,
+          }}>
+          <Header handleOpen={handleOpen} />
+          <ContentKindContext.Provider value={kindValue}>
+            <LeftDrawer open={isDrawerOpen} setOpen={setIsDrawerOpen} />
+            <ContentRegion isDrawerOpen={isDrawerOpen} />
+          </ContentKindContext.Provider>
+        </SelectedMemosContext.Provider>
       </QueryContext.Provider>
     </Root>
   )
